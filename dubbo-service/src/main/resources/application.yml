@@ -7,13 +7,13 @@ spring:
     protocol:
       name: dubbo
       port: 20880
-    scan: org.xxpay.dubbo
+    scan: com.bon
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/wxmanage?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/wxmanage?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false&&zeroDateTimeBehavior=convertToNull
     username: root
-    password: root
+    password: 12345678
     initialSize: 5    # 初始化大小
     minIdle: 5        # 最小
     maxActive: 20     # 最大
@@ -36,7 +36,7 @@ spring:
     in-memory: true
 
 logging:
-  file: ./log/xxpay4dubbo-service.log
+  file: ./log/dubbo-service.log
 
 config:
   ali:

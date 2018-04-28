@@ -1,8 +1,8 @@
 package com.bon.common.util;
 
 import com.alibaba.fastjson.JSON;
-import org.xxpay.common.constant.PayConstant;
-import org.xxpay.common.constant.PayEnum;
+import com.bon.common.constant.PayConstant;
+import com.bon.common.constant.PayEnum;
 
 import java.net.MalformedURLException;
 import java.net.URL;

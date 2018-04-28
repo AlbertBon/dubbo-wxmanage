@@ -1,6 +1,7 @@
 package com.bon.common.util;
 
-import org.xxpay.common.constant.Constant;
+
+import com.bon.common.constant.Constant;
 
 import java.util.Iterator;
 import java.util.Map;

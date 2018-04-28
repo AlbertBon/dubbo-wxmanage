@@ -1,10 +1,13 @@
 package com.bon.service;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.bon.api.IUserService;
 import com.bon.common.util.MyLog;
+import com.bon.dao.UserMapper;
 import com.bon.model.User;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -19,6 +22,9 @@ public class UserServiceImpl implements IUserService {
 
     private static final MyLog _log = MyLog.getLog(UserServiceImpl.class);
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public User findByUsername(String username) {
         return null;
@@ -31,7 +37,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User findById(Long id) {
-        return null;
+        User user = userMapper.selectByPrimaryKey(id);
+        return user;
     }
 
     @Override

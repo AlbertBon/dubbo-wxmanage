@@ -19,6 +19,11 @@
     <dependencies>
         <dependency>
             <groupId>com.bon</groupId>
+            <artifactId>dubbo-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bon</groupId>
             <artifactId>dubbo-api</artifactId>
             <version>1.0.0</version>
         </dependency>

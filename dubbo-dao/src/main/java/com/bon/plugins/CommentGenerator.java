@@ -20,7 +20,7 @@ public class CommentGenerator extends DefaultCommentGenerator {
 		if (introspectedColumn.getRemarks() != null && !introspectedColumn.getRemarks().equals("")) {
 			field.addJavaDocLine("/**");
 			field.addJavaDocLine(" * " + introspectedColumn.getRemarks());
-			addJavadocTag(field, false);
+//			addJavadocTag(field, false);
 			field.addJavaDocLine(" */");
 		}
 	}

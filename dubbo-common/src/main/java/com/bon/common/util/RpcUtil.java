@@ -1,9 +1,10 @@
 package com.bon.common.util;
 
-import org.xxpay.common.constant.Constant;
-import org.xxpay.common.domain.BaseParam;
-import org.xxpay.common.domain.RpcBaseParam;
-import org.xxpay.common.enumm.RetEnum;
+
+import com.bon.common.constant.Constant;
+import com.bon.common.domain.BaseParam;
+import com.bon.common.domain.RpcBaseParam;
+import com.bon.common.enumm.RetEnum;
 
 import java.util.HashMap;
 import java.util.Map;

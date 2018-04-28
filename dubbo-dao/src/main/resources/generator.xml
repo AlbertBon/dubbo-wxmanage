@@ -60,12 +60,12 @@
         </javaModelGenerator>
 
 
-        <!-- Mapper接口生成 -->
-        <sqlMapGenerator targetPackage="com.bon.mapper" targetProject="src/main/resources">
+        <!-- MapperXML生成 -->
+        <sqlMapGenerator targetPackage="com.bon.dao.mapper" targetProject="src/main/resources">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
-        <!-- MapperXML生成 -->
+        <!-- Mapper接口生成 -->
         <javaClientGenerator targetPackage="com.bon.dao"
                              type="XMLMAPPER" targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />

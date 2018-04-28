@@ -1,7 +1,8 @@
 package com.bon.common.domain;
 
-import org.xxpay.common.enumm.RpcSignTypeEnum;
-import org.xxpay.common.util.*;
+
+import com.bon.common.enumm.RpcSignTypeEnum;
+import com.bon.common.util.*;
 
 import java.io.Serializable;
 import java.util.HashMap;
