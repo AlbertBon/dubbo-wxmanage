@@ -2,11 +2,12 @@ package com.bon.web;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.bon.api.IUserService;
+import com.bon.api.exception.BusinessException;
 import com.bon.model.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @program: bon-dubbo
@@ -21,6 +22,8 @@ public class UserController {
     @Reference
     private IUserService userService;
 
+    @ApiOperation(value = "用户列表")
+    @ApiResponse(code = 200, message = "success")
     @GetMapping("/query")
     public String findByKey(@RequestParam Long key){
         User user= userService.findById(key);

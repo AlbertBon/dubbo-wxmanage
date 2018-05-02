@@ -1,5 +1,6 @@
 package com.bon.api;
 
+import com.bon.api.exception.BusinessException;
 import com.bon.model.User;
 import com.github.pagehelper.PageInfo;
 

@@ -3,6 +3,9 @@ package com.bon.service;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.bon.api.IUserService;
+import com.bon.api.exception.BusinessException;
+import com.bon.common.constant.ExceptionType;
+import com.bon.common.enumm.RetEnum;
 import com.bon.common.util.MyLog;
 import com.bon.dao.UserMapper;
 import com.bon.model.User;
@@ -36,7 +39,10 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User findById(Long id) {
+    public User findById(Long id){
+        if(id.equals(1L)){
+            throw new BusinessException(ExceptionType.DATA_ERROR.getCode(),ExceptionType.DATA_ERROR.getMessage());
+        }
         User user = userMapper.selectByPrimaryKey(id);
         return user;
     }
