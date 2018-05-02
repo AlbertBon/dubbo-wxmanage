@@ -9,5 +9,3 @@ spring:
       address: zookeeper://127.0.0.1:2181
     scan: com.bon
 
-logging:
-  file: ./log/dubbo-web.log
