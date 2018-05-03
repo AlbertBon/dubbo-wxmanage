@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
+
 /**
  * @program: bon-dubbo
  * @description: 用户管理模块
@@ -34,7 +36,7 @@ public class UserController {
 
     @ApiOperation(value = "新增用户")
     @ApiResponse(code = 200, message = "success")
-    @PostMapping("/addUser")
+    @RequestMapping(value = "/addUser")
     public String addUser(@RequestBody UserDTO user){
         userService.save(user);
         return new ResultBody().toJsonString();

@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @create: 2018-05-03 18:36
  **/
 @ApiModel(value ="UserDTO")
-public class UserDTO{
+public class UserDTO implements Serializable{
     @ApiModelProperty(value = "姓名")
     private String name;
 
