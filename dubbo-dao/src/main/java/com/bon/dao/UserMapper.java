@@ -1,7 +1,7 @@
 package com.bon.dao;
 
-import com.bon.model.User;
-import com.bon.model.UserExample;
+import com.bon.entity.User;
+import com.bon.entity.UserExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

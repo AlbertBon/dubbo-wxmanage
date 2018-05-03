@@ -4,7 +4,7 @@ package com.bon.api.exception;
 
 
 /**
- * 业务异常
+ * 业务异常（放）
  *
  * @author Bon
  * @since 1.0.0

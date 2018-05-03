@@ -1,17 +1,20 @@
-package com.bon.service;
+package com.bon.service.impl;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.bon.api.IUserService;
 import com.bon.api.exception.BusinessException;
 import com.bon.common.constant.ExceptionType;
-import com.bon.common.enumm.RetEnum;
+import com.bon.common.domain.UserDTO;
+import com.bon.common.util.BeanConvertUtils;
+import com.bon.common.util.BeanUtil;
 import com.bon.common.util.MyLog;
 import com.bon.dao.UserMapper;
-import com.bon.model.User;
+import com.bon.entity.User;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,22 +42,26 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User findById(Long id){
-        if(id.equals(1L)){
-            _log.info("ceshi{}","123");
-            throw new BusinessException(ExceptionType.DATA_ERROR.getCode(),ExceptionType.DATA_ERROR.getMessage());
+    public User findById(Long id) {
+        if (id.equals(1L)) {
+            _log.info("ceshi{}", "123");
+            throw new BusinessException(ExceptionType.DATA_ERROR.getCode(), ExceptionType.DATA_ERROR.getMessage());
         }
         User user = userMapper.selectByPrimaryKey(id);
         return user;
     }
 
     @Override
-    public void save(User User) {
-
+    public void save(UserDTO userDTO){
+        User user = new User();
+        BeanUtil.copyPropertys(userDTO, user);
+        user.setGmtCreate(new Date());
+        user.setGmtModified(new Date());
+        userMapper.insertSelective(user);
     }
 
     @Override
-    public void update(User User) {
+    public void update(User user) {
 
     }
 

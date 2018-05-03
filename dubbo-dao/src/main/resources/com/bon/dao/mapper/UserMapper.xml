@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bon.dao.UserMapper">
-  <resultMap id="BaseResultMap" type="com.bon.model.User">
+  <resultMap id="BaseResultMap" type="com.bon.entity.User">
     <constructor>
       <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
       <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -72,7 +72,7 @@
   <sql id="Base_Column_List">
     id, name, birthday, address, gmt_create, gmt_modified
   </sql>
-  <select id="selectByExample" parameterType="com.bon.model.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.bon.entity.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -104,13 +104,13 @@
     delete from tb_user
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.bon.model.UserExample">
+  <delete id="deleteByExample" parameterType="com.bon.entity.UserExample">
     delete from tb_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.bon.model.User">
+  <insert id="insert" parameterType="com.bon.entity.User">
     insert into tb_user (id, name, birthday, 
       address, gmt_create, gmt_modified
       )
@@ -118,7 +118,7 @@
       #{address,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.bon.model.User">
+  <insert id="insertSelective" parameterType="com.bon.entity.User">
     insert into tb_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -161,7 +161,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.bon.model.UserExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.bon.entity.UserExample" resultType="java.lang.Long">
     select count(*) from tb_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -205,7 +205,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bon.model.User">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bon.entity.User">
     update tb_user
     <set>
       <if test="name != null">
@@ -226,7 +226,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bon.model.User">
+  <update id="updateByPrimaryKey" parameterType="com.bon.entity.User">
     update tb_user
     set name = #{name,jdbcType=VARCHAR},
       birthday = #{birthday,jdbcType=VARCHAR},

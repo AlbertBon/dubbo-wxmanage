@@ -2,11 +2,12 @@ package com.bon.web;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.bon.api.IUserService;
-import com.bon.api.exception.BusinessException;
-import com.bon.model.User;
+import com.bon.common.constant.ResultBody;
+import com.bon.common.domain.UserDTO;
+import com.bon.entity.User;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * @author: Bon
  * @create: 2018-04-27 18:16
  **/
+@Api("用户管理模块")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -27,6 +29,14 @@ public class UserController {
     @GetMapping("/query")
     public String findByKey(@RequestParam Long key){
         User user= userService.findById(key);
-        return user.toString();
+        return new ResultBody(user).toJsonString();
+    }
+
+    @ApiOperation(value = "新增用户")
+    @ApiResponse(code = 200, message = "success")
+    @PostMapping("/addUser")
+    public String addUser(@RequestBody UserDTO user){
+        userService.save(user);
+        return new ResultBody().toJsonString();
     }
 }

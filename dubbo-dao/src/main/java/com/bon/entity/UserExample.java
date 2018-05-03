@@ -1,4 +1,4 @@
-package com.bon.model;
+package com.bon.entity;
 
 import java.util.ArrayList;
 import java.util.Date;

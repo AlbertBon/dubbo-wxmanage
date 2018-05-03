@@ -1,7 +1,7 @@
 package com.bon.api;
 
-import com.bon.api.exception.BusinessException;
-import com.bon.model.User;
+import com.bon.common.domain.UserDTO;
+import com.bon.entity.User;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public interface IUserService {
     User findByUsername(String username);
     User findByPhone(String phone);
     User findById(Long id);
-    void save(User User);
+    void save(UserDTO user);
     void update(User User);
     PageInfo<User> findAll(int pageNum, int pageSize);
     String findAvatarById(Long id);

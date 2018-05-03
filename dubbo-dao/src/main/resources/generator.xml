@@ -59,7 +59,7 @@
         </javaTypeResolver>
 
         <!-- model生成 -->
-        <javaModelGenerator targetPackage="com.bon.model" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.bon.entity" targetProject="src/main/java">
             <property name="constructorBased" value="true" />
             <property name="enableSubPackages" value="true" />
             <property name="immutable" value="false" />

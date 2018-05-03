@@ -27,6 +27,8 @@ public class ResultBody<T> implements Serializable {
 //    @ApiModelProperty(value = "数据", required = true)
     private T data;
 
+    public ResultBody(){}
+
     public ResultBody(String msg) {
         super();
         this.msg = msg;

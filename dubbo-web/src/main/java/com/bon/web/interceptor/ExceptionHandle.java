@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bon.api.exception.BusinessException;
 import com.bon.common.constant.ExceptionType;
 import com.bon.common.constant.ResultBody;
+import com.bon.common.util.MyLog;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,10 +22,13 @@ import java.util.Map;
 @ControllerAdvice
 public class ExceptionHandle {
 
+    private static final MyLog LOG = MyLog.getLog(ExceptionHandle.class);
+
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public JSONObject handle(Exception e) {
         /*业务异常*/
+        LOG.error(e,e.getMessage());
         if(e instanceof BusinessException){
             BusinessException businessException = (BusinessException) e;
             return new ResultBody(businessException.getCode(), businessException.getMessage()).toJsonObject();
