@@ -10,11 +10,23 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.bon</groupId>
-    <artifactId>dubbo-common</artifactId>
+    <artifactId>web</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
-    <name>dubbo-common</name>
-    <description>dubbo-common</description>
+    <name>web</name>
+    <description>web</description>
 
-    
+    <dependencies>
+        <dependency>
+            <groupId>com.bon</groupId>
+            <artifactId>system-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bon</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+
+
 </project>
