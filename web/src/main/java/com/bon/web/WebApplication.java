@@ -1,6 +1,5 @@
 package com.bon.web;
 
-import com.bon.common.config.DataSourceConfig;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @create 2018/4/28 0028
  **/
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-@ComponentScan({"com.bon"})
+@ComponentScan({"com.bon.web","com.bon.wx.service"})
 public class WebApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(WebApplication.class, args);

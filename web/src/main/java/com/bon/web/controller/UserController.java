@@ -36,7 +36,7 @@ public class UserController {
 
     @ApiOperation(value = "新增用户")
     @ApiResponse(code = 200, message = "success")
-    @RequestMapping(value = "/addUser")
+    @PostMapping(value = "/addUser")
     public String addUser(@RequestBody UserDTO user){
         userService.save(user);
         return new ResultBody().toJsonString();

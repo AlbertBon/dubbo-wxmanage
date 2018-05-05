@@ -1,6 +1,9 @@
 package com.bon.wx.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.bon.common.domain.base.ExceptionType;
+import com.bon.common.util.BeanUtil;
+import com.bon.common.util.MyLog;
 import com.bon.wx.dao.UserMapper;
 import com.bon.wx.domain.dto.UserDTO;
 import com.bon.wx.domain.entity.User;
@@ -21,7 +24,7 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-//    private static final MyLog _log = MyLog.getLog(UserServiceImpl.class);
+    private static final MyLog _log = MyLog.getLog(UserServiceImpl.class);
 
     @Autowired
     private UserMapper userMapper;
@@ -39,8 +42,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long id) {
         if (id.equals(1L)) {
-//            _log.info("ceshi{}", "123");
-//            throw new BusinessException(ExceptionType.DATA_ERROR.getCode(), ExceptionType.DATA_ERROR.getMessage());
+            _log.info("ceshi{}", "123");
+            throw new BusinessException(ExceptionType.DATA_ERROR.getCode(), ExceptionType.DATA_ERROR.getMessage());
         }
         User user = userMapper.selectByPrimaryKey(id);
         return user;
@@ -48,11 +51,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserDTO userDTO){
-//        User user = new User();
-//        BeanUtil.copyPropertys(userDTO, user);
-//        user.setGmtCreate(new Date());
-//        user.setGmtModified(new Date());
-//        userMapper.insertSelective(user);
+        User user = new User();
+        BeanUtil.copyPropertys(userDTO, user);
+        user.setGmtCreate(new Date());
+        user.setGmtModified(new Date());
+        userMapper.insertSelective(user);
     }
 
     @Override

@@ -18,11 +18,6 @@
     </parent>
 
     <modules>
-        <module>dubbo-api</module>
-        <module>dubbo-web</module>
-        <module>dubbo-service</module>
-        <module>dubbo-common</module>
-        <module>dubbo-dao</module>
         <module>system-servide</module>
         <module>system-api</module>
         <module>common</module>

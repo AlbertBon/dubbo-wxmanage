@@ -4,8 +4,8 @@ server:
 spring:
   dubbo:
     application:
-      name: service
+      name: web
     registry:
        address: zookeeper://127.0.0.1:2181
-    scan: com.bon.service
+    scan: com.bon
 

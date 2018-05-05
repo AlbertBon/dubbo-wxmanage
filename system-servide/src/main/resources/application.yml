@@ -2,6 +2,15 @@ spring:
   # 环境 dev|test|pro
   profiles:
       active: dev
+  dubbo:
+    application:
+      name: service
+    registry:
+      address: zookeeper://127.0.0.1:2181
+    protocol:
+      name: dubbo
+      port: 20880
+    scan: com.bon
   output:
     ansi:
       enabled: detect #配置输出console的ide中的配色
@@ -19,15 +28,6 @@ spring:
     auto: true
     # 使用JDK代理，只有这样才能用Spring AOP拦截Mapper接口实现类 
     proxy-target-class: false
-  dubbo:
-      application:
-        name: service
-      registry:
-        address: zookeeper://127.0.0.1:2181
-      protocol:
-        name: dubbo
-        port: 20880
-      scan: com.bon.service
   activemq:
       broker-url: failover:(tcp://127.0.0.1:61616?wireFormat.maxInactivityDuration=0)
       in-memory: true

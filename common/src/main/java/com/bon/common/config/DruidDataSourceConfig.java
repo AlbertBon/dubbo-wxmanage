@@ -1,11 +1,13 @@
-package com.bon.plugins;
+package com.bon.common.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.EnvironmentAware;
@@ -16,7 +18,6 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.util.StringUtils;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -42,10 +43,13 @@ public class DruidDataSourceConfig implements EnvironmentAware {
         this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.datasource.");
     }
 
+    @Value("${mybatis.mapper-locations:}")
+    private String mapperLocations;
+
     //注册dataSource
     @Bean(initMethod = "init", destroyMethod = "close")
     public DruidDataSource dataSource() throws SQLException {
-        if (StringUtils.isEmpty(propertyResolver.getProperty("url"))) {
+        if (StringUtils.isBlank(propertyResolver.getProperty("url"))) {
             System.out.println("Your database connection pool configuration is incorrect!"
                     + " Please check your Spring profile, current profiles are:"
                     + Arrays.toString(environment.getActiveProfiles()));
@@ -88,7 +92,9 @@ public class DruidDataSourceConfig implements EnvironmentAware {
         pageHelper.setProperties(props); //添加插件
         sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageHelper});
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:com/bon/dao/mapper/*.xml"));
+//        if(StringUtils.isNotBlank(mapperLocations)){
+            sqlSessionFactoryBean.setMapperLocations(resolver.getResources(mapperLocations));
+//        }
         return sqlSessionFactoryBean.getObject();
     }
 
