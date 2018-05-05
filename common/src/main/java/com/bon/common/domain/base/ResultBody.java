@@ -2,6 +2,7 @@ package com.bon.common.domain.base;
 
 
 import com.alibaba.fastjson.JSONObject;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
@@ -12,26 +13,26 @@ public class ResultBody<T> implements Serializable {
     /**
      * 返回码
      */
-//    @ApiModelProperty(value = "返回码", required = true)
+    @ApiModelProperty(value = "返回码", required = true)
     private String code = "00";
 
     /**
      * 消息提示
      */
-//    @ApiModelProperty(value = "消息提示")
-    private String msg="success";
+    @ApiModelProperty(value = "消息提示")
+    private String message="success";
 
     /**
      * 数据
      */
-//    @ApiModelProperty(value = "数据", required = true)
+    @ApiModelProperty(value = "数据", required = true)
     private T data;
 
     public ResultBody(){}
 
-    public ResultBody(String msg) {
+    public ResultBody(String message) {
         super();
-        this.msg = msg;
+        this.message = message;
     }
 
     public ResultBody(T data) {
@@ -39,16 +40,16 @@ public class ResultBody<T> implements Serializable {
         this.data = data;
     }
 
-    public ResultBody(String code, String msg) {
+    public ResultBody(String code, String message) {
         super();
         this.code = code;
-        this.msg = msg;
+        this.message = message;
     }
 
-    public ResultBody(String code, String msg, T data) {
+    public ResultBody(String code, String message, T data) {
         super();
         this.code = (null==code) ? "00" : code;
-        this.msg = (null==code) ? "success" : msg;
+        this.message = (null==code) ? "success" : message;
         this.data = data;
     }
 
@@ -60,12 +61,12 @@ public class ResultBody<T> implements Serializable {
         this.code = code;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public T getData() {
@@ -79,7 +80,7 @@ public class ResultBody<T> implements Serializable {
     public String toJsonString() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("response_code", getCode());
-        jsonObject.put("message", getMsg());
+        jsonObject.put("message", getMessage());
         jsonObject.put("content", getData());
         return jsonObject.toJSONString();
     }
@@ -87,16 +88,8 @@ public class ResultBody<T> implements Serializable {
     public JSONObject toJsonObject() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("response_code", getCode());
-        jsonObject.put("message", getMsg());
+        jsonObject.put("message", getMessage());
         jsonObject.put("content", getData());
-        return jsonObject;
-    }
-
-    public static JSONObject toJsonObject(Object data) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("response_code", ExceptionType.SUCCESS.getCode());
-        jsonObject.put("message", ExceptionType.SUCCESS.getMessage());
-        jsonObject.put("content", data);
         return jsonObject;
     }
 }

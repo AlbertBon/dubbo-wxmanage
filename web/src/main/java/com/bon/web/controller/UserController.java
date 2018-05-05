@@ -29,9 +29,9 @@ public class UserController {
     @ApiOperation(value = "用户列表")
     @ApiResponse(code = 200, message = "success")
     @GetMapping("/query")
-    public String findByKey(@RequestParam Long key){
+    public ResultBody findByKey(@RequestParam Long key){
         User user= userService.findById(key);
-        return new ResultBody(user).toJsonString();
+        return new ResultBody(user);
     }
 
     @ApiOperation(value = "新增用户")

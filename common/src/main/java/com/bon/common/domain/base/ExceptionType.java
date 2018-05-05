@@ -5,8 +5,8 @@ package com.bon.common.domain.base;
  */
 public enum ExceptionType {
     SUCCESS("00", "success"),
-    DATA_ERROR("400003", "数据错误"),
-    SYSTEM_ERROR("400001", "网络异常");
+    SYSTEM_ERROR("400001", "网络异常"),
+    DATA_ERROR("400003", "数据错误");
 
     private String code;
     private String message;

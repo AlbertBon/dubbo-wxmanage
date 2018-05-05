@@ -15,7 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @create 2018/4/28 0028
  **/
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-@ComponentScan({"com.bon.web","com.bon.wx.service"})
+@ComponentScan({"com.bon.web"})
 public class WebApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(WebApplication.class, args);
