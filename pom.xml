@@ -18,7 +18,7 @@
     </parent>
 
     <modules>
-        <module>system-servide</module>
+        <module>system-service</module>
         <module>system-api</module>
         <module>common</module>
     </modules>
