@@ -31,7 +31,10 @@
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
 
         <!-- 生成一个新的selectByExample方法，这个方法可以接收offset和limit参数，主要用来实现分页 -->
-        <plugin type="com.bon.common.plugins.PaginationPlugin"></plugin>
+        <!--<plugin type="com.bon.common.plugins.PaginationPlugin"></plugin>-->
+
+        <!--mybatis生成xml覆盖插件-->
+        <plugin type="com.bon.common.plugins.OverIsMergeablePlugin" />
 
         <!-- Java模型生成equals和hashcode方法 -->
         <!--<plugins type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugins>-->
