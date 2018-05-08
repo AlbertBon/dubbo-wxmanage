@@ -12,6 +12,13 @@
     <groupId>com.bon</groupId>
     <artifactId>common</artifactId>
     <version>1.0.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.14</version>
+        </dependency>
+    </dependencies>
 
 
 </project>
