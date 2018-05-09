@@ -3,6 +3,7 @@ package com.bon.wx.service;
 import com.bon.wx.domain.dto.UserDTO;
 import com.bon.wx.domain.entity.User;
 import com.github.pagehelper.PageInfo;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

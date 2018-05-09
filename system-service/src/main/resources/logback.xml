@@ -27,7 +27,7 @@
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>${log_path}/${log_name}/${log_modal}.log.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${log_path}/${log_name}/${log_modal}-%d{yyyy-MM-dd}.log</FileNamePattern>
             <!--文件数量限制-->
             <!--<maxIndex>${MAX_BACKUP}</maxIndex>-->
             <!--日志文件保留天数-->
@@ -43,9 +43,27 @@
         </triggeringPolicy>
     </appender>
 
+    <!-- 输出日志信息到文件  -->
+    <appender name="SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_path}/${log_name}/${log_modal}-sql-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %class.%method - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <!-- 日志输出级别 -->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
+
+    <!--打印com.alibaba.dubbo包下日志 (打印sql),此logger虽然没有指定appender，但是他的上级root已经指定了，所有他会把信息交给上级 -->
+    <logger name="com.bon.wx.dao" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="SQL"/>
+    </logger>
 </configuration>

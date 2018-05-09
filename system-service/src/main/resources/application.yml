@@ -4,10 +4,12 @@ spring:
       active: dev
   dubbo:
     application:
-      name: service
+      id: system-service
+      name: system-service
     registry:
       address: zookeeper://127.0.0.1:2181
     protocol:
+      id: dubbo
       name: dubbo
       port: 20880
     scan: com.bon
@@ -28,9 +30,9 @@ spring:
     auto: true
     # 使用JDK代理，只有这样才能用Spring AOP拦截Mapper接口实现类 
     proxy-target-class: false
-  activemq:
-      broker-url: failover:(tcp://127.0.0.1:61616?wireFormat.maxInactivityDuration=0)
-      in-memory: true
+#  activemq:
+#      broker-url: failover:(tcp://127.0.0.1:61616?wireFormat.maxInactivityDuration=0)
+#      in-memory: true
 ## Mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml

@@ -1,18 +1,23 @@
 package com.bon.common.config;
 
+import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.wall.WallConfig;
+import com.alibaba.druid.wall.WallFilter;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -20,7 +25,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -73,6 +80,9 @@ public class DruidDataSourceConfig implements EnvironmentAware {
         druidDataSource.setTestOnReturn(Boolean.parseBoolean(propertyResolver.getProperty("testOnReturn")));
         druidDataSource.setPoolPreparedStatements(Boolean.parseBoolean(propertyResolver.getProperty("poolPreparedStatements")));
         druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt(propertyResolver.getProperty("maxPoolPreparedStatementPerConnectionSize")));
+//        List<Filter> filters = new ArrayList<>();
+//        filters.add(wallFilter);
+//        druidDataSource.setProxyFilters(filters);
         druidDataSource.setFilters(propertyResolver.getProperty("filters"));
         return druidDataSource;
     }
@@ -102,4 +112,23 @@ public class DruidDataSourceConfig implements EnvironmentAware {
     public PlatformTransactionManager transactionManager() throws SQLException {
         return new DataSourceTransactionManager(dataSource());
     }
+
+//    @Autowired
+//    WallFilter wallFilter;
+//
+//
+//    @Bean(name = "wallConfig")
+//    WallConfig wallFilterConfig(){
+//        WallConfig wc = new WallConfig ();
+//        wc.setMultiStatementAllow(true);
+//        return wc;
+//    }
+//
+//    @Bean(name = "wallFilter")
+//    @DependsOn("wallConfig")
+//    WallFilter wallFilter(WallConfig wallConfig){
+//        WallFilter wfilter = new WallFilter();
+//        wfilter.setConfig(wallConfig);
+//        return wfilter;
+//    }
 }

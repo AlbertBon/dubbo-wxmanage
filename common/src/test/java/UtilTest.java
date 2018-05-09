@@ -29,9 +29,8 @@ public class UtilTest {
 
     @Test
     public void poiUtil(){
-//        File file = new File("D:\\test\\generate.xls");
         try {
-           List<String> list = POIUtil.excelSqlImport("D:\\test\\generate.xlsx");
+           List<String> list = POIUtil.excelSqlImport("D:\\test\\generate.xls");
            for (String str:list){
                log.info("sql:{}",str);
            }
