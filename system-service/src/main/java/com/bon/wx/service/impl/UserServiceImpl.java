@@ -1,6 +1,5 @@
 package com.bon.wx.service.impl;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.bon.common.domain.base.ExceptionType;
 import com.bon.common.util.BeanUtil;
 import com.bon.common.util.MyLog;
@@ -11,6 +10,7 @@ import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.UserService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;

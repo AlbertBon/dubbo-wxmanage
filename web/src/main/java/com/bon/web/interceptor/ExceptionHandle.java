@@ -1,5 +1,6 @@
 package com.bon.interceptor;
 
+import com.alibaba.dubbo.rpc.RpcException;
 import com.alibaba.fastjson.JSONObject;
 import com.bon.common.domain.base.ExceptionType;
 import com.bon.common.domain.base.ResultBody;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,14 +21,14 @@ import java.util.Map;
  * @author: Bon
  * @create: 2018-05-02 11:07
  **/
-@ControllerAdvice
+@RestControllerAdvice
 public class ExceptionHandle {
 
     private static final MyLog LOG = MyLog.getLog(ExceptionHandle.class);
 
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(RpcException.class)
     @ResponseBody
-    public JSONObject handle(Exception e) {
+    public JSONObject handle(RuntimeException e) {
         /*业务异常*/
         LOG.error(e,e.getMessage());
         if(e instanceof BusinessException){

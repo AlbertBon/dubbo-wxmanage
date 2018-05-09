@@ -2,17 +2,17 @@ spring:
   # 环境 dev|test|pro
   profiles:
       active: dev
-  dubbo:
-    application:
-      id: system-service
-      name: system-service
-    registry:
-      address: zookeeper://127.0.0.1:2181
-    protocol:
-      id: dubbo
-      name: dubbo
-      port: 20880
-    scan: com.bon
+#  dubbo:
+#    application:
+#      id: system-service
+#      name: system-service
+#    registry:
+#      address: zookeeper://127.0.0.1:2181
+#    protocol:
+#      id: dubbo
+#      name: dubbo
+#      port: 20880
+#    scan: com.bon
   output:
     ansi:
       enabled: detect #配置输出console的ide中的配色

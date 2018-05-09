@@ -1,41 +1,42 @@
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
-<!--<beans xmlns="http://www.springframework.org/schema/beans"-->
-       <!--xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
-       <!--xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"-->
-       <!--xsi:schemaLocation="http://www.springframework.org/schema/beans-->
-        <!--http://www.springframework.org/schema/beans/spring-beans.xsd-->
-        <!--http://code.alibabatech.com/schema/dubbo-->
-        <!--http://code.alibabatech.com/schema/dubbo/dubbo.xsd">-->
-    <!--<bean id="userService" class="com.bon.wx.service.impl.UserServiceImpl"/>-->
-    <!--<bean id="generateService" class="com.bon.wx.service.impl.GenerateServiceImpl"/>-->
-    <!--&lt;!&ndash; 提供方应用信息，用于计算依赖关系  &ndash;&gt;-->
-    <!--<dubbo:application name="system_provider"/>-->
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+    <bean id="userService" class="com.bon.wx.service.impl.UserServiceImpl"/>
+    <bean id="generateService" class="com.bon.wx.service.impl.GenerateServiceImpl"/>
+    <!-- 提供方应用信息，用于计算依赖关系  -->
+    <dubbo:application name="system_provider"/>
+    <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>
+     <!--用dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="20880" serialization="java"/>
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service ref="userService" interface="com.bon.wx.service.UserService"/>
+    <dubbo:service interface="com.bon.wx.service.GenerateService" ref="generateService" />
+
+
+
     <!--&lt;!&ndash; 使用zookeeper注册中心暴露服务地址 &ndash;&gt;-->
-    <!--<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181,192.168.1.119:2181,192.168.1.120:2181"/>-->
-     <!--&lt;!&ndash;用dubbo协议在20880端口暴露服务 &ndash;&gt;-->
-    <!--<dubbo:protocol name="dubbo" port="20880" serialization="java"/>-->
-    <!--&lt;!&ndash; 声明需要暴露的服务接口 &ndash;&gt;-->
-    <!--<dubbo:service ref="userService" interface="com.bon.wx.service.UserService" />-->
-    <!--&lt;!&ndash;<dubbo:service interface="com.bon.wx.service.GenerateService" version="1.0.0" ref="generateService"/>&ndash;&gt;-->
+    <!--<dubbo:registry address="zookeeper://127.0.0.1:2181" />-->
 
+    <!--&lt;!&ndash; 用dubbo协议在20880端口暴露服务 &ndash;&gt;-->
+    <!--<dubbo:protocol name="dubbo" port="20880" />-->
 
+    <!-- 具体的实现bean
+    <bean id="demoService" class="com.unj.dubbotest.provider.impl.DemoServiceImpl" />
+    -->
+    <!-- 声明需要暴露的服务接口
+    <dubbo:service interface="com.unj.dubbotest.provider.DemoService" ref="demoService" />
+    -->
 
-    <!--&lt;!&ndash;&lt;!&ndash; 使用zookeeper注册中心暴露服务地址 &ndash;&gt;&ndash;&gt;-->
-    <!--&lt;!&ndash;<dubbo:registry address="zookeeper://127.0.0.1:2181" />&ndash;&gt;-->
+    <!--&lt;!&ndash; 使用注解方式暴露接口 &ndash;&gt;-->
+    <!--<dubbo:annotation package="com.bon.wx.service" />-->
 
-    <!--&lt;!&ndash;&lt;!&ndash; 用dubbo协议在20880端口暴露服务 &ndash;&gt;&ndash;&gt;-->
-    <!--&lt;!&ndash;<dubbo:protocol name="dubbo" port="20880" />&ndash;&gt;-->
-
-    <!--&lt;!&ndash; 具体的实现bean-->
-    <!--<bean id="demoService" class="com.unj.dubbotest.provider.impl.DemoServiceImpl" />-->
-    <!--&ndash;&gt;-->
-    <!--&lt;!&ndash; 声明需要暴露的服务接口-->
-    <!--<dubbo:service interface="com.unj.dubbotest.provider.DemoService" ref="demoService" />-->
-    <!--&ndash;&gt;-->
-
-    <!--&lt;!&ndash;&lt;!&ndash; 使用注解方式暴露接口 &ndash;&gt;&ndash;&gt;-->
-    <!--&lt;!&ndash;<dubbo:annotation package="com.bon.wx.service" />&ndash;&gt;-->
-
-    <!--&lt;!&ndash;&lt;!&ndash; 加入spring注解扫描 &ndash;&gt;&ndash;&gt;-->
-    <!--&lt;!&ndash;<context:component-scan base-package="com.bon.wx.service"/>&ndash;&gt;-->
-<!--</beans>-->
+    <!--&lt;!&ndash; 加入spring注解扫描 &ndash;&gt;-->
+    <!--<context:component-scan base-package="com.bon.wx.service"/>-->
+</beans>

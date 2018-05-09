@@ -1,18 +1,18 @@
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
-<!--<beans xmlns="http://www.springframework.org/schema/beans"-->
-       <!--xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
-       <!--xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"-->
-       <!--xsi:schemaLocation="http://www.springframework.org/schema/beans  -->
-        <!--http://www.springframework.org/schema/beans/spring-beans.xsd  -->
-        <!--http://code.alibabatech.com/schema/dubbo  -->
-        <!--http://code.alibabatech.com/schema/dubbo/dubbo.xsd  -->
-        <!--">-->
-    <!--&lt;!&ndash; 消费者应用信息，用于提供依赖关系 &ndash;&gt;-->
-    <!--<dubbo:application name="web_consumer"/>-->
-    <!--&lt;!&ndash; 注册地址，用于消费者寻找服务 &ndash;&gt;-->
-    <!--<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181,192.168.1.119:2181,192.168.1.120:2181"/>-->
-    <!--<dubbo:consumer timeout="5000"/>-->
-    <!--&lt;!&ndash; 引用的服务 &ndash;&gt;-->
-    <!--<dubbo:reference id="userService" interface="com.bon.wx.service.UserService" version="1.0.0"/>-->
-    <!---->
-<!--</beans>-->
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+    <!-- 消费者应用信息，用于提供依赖关系 -->
+    <dubbo:application name="web_consumer"/>
+    <!-- 注册地址，用于消费者寻找服务 -->
+    <dubbo:registry protocol="zookeeper" address="192.168.0.126:2181"/>
+    <dubbo:consumer timeout="5000"/>
+    <!-- 引用的服务 -->
+    <dubbo:reference id="userService" interface="com.bon.wx.service.UserService"/>
+    <dubbo:reference id="generateService" interface="com.bon.wx.service.GenerateService"/>
+</beans>

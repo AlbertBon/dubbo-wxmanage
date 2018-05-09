@@ -1,12 +1,12 @@
 package com.bon.wx.service.impl;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.bon.common.util.MyLog;
 import com.bon.common.util.POIUtil;
 import com.bon.wx.dao.GenerateMapper;
 import com.bon.wx.service.GenerateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -26,6 +26,7 @@ public class GenerateServiceImpl implements GenerateService{
     private GenerateMapper generateMapper;
 
     @Override
+    @Transactional
     public void generateByFilePath(String path){
         List<String> list = null;
         try {

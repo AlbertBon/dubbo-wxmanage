@@ -9,6 +9,7 @@ import com.bon.wx.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/generate")
 public class GenerateController {
 
-    @Reference
+    @Autowired
     private GenerateService generateService;
 
     @ApiOperation(value = "文件路径导入")

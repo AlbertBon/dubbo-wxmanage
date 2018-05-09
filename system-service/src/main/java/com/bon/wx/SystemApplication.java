@@ -17,6 +17,7 @@ import org.springframework.context.annotation.ImportResource;
  **/
 @SpringBootApplication
 @ComponentScan({"com.bon"})
+@ImportResource({"classpath:dubbo.xml"})
 public class SystemApplication implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(SystemApplication.class);
