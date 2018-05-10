@@ -18,7 +18,6 @@ import org.springframework.context.annotation.ImportResource;
  **/
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @ComponentScan({"com.bon.web"})
-@EnableConfigurationProperties
 @ImportResource("classpath:dubbo.xml")
 public class WebApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {

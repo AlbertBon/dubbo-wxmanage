@@ -7,6 +7,6 @@ package com.bon.wx.service;
  * @create: 2018-05-09 10:43
  **/
 public interface GenerateService {
-    void generateByFilePath(String path);
+    void generateByFilePath(String path) throws Exception;
     void generateByFile();
 }

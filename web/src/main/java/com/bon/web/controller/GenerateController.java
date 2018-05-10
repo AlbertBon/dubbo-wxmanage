@@ -29,7 +29,7 @@ public class GenerateController {
     @ApiOperation(value = "文件路径导入")
     @ApiResponse(code = 200, message = "success")
     @GetMapping("/path")
-    public ResultBody generateByFilePath(@RequestParam String path){
+    public ResultBody generateByFilePath(@RequestParam String path) throws Exception{
         generateService.generateByFilePath(path);
         return new ResultBody();
     }

@@ -1,14 +1,18 @@
 package com.bon.wx.service.impl;
 
+import com.bon.common.domain.base.ExceptionType;
 import com.bon.common.util.MyLog;
 import com.bon.common.util.POIUtil;
 import com.bon.wx.dao.GenerateMapper;
+import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.GenerateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.border.EtchedBorder;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,16 +31,11 @@ public class GenerateServiceImpl implements GenerateService{
 
     @Override
     @Transactional
-    public void generateByFilePath(String path){
-        List<String> list = null;
-        try {
-            list = POIUtil.excelSqlImport(path);
-            for(String sql:list){
-                generateMapper.createTable(sql);
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
+    public void generateByFilePath(String path) throws Exception{
+        List<String> list = new ArrayList<>();
+        list = POIUtil.excelSqlImport(path);
+        for(String sql:list){
+            generateMapper.createTable(sql);
         }
     }
 

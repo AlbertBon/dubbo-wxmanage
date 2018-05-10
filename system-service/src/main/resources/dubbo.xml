@@ -16,8 +16,10 @@
      <!--用dubbo协议在20880端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="20880" serialization="java"/>
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service ref="userService" interface="com.bon.wx.service.UserService"/>
+    <dubbo:service ref="userService" interface="com.bon.wx.service.UserService" />
     <dubbo:service interface="com.bon.wx.service.GenerateService" ref="generateService" />
+
+    <dubbo:provider />
 
 
 
