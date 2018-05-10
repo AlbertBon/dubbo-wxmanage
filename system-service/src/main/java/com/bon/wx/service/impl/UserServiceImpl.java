@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long id) {
         if (id.equals(1L)) {
-            throw new BusinessException(ExceptionType.DATA_ERROR.getCode(), ExceptionType.DATA_ERROR.getMessage());
+            throw new BusinessException(ExceptionType.SYSTEM_ERROR);
         }
         User user = userMapper.selectByPrimaryKey(id);
         return user;

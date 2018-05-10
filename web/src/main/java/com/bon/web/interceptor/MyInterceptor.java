@@ -44,10 +44,10 @@ public class MyInterceptor implements HandlerInterceptor {
             /*异常拦截*/
             if (e instanceof BusinessException) {
                 BusinessException businessException = (BusinessException) e;
-                out.write(new ResultBody(businessException.getCode(), businessException.getMessage()).toJsonString().getBytes("utf-8"));
+                out.write(new ResultBody(businessException.getCode(), businessException.getMessage()).toErrString().getBytes("utf-8"));
                 out.close();
             } else {
-                out.write(new ResultBody(ExceptionType.SYSTEM_ERROR.getCode(),ExceptionType.SYSTEM_ERROR.getMessage()).toJsonString().getBytes("utf-8"));
+                out.write(new ResultBody(ExceptionType.SYSTEM_ERROR).toErrString().getBytes("utf-8"));
                 out.close();
             }
         }

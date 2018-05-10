@@ -4,7 +4,7 @@ package com.bon.common.domain.base.exception;
 
 
 /**
- * 业务异常（放）
+ * 业务异常（common包中的暂不使用）
  *
  * @author Bon
  * @since 1.0.0

@@ -26,7 +26,7 @@ public class ResultBody<T> implements Serializable {
      * 数据
      */
     @ApiModelProperty(value = "数据", required = true)
-    private T data;
+    private T data = (T) "-";
 
     public ResultBody(){}
 
@@ -37,7 +37,11 @@ public class ResultBody<T> implements Serializable {
 
     public ResultBody(T data) {
         super();
-        this.data = data;
+        if(data == null){
+            this.data = (T) "-";
+        }else{
+            this.data = data;
+        }
     }
 
     public ResultBody(String code, String message) {
@@ -50,7 +54,11 @@ public class ResultBody<T> implements Serializable {
         super();
         this.code = (null==code) ? "00" : code;
         this.message = (null==code) ? "success" : message;
-        this.data = data;
+        if(data == null){
+            this.data = (T) "-";
+        }else{
+            this.data = data;
+        }
     }
 
     public String getCode() {
@@ -77,19 +85,26 @@ public class ResultBody<T> implements Serializable {
         this.data = data;
     }
 
+    public String toErrString() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", getCode());
+        jsonObject.put("message", getMessage());
+        return jsonObject.toJSONString();
+    }
+
     public String toJsonString() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("response_code", getCode());
+        jsonObject.put("code", getCode());
         jsonObject.put("message", getMessage());
-        jsonObject.put("content", getData());
+        jsonObject.put("data", getData());
         return jsonObject.toJSONString();
     }
 
     public JSONObject toJsonObject() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("response_code", getCode());
+        jsonObject.put("code", getCode());
         jsonObject.put("message", getMessage());
-        jsonObject.put("content", getData());
+//        jsonObject.put("data", getData());
         return jsonObject;
     }
 }

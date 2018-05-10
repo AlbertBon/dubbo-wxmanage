@@ -2,6 +2,7 @@
 package com.bon.wx.exception;
 
 
+import com.bon.common.domain.base.ExceptionType;
 
 /**
  * 业务异常（放）
@@ -17,11 +18,10 @@ public class BusinessException extends RuntimeException {
 
 //    private int level;
 
-//    public BusinessException(ExceptionType exceptionType) {
-//        this.code = exceptionType.getCode();
-//        this.message = exceptionType.getMessage();
-//        this.level = exceptionType.getLevel();
-//    }
+    public BusinessException(ExceptionType exceptionType) {
+        this.code = exceptionType.getCode();
+        this.message = exceptionType.getMessage();
+    }
 
     public BusinessException(String code, String message) {
         this.code = code;
