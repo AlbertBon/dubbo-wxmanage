@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -27,7 +28,7 @@ public class UserController {
 
     @ApiOperation(value = "用户列表")
     @ApiResponse(code = 200, message = "success")
-    @GetMapping("/query")
+    @GetMapping(value = "/query",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultBody findByKey(@RequestParam Long key){
         User user= userService.findById(key);
         return new ResultBody(user);
@@ -35,7 +36,7 @@ public class UserController {
 
     @ApiOperation(value = "新增用户")
     @ApiResponse(code = 200, message = "success")
-    @PostMapping(value = "/addUser")
+    @PostMapping(value = "/addUser",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String addUser(@RequestBody UserDTO user){
         userService.save(user);
         return new ResultBody().toJsonString();
