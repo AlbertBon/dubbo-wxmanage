@@ -1,14 +1,17 @@
 package com.bon.wx.service.impl;
 
 import com.bon.common.domain.base.ExceptionType;
+import com.bon.common.domain.vo.PageVO;
 import com.bon.common.util.BeanUtil;
 import com.bon.common.util.MyLog;
+import com.bon.wx.dao.UserBaseMapper;
 import com.bon.wx.dao.UserMapper;
 import com.bon.wx.domain.dto.UserDTO;
+import com.bon.wx.domain.dto.UserListDTO;
 import com.bon.wx.domain.entity.User;
 import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.UserService;
-import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,18 +32,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Override
-    public User findByUsername(String username) {
-        return null;
-    }
+    @Autowired
+    private UserBaseMapper userBaseMapper;
 
     @Override
-    public User findByPhone(String phone) {
-        return null;
-    }
-
-    @Override
-    public User findById(Long id) {
+    public User getById(Long id) {
         if (id.equals(1L)) {
             throw new BusinessException(ExceptionType.SYSTEM_ERROR);
         }
@@ -58,32 +54,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
+    public void update(UserDTO userDTO) {
 
     }
 
     @Override
-    public PageInfo<User> findAll(int pageNum, int pageSize) {
-        return null;
-    }
-
-    @Override
-    public String findAvatarById(Long id) {
-        return null;
-    }
-
-    @Override
-    public User findByEmail(String email) {
-        return null;
-    }
-
-    @Override
-    public void resetPassword(Long id, String newPassword) {
+    public void delete(Long id) {
 
     }
 
     @Override
-    public List<Long> findAllUserIds() {
-        return null;
+    public PageVO listAll(UserListDTO userListDTO) {
+        PageHelper.startPage(userListDTO);
+//        PageVO pageVO = (PageVO) userMapper.listAll();
+//        PageVO pageVO = new PageVO(userMapper.listAll());
+        List<User> list = userBaseMapper.selectAll();
+        PageVO pageVO = new PageVO(list);
+        return pageVO;
     }
+
+    @Override
+    public PageVO list(UserListDTO userListDTO) {
+        PageHelper.startPage(userListDTO);
+        PageVO<User> pageVO = (PageVO<User>) userMapper.list();
+        return pageVO;
+    }
+
 }

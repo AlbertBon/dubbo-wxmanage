@@ -1,11 +1,7 @@
 package com.bon.web.controller;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.bon.common.domain.base.ResultBody;
-import com.bon.wx.domain.dto.UserDTO;
-import com.bon.wx.domain.entity.User;
 import com.bon.wx.service.GenerateService;
-import com.bon.wx.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

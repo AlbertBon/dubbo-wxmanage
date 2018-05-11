@@ -1,8 +1,9 @@
 package com.bon.web;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.bon.common.domain.base.ResultBody;
+import com.bon.common.domain.vo.PageVO;
 import com.bon.wx.domain.dto.UserDTO;
+import com.bon.wx.domain.dto.UserListDTO;
 import com.bon.wx.domain.entity.User;
 import com.bon.wx.service.UserService;
 import io.swagger.annotations.Api;
@@ -28,17 +29,25 @@ public class UserController {
 
     @ApiOperation(value = "用户列表")
     @ApiResponse(code = 200, message = "success")
-    @GetMapping(value = "/query",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/query",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultBody findByKey(@RequestParam Long key){
-        User user= userService.findById(key);
+        User user= userService.getById(key);
         return new ResultBody(user);
     }
 
     @ApiOperation(value = "新增用户")
     @ApiResponse(code = 200, message = "success")
     @PostMapping(value = "/addUser",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String addUser(@RequestBody UserDTO user){
+    public ResultBody addUser(@RequestBody UserDTO user){
         userService.save(user);
-        return new ResultBody().toJsonString();
+        return new ResultBody();
+    }
+
+    @ApiOperation(value = "根据条件获取用户列表")
+    @ApiResponse(code = 200, message = "success" )
+    @PostMapping(value = "/list",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResultBody list(@RequestBody UserListDTO listDTO){
+        PageVO pageVO = userService.listAll(listDTO);
+        return new ResultBody(pageVO);
     }
 }

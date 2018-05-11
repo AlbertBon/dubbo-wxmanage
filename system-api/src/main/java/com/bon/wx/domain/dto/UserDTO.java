@@ -1,5 +1,6 @@
 package com.bon.wx.domain.dto;
 
+import com.bon.common.domain.dto.BaseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * @create: 2018-05-03 18:36
  **/
 @ApiModel(value ="UserDTO")
-public class UserDTO implements Serializable{
+public class UserDTO implements Serializable {
     @ApiModelProperty(value = "登陆名")
     private String name;
 

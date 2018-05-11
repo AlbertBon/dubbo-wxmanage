@@ -22,7 +22,7 @@ import java.io.PrintWriter;
 public class MyInterceptor implements HandlerInterceptor {
     //在请求处理之前进行调用（Controller方法调用之前
     @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
 //        System.out.println("preHandle被调用");
         return true;    //如果false，停止流程，api被拦截
     }
@@ -46,7 +46,10 @@ public class MyInterceptor implements HandlerInterceptor {
                 BusinessException businessException = (BusinessException) e;
                 out.write(new ResultBody(businessException.getCode(), businessException.getMessage()).toErrString().getBytes("utf-8"));
                 out.close();
-            } else {
+            } else if(e instanceof ClassCastException){
+                out.write(new ResultBody(ExceptionType.SYSTEM_ERROR).toErrString().getBytes("utf-8"));
+                out.close();
+            }else {
                 out.write(new ResultBody(ExceptionType.SYSTEM_ERROR).toErrString().getBytes("utf-8"));
                 out.close();
             }

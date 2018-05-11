@@ -44,6 +44,12 @@ public class ResultBody<T> implements Serializable {
         }
     }
 
+    public ResultBody(ExceptionType exceptionType) {
+        super();
+        this.code = exceptionType.getCode();
+        this.message = exceptionType.getMessage();
+    }
+
     public ResultBody(String code, String message) {
         super();
         this.code = code;

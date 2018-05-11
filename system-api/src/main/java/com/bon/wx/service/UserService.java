@@ -1,11 +1,9 @@
 package com.bon.wx.service;
 
+import com.bon.common.domain.vo.PageVO;
 import com.bon.wx.domain.dto.UserDTO;
+import com.bon.wx.domain.dto.UserListDTO;
 import com.bon.wx.domain.entity.User;
-import com.github.pagehelper.PageInfo;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @program: bon-dubbo
@@ -14,14 +12,10 @@ import java.util.List;
  * @create: 2018-04-27 17:47
  **/
 public interface UserService {
-    User findByUsername(String username);
-    User findByPhone(String phone);
-    User findById(Long id);
-    void save(UserDTO user);
-    void update(User User);
-    PageInfo<User> findAll(int pageNum, int pageSize);
-    String findAvatarById(Long id);
-    User findByEmail(String email);
-    void resetPassword(Long id, String newPassword);
-    List<Long> findAllUserIds();
+    User getById(Long id);
+    void save(UserDTO userDTO);
+    void update(UserDTO userDTO);
+    void delete(Long id);
+    PageVO listAll(UserListDTO userListDTO);
+    PageVO list(UserListDTO userListDTO);
 }
