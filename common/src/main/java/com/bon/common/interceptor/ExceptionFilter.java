@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * @program: dubbo-wxmanage
- * @description:
+ * @description: dubbo过滤器（暂未使用）
  * @author: Bon
  * @create: 2018-05-10 11:37
  **/

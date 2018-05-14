@@ -19,26 +19,6 @@
     <dubbo:service ref="userService" interface="com.bon.wx.service.UserService" />
     <dubbo:service interface="com.bon.wx.service.GenerateService" ref="generateService" />
 
-    <dubbo:provider />
 
 
-
-    <!--&lt;!&ndash; 使用zookeeper注册中心暴露服务地址 &ndash;&gt;-->
-    <!--<dubbo:registry address="zookeeper://127.0.0.1:2181" />-->
-
-    <!--&lt;!&ndash; 用dubbo协议在20880端口暴露服务 &ndash;&gt;-->
-    <!--<dubbo:protocol name="dubbo" port="20880" />-->
-
-    <!-- 具体的实现bean
-    <bean id="demoService" class="com.unj.dubbotest.provider.impl.DemoServiceImpl" />
-    -->
-    <!-- 声明需要暴露的服务接口
-    <dubbo:service interface="com.unj.dubbotest.provider.DemoService" ref="demoService" />
-    -->
-
-    <!--&lt;!&ndash; 使用注解方式暴露接口 &ndash;&gt;-->
-    <!--<dubbo:annotation package="com.bon.wx.service" />-->
-
-    <!--&lt;!&ndash; 加入spring注解扫描 &ndash;&gt;-->
-    <!--<context:component-scan base-package="com.bon.wx.service"/>-->
 </beans>
