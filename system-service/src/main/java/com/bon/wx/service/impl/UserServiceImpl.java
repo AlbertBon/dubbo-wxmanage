@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(UserDTO userDTO){
+    public void save(UserDTO userDTO) {
         User user = new User();
         BeanUtil.copyPropertys(userDTO, user);
         user.setGmtCreate(new Date());
@@ -66,10 +66,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageVO listAll(UserListDTO userListDTO) {
         PageHelper.startPage(userListDTO);
-//        PageVO pageVO = (PageVO) userMapper.listAll();
-//        PageVO pageVO = new PageVO(userMapper.listAll());
-//        List<User> list = userBaseMapper.selectAll();
-        List<User> list = userBaseMapper.selectByExample(userListDTO.createExample(new User()));
+        List<User> list = userBaseMapper.selectAll();
+
         PageVO pageVO = new PageVO(list);
         return pageVO;
     }
@@ -77,7 +75,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageVO list(UserListDTO userListDTO) {
         PageHelper.startPage(userListDTO);
-        PageVO<User> pageVO = (PageVO<User>) userMapper.list();
+        List<User> list = userBaseMapper.selectByExample(userListDTO.createExample(new User()));
+
+        PageVO pageVO = new PageVO(list);
         return pageVO;
     }
 

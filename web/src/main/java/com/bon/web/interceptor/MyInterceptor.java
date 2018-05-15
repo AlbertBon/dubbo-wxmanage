@@ -23,7 +23,14 @@ public class MyInterceptor implements HandlerInterceptor {
     //在请求处理之前进行调用（Controller方法调用之前
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-//        System.out.println("preHandle被调用");
+        if(request.getServletPath().equals("/error")){
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json; charset=utf-8");
+            OutputStream out = response.getOutputStream();
+            out.write(new ResultBody(ExceptionType.REQUEST_ERROR).toErrString().getBytes("utf-8"));
+            out.close();
+            return false;
+        }
         return true;    //如果false，停止流程，api被拦截
     }
 

@@ -37,9 +37,9 @@
     <dependencies>
         <!--dubbo spring boot注解方式-->
         <!--<dependency>-->
-            <!--<groupId>io.dubbo.springboot</groupId>-->
-            <!--<artifactId>spring-boot-starter-dubbo</artifactId>-->
-            <!--<version>${springboot.dubbo.version}</version>-->
+        <!--<groupId>io.dubbo.springboot</groupId>-->
+        <!--<artifactId>spring-boot-starter-dubbo</artifactId>-->
+        <!--<version>${springboot.dubbo.version}</version>-->
         <!--</dependency>-->
 
         <!--dubbo xml方式注册 start-->
@@ -48,6 +48,10 @@
             <artifactId>dubbo</artifactId>
             <version>2.5.7</version>
             <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
                 <exclusion>
                     <groupId>org.springframework</groupId>
                     <artifactId>spring</artifactId>
@@ -62,6 +66,12 @@
             <groupId>com.github.sgroschupf</groupId>
             <artifactId>zkclient</artifactId>
             <version>0.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.zookeeper</groupId>

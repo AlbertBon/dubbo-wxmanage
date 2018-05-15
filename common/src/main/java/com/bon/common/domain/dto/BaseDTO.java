@@ -31,7 +31,7 @@ public class BaseDTO<T> implements Serializable {
     private Boolean reasonable;
     @ApiModelProperty(value = "当设置为true的时候，如果pagesize设置为0（或RowBounds的limit=0），就不执行分页，返回全部结果", example = "false", hidden = true)
     private Boolean pageSizeZero;
-    @ApiModelProperty(value = "查询关键字", example = "{'id=':'1','or:':'{'id':'3','id':'4'}'}")
+    @ApiModelProperty(value = "查询关键字,举例{\"id=\":\"1\",\"or:\":'{'id=':'2','name=':'2'}\"}", example = "{'id=':'1','or:':'{'id=':'2','name=':'2'}'}")
     private Map<String, String> keyMap;
 
     private Example example;
