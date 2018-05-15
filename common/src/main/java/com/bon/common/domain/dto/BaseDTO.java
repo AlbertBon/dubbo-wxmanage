@@ -7,10 +7,8 @@ import org.apache.poi.ss.formula.functions.T;
 import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * @program: dubbo-wxmanage
@@ -31,7 +29,7 @@ public class BaseDTO<T> implements Serializable {
     private Boolean reasonable;
     @ApiModelProperty(value = "当设置为true的时候，如果pagesize设置为0（或RowBounds的limit=0），就不执行分页，返回全部结果", example = "false", hidden = true)
     private Boolean pageSizeZero;
-    @ApiModelProperty(value = "查询关键字,举例{\"id=\":\"1\",\"or:\":'{'id=':'2','name=':'2'}\"}", example = "{'id=':'1','or:':'{'id=':'2','name=':'2'}'}")
+    @ApiModelProperty(value = "查询关键字,举例{\"id=\":\"1\",\"or:\":\"{'id=':'2','name=':'2','in:name':'1,2,3','isNotNull':'name'}\"}", example = "{\"in:id\":\"1,2,3\",\"or:\":\"{'id=':'2','name=':'2','in:name':'1,2,3'}\"}")
     private Map<String, String> keyMap;
 
     private Example example;
@@ -42,7 +40,7 @@ public class BaseDTO<T> implements Serializable {
             example = new Example(t.getClass());
             String flag = "";
             for (Map.Entry<String, String> entry : keyMap.entrySet()) {
-                //获取标识值 or：,in:等等
+                //获取标识值 or：,in: ,notIn:,isNull,isNotNull等等
                 flag = entry.getKey().split(":")[0];
                 switch (flag) {
                     case "or":
@@ -50,9 +48,35 @@ public class BaseDTO<T> implements Serializable {
                         Example example1 = new Example(t.getClass());
                         Example.Criteria criteria = example1.createCriteria();
                         for (Map.Entry<String,String> en: map.entrySet()) {
-                            criteria.andCondition(en.getKey(),en.getValue());
+
+                            //判断类型
+                            if(en.getKey().split(":")[0].equals("isNull")){
+                                criteria.andIsNull(en.getValue());
+                            }else if(en.getKey().split(":")[0].equals("isNotNull")){
+                                criteria.andIsNotNull(en.getValue());
+                            }else if(en.getKey().split(":")[0].equals("in")){
+                                criteria.andIn(en.getKey().split(":")[1],Arrays.asList(en.getValue().split(",")));
+                            }else if(en.getKey().split(":")[0].equals("notIn")){
+                                criteria.andNotIn(en.getKey().split(":")[1],Arrays.asList(en.getValue().split(",")));
+                            }else {
+                                criteria.andCondition(en.getKey(),en.getValue());
+                            }
                         }
                         example.or(criteria);
+                        break;
+                    case "in":
+                        String strIn[] = entry.getValue().split(",");
+                        example.and().andIn(entry.getKey().split(":")[1],Arrays.asList(strIn));
+                        break;
+                    case "notIn":
+                        String strNotIn[] = entry.getValue().split(",");
+                        example.and().andNotIn(entry.getKey().split(":")[1],Arrays.asList(strNotIn));
+                        break;
+                    case "isNull":
+                        example.and().andIsNull(entry.getValue());
+                        break;
+                    case "isNotNull":
+                        example.and().andIsNotNull(entry.getValue());
                         break;
                     default:
                         example.and().andCondition(entry.getKey(), entry.getValue());
