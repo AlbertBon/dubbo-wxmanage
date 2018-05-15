@@ -1,10 +1,15 @@
 package com.bon.common.domain.dto;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.poi.ss.formula.functions.T;
 import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,32 +19,48 @@ import java.util.Map;
  * @create: 2018-05-03 18:35
  **/
 public class BaseDTO<T> implements Serializable {
-    @ApiModelProperty(value = "当前页",example = "1")
-    private int pageNum=1;
-    @ApiModelProperty(value = "页面大小",example = "1000")
-    private int pageSize=1000;
+    @ApiModelProperty(value = "当前页", example = "1")
+    private int pageNum = 1;
+    @ApiModelProperty(value = "页面大小", example = "1000")
+    private int pageSize = 1000;
     @ApiModelProperty(value = "排序字段")
     private String orderBy;
-    @ApiModelProperty(value = "是否进行count查询",example = "false",hidden = true)
+    @ApiModelProperty(value = "是否进行count查询", example = "false", hidden = true)
     private boolean count;
-    @ApiModelProperty(value = "分页合理化",example = "false",hidden = true)
+    @ApiModelProperty(value = "分页合理化", example = "false", hidden = true)
     private Boolean reasonable;
-    @ApiModelProperty(value = "当设置为true的时候，如果pagesize设置为0（或RowBounds的limit=0），就不执行分页，返回全部结果",example = "false",hidden = true)
+    @ApiModelProperty(value = "当设置为true的时候，如果pagesize设置为0（或RowBounds的limit=0），就不执行分页，返回全部结果", example = "false", hidden = true)
     private Boolean pageSizeZero;
-    @ApiModelProperty(value = "查询关键字",example = "{}")
-    private Map<String,String> keyMap;
+    @ApiModelProperty(value = "查询关键字", example = "{'id=':'1','or:':'{'id':'3','id':'4'}'}")
+    private Map<String, String> keyMap;
 
     private Example example;
 
     //根据条件创建查询模板
     public Example createExample(T t) {
-        if(null!=this.getKeyMap()){
+        if (null != this.getKeyMap()) {
             example = new Example(t.getClass());
-            for(Map.Entry<String, String> entry : keyMap.entrySet()){
-                example.createCriteria().andCondition(entry.getKey(),entry.getValue());
+            String flag = "";
+            for (Map.Entry<String, String> entry : keyMap.entrySet()) {
+                //获取标识值 or：,in:等等
+                flag = entry.getKey().split(":")[0];
+                switch (flag) {
+                    case "or":
+                        Map<String, String> map = JSONObject.parseObject(entry.getValue(),Map.class);
+                        Example example1 = new Example(t.getClass());
+                        Example.Criteria criteria = example1.createCriteria();
+                        for (Map.Entry<String,String> en: map.entrySet()) {
+                            criteria.andCondition(en.getKey(),en.getValue());
+                        }
+                        example.or(criteria);
+                        break;
+                    default:
+                        example.and().andCondition(entry.getKey(), entry.getValue());
+                        break;
+                }
             }
             return example;
-        }else {
+        } else {
             return null;
         }
     }

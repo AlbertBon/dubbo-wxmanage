@@ -68,7 +68,8 @@ public class UserServiceImpl implements UserService {
         PageHelper.startPage(userListDTO);
 //        PageVO pageVO = (PageVO) userMapper.listAll();
 //        PageVO pageVO = new PageVO(userMapper.listAll());
-        List<User> list = userBaseMapper.selectAll();
+//        List<User> list = userBaseMapper.selectAll();
+        List<User> list = userBaseMapper.selectByExample(userListDTO.createExample(new User()));
         PageVO pageVO = new PageVO(list);
         return pageVO;
     }
