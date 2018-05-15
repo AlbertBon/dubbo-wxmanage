@@ -1,17 +1,14 @@
 package com.bon.web.interceptor;
 
-import com.bon.common.domain.base.ExceptionType;
-import com.bon.common.domain.base.ResultBody;
+import com.bon.common.domain.enums.ExceptionType;
+import com.bon.common.domain.vo.ResultBody;
 import com.bon.wx.exception.BusinessException;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 
 /**
  * @program: dubbo-wxmanage

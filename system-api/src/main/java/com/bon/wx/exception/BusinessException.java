@@ -2,7 +2,7 @@
 package com.bon.wx.exception;
 
 
-import com.bon.common.domain.base.ExceptionType;
+import com.bon.common.domain.enums.ExceptionType;
 
 /**
  * 业务异常（放）

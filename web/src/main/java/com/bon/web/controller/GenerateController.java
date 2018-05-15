@@ -1,6 +1,6 @@
 package com.bon.web.controller;
 
-import com.bon.common.domain.base.ResultBody;
+import com.bon.common.domain.vo.ResultBody;
 import com.bon.wx.service.GenerateService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

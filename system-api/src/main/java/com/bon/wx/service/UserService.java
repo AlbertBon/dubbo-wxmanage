@@ -16,6 +16,5 @@ public interface UserService {
     void save(UserDTO userDTO);
     void update(UserDTO userDTO);
     void delete(Long id);
-    PageVO listAll(UserListDTO userListDTO);
     PageVO list(UserListDTO userListDTO);
 }

@@ -1,7 +1,8 @@
-package com.bon.common.domain.base;
+package com.bon.common.domain.vo;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.bon.common.domain.enums.ExceptionType;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;

@@ -1,17 +1,11 @@
 package com.bon.common.interceptor;
 
-import com.alibaba.dubbo.common.Constants;
-import com.alibaba.dubbo.common.extension.Activate;
-import com.alibaba.dubbo.common.utils.NetUtils;
 import com.alibaba.dubbo.rpc.*;
 import com.alibaba.dubbo.rpc.service.GenericService;
-import com.bon.common.domain.base.ExceptionType;
-import com.bon.common.domain.base.ResultBody;
-import com.bon.common.domain.base.exception.BusinessException;
+import com.bon.common.domain.enums.ExceptionType;
+import com.bon.common.domain.vo.ResultBody;
+import com.bon.common.domain.exception.BusinessException;
 import com.bon.common.util.MyLog;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * @program: dubbo-wxmanage

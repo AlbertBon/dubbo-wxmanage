@@ -1,4 +1,4 @@
-package com.bon.common.domain.base;
+package com.bon.common.domain.enums;
 
 /**
  * Enum 响应类型

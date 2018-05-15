@@ -1,6 +1,6 @@
 package com.bon.wx.service.impl;
 
-import com.bon.common.domain.base.ExceptionType;
+import com.bon.common.domain.enums.ExceptionType;
 import com.bon.common.domain.vo.PageVO;
 import com.bon.common.util.BeanUtil;
 import com.bon.common.util.MyLog;
@@ -61,15 +61,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
 
-    }
-
-    @Override
-    public PageVO listAll(UserListDTO userListDTO) {
-        PageHelper.startPage(userListDTO);
-        List<User> list = userBaseMapper.selectAll();
-
-        PageVO pageVO = new PageVO(list);
-        return pageVO;
     }
 
     @Override

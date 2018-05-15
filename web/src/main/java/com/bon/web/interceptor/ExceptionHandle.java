@@ -2,18 +2,13 @@ package com.bon.interceptor;
 
 import com.alibaba.dubbo.rpc.RpcException;
 import com.alibaba.fastjson.JSONObject;
-import com.bon.common.domain.base.ExceptionType;
-import com.bon.common.domain.base.ResultBody;
+import com.bon.common.domain.enums.ExceptionType;
+import com.bon.common.domain.vo.ResultBody;
 import com.bon.common.util.MyLog;
 import com.bon.wx.exception.BusinessException;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @program: dubbo-wxmanage

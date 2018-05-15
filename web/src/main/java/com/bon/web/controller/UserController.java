@@ -1,6 +1,6 @@
 package com.bon.web;
 
-import com.bon.common.domain.base.ResultBody;
+import com.bon.common.domain.vo.ResultBody;
 import com.bon.common.domain.vo.PageVO;
 import com.bon.wx.domain.dto.UserDTO;
 import com.bon.wx.domain.dto.UserListDTO;
@@ -47,7 +47,7 @@ public class UserController {
     @ApiResponse(code = 200, message = "success" )
     @PostMapping(value = "/list",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultBody list(@RequestBody UserListDTO listDTO){
-        PageVO pageVO = userService.listAll(listDTO);
+        PageVO pageVO = userService.list(listDTO);
         return new ResultBody(pageVO);
     }
 }

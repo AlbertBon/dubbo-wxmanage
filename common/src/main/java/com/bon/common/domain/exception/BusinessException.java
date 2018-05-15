@@ -1,5 +1,5 @@
 
-package com.bon.common.domain.base.exception;
+package com.bon.common.domain.exception;
 
 
 
