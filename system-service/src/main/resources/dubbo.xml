@@ -7,18 +7,21 @@
         http://code.alibabatech.com/schema/dubbo
         http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         ">
-    <bean id="userService" class="com.bon.wx.service.impl.UserServiceImpl"/>
-    <bean id="generateService" class="com.bon.wx.service.impl.GenerateServiceImpl"/>
+
     <!-- 提供方应用信息，用于计算依赖关系  -->
     <dubbo:application name="system_provider"/>
     <!-- 使用zookeeper注册中心暴露服务地址 -->
     <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>
      <!--用dubbo协议在20880端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="20880" serialization="java"/>
+    <!--bean-->
+    <bean id="userService" class="com.bon.wx.service.impl.UserServiceImpl"/>
+    <bean id="generateService" class="com.bon.wx.service.impl.GenerateServiceImpl"/>
+    <bean id="loginService" class="com.bon.wx.service.impl.LoginServiceImpl"/>
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service ref="userService" interface="com.bon.wx.service.UserService" />
+    <dubbo:service interface="com.bon.wx.service.UserService"  ref="userService"/>
     <dubbo:service interface="com.bon.wx.service.GenerateService" ref="generateService" />
-
+    <dubbo:service interface="com.bon.wx.service.LoginService" ref="loginService" />
 
 
 </beans>

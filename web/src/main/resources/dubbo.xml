@@ -11,12 +11,14 @@
     <dubbo:application name="web_consumer"/>
     <!-- 注册地址，用于消费者寻找服务 -->
     <dubbo:registry protocol="zookeeper" address="192.168.0.126:2181"/>
-    <!-- 引用的服务 -->
-    <dubbo:reference id="userService" interface="com.bon.wx.service.UserService"/>
-    <dubbo:reference id="generateService" interface="com.bon.wx.service.GenerateService"/>
 
     <!--<dubbo:consumer timeout="300000" filter="exceptionFilter"/>-->
     <dubbo:consumer timeout="300000" />
+
+    <!-- 引用的服务 -->
+    <dubbo:reference id="userService" interface="com.bon.wx.service.UserService"/>
+    <dubbo:reference id="generateService" interface="com.bon.wx.service.GenerateService"/>
+    <dubbo:reference id="loginService" interface="com.bon.wx.service.LoginService"/>
 
 
 </beans>
