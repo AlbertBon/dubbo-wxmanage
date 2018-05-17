@@ -1,7 +1,10 @@
 package com.bon.web.controller;
 
+import com.bon.common.config.Constants;
 import com.bon.common.domain.vo.ResultBody;
+import com.bon.common.service.RedisService;
 import com.bon.common.util.ImageCodeUtil;
+import com.bon.wx.domain.dto.LoginDTO;
 import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.vo.LoginVO;
 import com.bon.wx.service.LoginService;
@@ -14,8 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.MessageFormat;
 
 /**
  * @program: dubbo-wxmanage
@@ -31,10 +36,13 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private RedisService redisService;
+
     @ApiOperation(value = "登录")
     @PostMapping(value = "/loginIn",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResultBody loginIn(@RequestParam String username, @RequestParam String password) {
-        LoginVO loginVO=loginService.loginIn();
+    public ResultBody loginIn(@RequestBody LoginDTO loginDTO) {
+        LoginVO loginVO=loginService.loginIn(loginDTO);
         return new ResultBody(loginVO);
 //        User user = userRepository.findByUsername(username);
 //        if (user == null ||  //未注册
@@ -49,7 +57,7 @@ public class LoginController {
 
     @ApiOperation(value = "验证码")
     @GetMapping(value = "/getImageCode")
-    public ResultBody getImageCode(HttpServletResponse response) throws IOException {
+    public ResultBody getImageCode(HttpServletRequest request,HttpServletResponse response) throws IOException {
         // 设置响应的类型格式为图片格式
         response.setContentType("image/jpeg");
         //禁止图像缓存。
@@ -59,7 +67,9 @@ public class LoginController {
 
 
         ImageCodeUtil vCode = new ImageCodeUtil(120,40,4,100);
-//        session.setAttribute("code", vCode.getCode());
+
+        String key= MessageFormat.format(Constants.RedisKey.USER_VALIDATE_CODE_SESSION_ID,request.getRequestedSessionId());
+        redisService.set(key,vCode.getCode());
         vCode.write(response.getOutputStream());
         return null;
     }

@@ -1,5 +1,6 @@
 package com.bon.wx.service;
 
+import com.bon.wx.domain.dto.LoginDTO;
 import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.vo.LoginVO;
 
@@ -10,5 +11,5 @@ import com.bon.wx.domain.vo.LoginVO;
  * @create: 2018-05-16 11:14
  **/
 public interface LoginService {
-    LoginVO loginIn();
+    LoginVO loginIn(LoginDTO loginDTO);
 }

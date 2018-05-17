@@ -1,12 +1,14 @@
 package com.bon.wx.domain.dto;
 
+import com.bon.common.domain.dto.BaseDTO;
+
 /**
  * @program: dubbo-wxmanage
  * @description: 登录参数
  * @author: Bon
  * @create: 2018-05-16 11:16
  **/
-public class LoginDTO {
+public class LoginDTO extends BaseDTO{
     private String username;
     private String password;
     private String code;

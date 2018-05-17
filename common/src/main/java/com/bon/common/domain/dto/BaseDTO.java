@@ -88,6 +88,13 @@ public class BaseDTO<T> implements Serializable {
             return null;
         }
     }
+    //根据单个字段条件创建查询模板
+    public Example createExample(T t,String field,String value) {
+        example = new Example(t.getClass());
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andCondition(field,value);
+        return example;
+    }
 
     public Map<String, String> getKeyMap() {
         return keyMap;
