@@ -20,5 +20,8 @@
     <dubbo:reference id="generateService" interface="com.bon.wx.service.GenerateService"/>
     <dubbo:reference id="loginService" interface="com.bon.wx.service.LoginService"/>
 
+    <!-- 开启dubbo注解支持 (注解方式会不能使用spring的事务管理)-->
+    <!-- 扫描注解包路径，多个包用逗号分隔，不填pacakge表示扫描当前ApplicationContext中所有的类 -->
+    <dubbo:annotation package="com.bon" />
 
 </beans>
