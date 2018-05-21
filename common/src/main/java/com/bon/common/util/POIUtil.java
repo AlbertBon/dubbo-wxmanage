@@ -48,6 +48,38 @@ public class POIUtil {
      * @return: java.lang.String
      * @Date: 2018/5/7 14:16
      */
+    public static List<String> getTableNames(String filePath) throws Exception {
+        if (StringUtils.isBlank(filePath)) {
+            throw new Exception("路径不能为空");
+        }
+        Workbook workbook;
+        FileInputStream fis = new FileInputStream(filePath);
+        if (filePath.endsWith(".xls")) {
+            workbook = new HSSFWorkbook(fis);
+        } else if (filePath.endsWith(".xlsx")) {//暂时有问题
+            workbook = new XSSFWorkbook(fis);
+        } else {
+            throw new Exception("请导入xls或xlsx文档");
+        }
+        List<String> list = new ArrayList<>();
+        String tableName = "";//表名
+        /*遍历sheet*/
+        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+            Sheet sheet = workbook.getSheetAt(i);
+            /*获取表名*/
+            tableName = sheet.getRow(1).getCell(0).getRichStringCellValue().getString();
+            list.add(tableName);
+        }
+        return list;
+    }
+
+    /**
+     * @param workbook
+     * @Author: Bon
+     * @Description: 导入xls
+     * @return: java.lang.String
+     * @Date: 2018/5/7 14:16
+     */
     private static List<String> generateSql(Workbook workbook) throws Exception {
         List<String> list = new ArrayList<>();
         String tableName = "";//表名
@@ -70,7 +102,7 @@ public class POIUtil {
             sql = "DROP TABLE IF EXISTS `" + tableName + "`;";
             list.add(sql);
             /*清空sql语句*/
-            sql="";
+            sql = "";
             sql += "CREATE TABLE `" + tableName + "` ( ";
             /*从第二行开始遍历*/
             for (int j = 1; j < sheet.getPhysicalNumberOfRows(); j++) {

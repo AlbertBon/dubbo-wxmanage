@@ -2,7 +2,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bon.common.util.MyLog;
 import com.bon.common.util.POIUtil;
+import com.bon.common.util.StringUtils;
 import org.apache.ibatis.annotations.Mapper;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,12 +21,17 @@ import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.bon.common.util.StringUtils.camel2Underline;
+import static com.bon.common.util.StringUtils.underline2Camel;
+import static com.bon.common.util.StringUtils.upperCase;
 
 /**
  * @program: dubbo-wxmanage
@@ -39,6 +51,13 @@ public class UtilTest {
     @After
     public void after() throws Exception {
         log.info(String.format("【测试结束】"));
+    }
+
+    @Test
+    public void test(){
+        String str="#123#"+"DROP TABLE IF EXISTS `";
+        String str1=str.split("#")[1];
+        log.info(str1.toString());
     }
 
     @Test
@@ -93,5 +112,77 @@ public class UtilTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void StringUtils(){
+        String line="tb_user";
+        String camel=underline2Camel(line,true);
+        System.out.println(upperCase(camel));
+        System.out.println(camel2Underline(camel));
+    }
+    /**
+     * 修改：属性值、文本
+     */
+    @Test
+    public void testXmlUpdate() throws DocumentException, IOException{
+        String tableName = "user";
+        String domainName = StringUtils.upperCase(tableName);
+        //创建Document对象，读取已存在的Xml文件generator.xml
+        Document doc = new SAXReader().read(new File(UtilTest.class.getResource("/generator.xml").getFile()));
+        //1.得到属性值标签
+        Element tableElem = doc.getRootElement().element("context").addElement("table");
+        //2.通过增加同名属性的方法，修改属性值----key相同，覆盖；不存在key，则添加
+        tableElem.addAttribute("tableName", tableName).addAttribute("domainObjectName", domainName)
+                .addAttribute("enableCountByExample", "false").addAttribute("enableUpdateByExample", "false")
+                .addAttribute("enableDeleteByExample", "false").addAttribute("enableSelectByExample", "false")
+                .addAttribute("selectByExampleQueryId", "false");
+        tableElem.addElement("property").addAttribute("useActualColumnNames", "false");
+//        //创建Document对象，读取已存在的Xml文件person.xml
+//        Document doc=new SAXReader().read(new File(UtilTest.class.getResource("/generator.xml").getFile()));
+//
+//        /**
+//         * 修改属性值（方案一）
+//         * 方法：使用Attribute类(属性类)的setValue()方法
+//         * 1.得到标签对象
+//         * 2.得到属性对象
+//         * 3.修改属性值
+//         */
+//    /*    //1.1 得到标签对象
+//        Element stuElem=doc.getRootElement().element("student");
+//        //1.2 得到id属性对象
+//        Attribute idAttr=stuElem.attribute("id");
+//        //1.3 修改属性值
+//        idAttr.setValue("000001");
+//    */
+//
+//        /**
+//         *  修改属性值（方案二）
+//         *  方法：Element标签类的addAttribute("attr","value")方法
+//         */
+//        //1.得到属性值标签
+//        Element tableElem=doc.getRootElement().element("context").addElement("table");
+//        //2.通过增加同名属性的方法，修改属性值
+//        tableElem.addAttribute("tableName", "user1").addAttribute("domainObjectName","User1");  //key相同，覆盖；不存在key，则添加
+////        /**
+////         * 修改文本
+////         * 方法：Element标签类的setTest("新文本值")方法
+////         * 1.得到标签对象
+////         * 2.修改文本
+////         */
+////        Element nameElem=doc.getRootElement().element("student").element("name");
+////        nameElem.setText("王二麻子");
+
+        //指定文件输出的位置
+        FileOutputStream out =new FileOutputStream("d:/test/student.xml");
+        // 指定文本的写出的格式：
+        OutputFormat format=OutputFormat.createPrettyPrint();   //漂亮格式：有空格换行
+        format.setEncoding("UTF-8");
+        //1.创建写出对象
+        XMLWriter writer=new XMLWriter(out,format);
+        //2.写出Document对象
+        writer.write(doc);
+        //3.关闭流
+        writer.close();
     }
 }
