@@ -3,7 +3,7 @@
 <mapper namespace="com.bon.wx.dao.UserMapper">
   <resultMap id="BaseResultMap" type="com.bon.wx.domain.entity.User">
     <constructor>
-      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <idArg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
       <arg column="gmt_create" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="gmt_modified" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -16,25 +16,25 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, gmt_create, gmt_modified, name, phone, telephone, address, username, password, 
+    user_id, gmt_create, gmt_modified, name, phone, telephone, address, username, password, 
     remark
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from user
-    where id = #{id,jdbcType=BIGINT}
+    where user_id = #{userId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from user
-    where id = #{id,jdbcType=BIGINT}
+    where user_id = #{userId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.bon.wx.domain.entity.User">
-    insert into user (id, gmt_create, gmt_modified, 
+    insert into user (user_id, gmt_create, gmt_modified, 
       name, phone, telephone, 
       address, username, password, 
       remark)
-    values (#{id,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+    values (#{userId,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
       #{name,jdbcType=VARCHAR}, #{phone,jdbcType=CHAR}, #{telephone,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR})
@@ -42,8 +42,8 @@
   <insert id="insertSelective" parameterType="com.bon.wx.domain.entity.User">
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
+      <if test="userId != null">
+        user_id,
       </if>
       <if test="gmtCreate != null">
         gmt_create,
@@ -74,8 +74,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="gmtCreate != null">
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -137,7 +137,7 @@
         remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where user_id = #{userId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.bon.wx.domain.entity.User">
     update user
@@ -150,11 +150,6 @@
       username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
+    where user_id = #{userId,jdbcType=BIGINT}
   </update>
-  <select id="listAll" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from user
-  </select>
 </mapper>

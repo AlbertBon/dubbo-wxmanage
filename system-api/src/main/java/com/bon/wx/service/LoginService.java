@@ -11,5 +11,5 @@ import com.bon.wx.domain.vo.LoginVO;
  * @create: 2018-05-16 11:14
  **/
 public interface LoginService {
-    LoginVO loginIn(LoginDTO loginDTO);
+    LoginVO loginIn(LoginDTO loginDTO,String sessionId);
 }

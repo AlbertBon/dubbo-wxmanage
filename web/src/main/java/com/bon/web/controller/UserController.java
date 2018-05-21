@@ -2,6 +2,7 @@ package com.bon.web;
 
 import com.bon.common.domain.vo.ResultBody;
 import com.bon.common.domain.vo.PageVO;
+import com.bon.common.util.MD5Util;
 import com.bon.wx.domain.dto.UserDTO;
 import com.bon.wx.domain.dto.UserListDTO;
 import com.bon.wx.domain.entity.User;
@@ -39,6 +40,7 @@ public class UserController {
     @ApiResponse(code = 200, message = "success")
     @PostMapping(value = "/addUser",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultBody addUser(@RequestBody UserDTO user){
+        user.setPassword(MD5Util.encode(user.getPassword()));
         userService.save(user);
         return new ResultBody();
     }

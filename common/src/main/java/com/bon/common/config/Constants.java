@@ -12,12 +12,14 @@ public class Constants {
     /*token有效期（小时）*/
     public static final int TOKEN_EXPIRES_HOUR = 2;
     /*token有效期（分钟）*/
-    public static final int TOKEN_EXPIRES_SECONDS = 2 * 60;
+    public static final int TOKEN_EXPIRES_SECONDS = 2 * 60 * 60;
     /*存放Authorization的header字段*/
     public static final String AUTHORIZATION = "authorization";
 
-    public static final class RedisKey{
+    public static final class RedisKey {
         public static final String USER_VALIDATE_CODE_SESSION_ID = "user_validate_code_session_id_{0}";
+        public static final String USER_LOGIN_USERNAME_TIMESTAMP_SESSION_ID = "user_login_username_{0}_timestamp_{1}_session_id_{2}";
+
     }
 
 }

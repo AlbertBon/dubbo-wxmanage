@@ -41,8 +41,8 @@ public class LoginController {
 
     @ApiOperation(value = "登录")
     @PostMapping(value = "/loginIn",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResultBody loginIn(@RequestBody LoginDTO loginDTO) {
-        LoginVO loginVO=loginService.loginIn(loginDTO);
+    public ResultBody loginIn(@RequestBody LoginDTO loginDTO,HttpServletRequest request) {
+        LoginVO loginVO=loginService.loginIn(loginDTO,request.getRequestedSessionId());
         return new ResultBody(loginVO);
 //        User user = userRepository.findByUsername(username);
 //        if (user == null ||  //未注册
@@ -69,7 +69,7 @@ public class LoginController {
         ImageCodeUtil vCode = new ImageCodeUtil(120,40,4,100);
 
         String key= MessageFormat.format(Constants.RedisKey.USER_VALIDATE_CODE_SESSION_ID,request.getRequestedSessionId());
-        redisService.set(key,vCode.getCode());
+        redisService.create(key,vCode.getCode());
         vCode.write(response.getOutputStream());
         return null;
     }

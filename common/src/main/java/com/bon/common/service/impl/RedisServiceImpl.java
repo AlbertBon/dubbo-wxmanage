@@ -1,6 +1,7 @@
 package com.bon.common.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.bon.common.config.Constants;
 import com.bon.common.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -11,6 +12,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,6 +39,21 @@ public class RedisServiceImpl implements RedisService{
         return result;
     }
 
+    @Override
+    public void create(String key, String value) {
+        this.set(key,value);
+        this.expire(key,Constants.TOKEN_EXPIRES_SECONDS);
+    }
+
+    @Override
+    public void createAndExpire(String key, String value, long expire) {
+        if(expire<=0){
+            expire = Constants.TOKEN_EXPIRES_SECONDS;
+        }
+        this.set(key,value);
+        this.expire(key,expire);
+    }
+
     public String get(final String key){
         String result = redisTemplate.execute(new RedisCallback<String>() {
             @Override
@@ -47,6 +64,20 @@ public class RedisServiceImpl implements RedisService{
             }
         });
         return result;
+    }
+
+    @Override
+    public Set<String> keys(String pattern) {
+        Set<String> keys = redisTemplate.keys(pattern);
+        return keys;
+    }
+
+    @Override
+    public void removeByPattern(String pattern) {
+        Set<String> keys = this.keys(pattern);
+        for (String key:keys){
+            this.del(key);
+        }
     }
 
     @Override

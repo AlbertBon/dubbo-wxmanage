@@ -1,15 +1,24 @@
 package com.bon.wx.service.impl;
 
+import com.bon.common.config.Constants;
+import com.bon.common.domain.enums.ExceptionType;
 import com.bon.common.service.RedisService;
+import com.bon.common.util.BeanUtil;
+import com.bon.common.util.MD5Util;
+import com.bon.common.util.MyLog;
 import com.bon.wx.dao.UserBaseMapper;
 import com.bon.wx.dao.UserMapper;
 import com.bon.wx.domain.dto.LoginDTO;
 import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.vo.LoginVO;
+import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import java.text.MessageFormat;
+import java.util.Date;
 
 /**
  * @program: dubbo-wxmanage
@@ -20,6 +29,8 @@ import tk.mybatis.mapper.entity.Example;
 @Service
 public class LoginServiceImpl implements LoginService{
 
+    private static final MyLog LOG = MyLog.getLog(LoginServiceImpl.class);
+
     @Autowired
     private UserBaseMapper userBaseMapper;
 
@@ -27,12 +38,22 @@ public class LoginServiceImpl implements LoginService{
     private RedisService redisService;
 
     @Override
-    public LoginVO loginIn(LoginDTO loginDTO) {
-        Example example = loginDTO.createExample(new User(),"username",loginDTO.getUsername());
-        User user = userBaseMapper.selectOneByExample(example);
-        if(user == null || user.getPassword().equals(loginDTO.getPassword())){
-//            redisService.set("")
+    public LoginVO loginIn(LoginDTO loginDTO,String sessionId) {
+        String vCode=redisService.get(MessageFormat.format(Constants.RedisKey.USER_VALIDATE_CODE_SESSION_ID,sessionId));
+        if(!vCode.equalsIgnoreCase(loginDTO.getCode())){
+            throw new BusinessException(ExceptionType.VALIDATE_CODE_ERROR);
         }
-        return null;
+        Example example = loginDTO.createExample(new User(),"username=",loginDTO.getUsername());
+        example.and().andCondition("password=", MD5Util.encode(loginDTO.getPassword()));
+        User user = userBaseMapper.selectOneByExample(example);
+        if(user == null ){
+            throw new BusinessException(ExceptionType.USERNAME_OR_PASSWORD_ERROR);
+        }
+        String key= MessageFormat.format(Constants.RedisKey.USER_LOGIN_USERNAME_TIMESTAMP_SESSION_ID,user.getUsername(),new Date().getTime(),sessionId);
+        redisService.create(key,user.getUsername()+"_"+new Date().getTime()+"_"+sessionId);
+        LoginVO loginVO = new LoginVO();
+        BeanUtil.copyPropertys(user,loginVO);
+        // TODO: 2018/5/21 给登录用户添加登录信息
+        return loginVO;
     }
 }

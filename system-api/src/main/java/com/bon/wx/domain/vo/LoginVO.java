@@ -3,6 +3,7 @@ package com.bon.wx.domain.vo;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  * @author: Bon
  * @create: 2018-05-16 14:06
  **/
-public class LoginVO {
+public class LoginVO implements Serializable{
     private Long userId;
 
     private String name;
