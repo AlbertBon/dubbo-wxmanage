@@ -7,6 +7,7 @@ import com.bon.wx.dao.GenerateMapper;
 import com.bon.wx.service.GenerateService;
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -54,12 +55,30 @@ public class GenerateServiceImpl implements GenerateService {
         LOG.info("创建表完成");
 
         LOG.info("开始修改generate.xml文件");
+        list = POIUtil.getTableNames(path);
+        List<String> tableList = new ArrayList<>();
+        //循环判断获取到的list是否删除原表，若是需要重新生成实体类
+        for(String str : list){
+            if(str.split(",")[1].equals("是")){
+                tableList.add(str.split(",")[0]);
+            }
+        }
+        if(tableList.size()<=0){
+            LOG.info("没有需要修改的实体类");
+            return ;
+        }
         //创建Document对象，读取已存在的Xml文件generator.xml
         Document doc = new SAXReader().read(new File(GenerateService.class.getResource("/generator.xml").getFile()));
-        list = POIUtil.getTableNames(path);
-        for (String tableName : list) {
+        //删除所有table标签
+        List<Element> elements = doc.getRootElement().element("context").elements();
+        for(Element element :elements){
+            if(element.getName().equals("table")){
+                element.detach();
+            }
+        }
+        //循环添加新的table标签
+        for (String tableName : tableList) {
             String domainName = StringUtils.upperCase(tableName);
-
             //1.得到属性值标签
             Element tableElem = doc.getRootElement().element("context").addElement("table");
             //2.通过增加同名属性的方法，修改属性值----key相同，覆盖；不存在key，则添加

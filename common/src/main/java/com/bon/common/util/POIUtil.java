@@ -63,12 +63,15 @@ public class POIUtil {
         }
         List<String> list = new ArrayList<>();
         String tableName = "";//表名
+        String isDropTable = "";//是否删除原表
         /*遍历sheet*/
-        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+        for (int i = 1; i < workbook.getNumberOfSheets(); i++) {
             Sheet sheet = workbook.getSheetAt(i);
             /*获取表名*/
             tableName = sheet.getRow(1).getCell(0).getRichStringCellValue().getString();
-            list.add(tableName);
+            /*是否删除原表*/
+            isDropTable = sheet.getRow(1).getCell(2).getRichStringCellValue().getString();
+            list.add(tableName+","+isDropTable);
         }
         return list;
     }
@@ -84,6 +87,7 @@ public class POIUtil {
         List<String> list = new ArrayList<>();
         String tableName = "";//表名
         String tableComment = "";//表备注
+        String isDropTable = "";//是否删除原表
         String nameStr = "";//字段名
         String typeStr = "";//数据类型
         String lengthStr = "";//数据长度
@@ -93,22 +97,25 @@ public class POIUtil {
         String sql = "";//sql语句
         String tempStr = "";//临时字符串
         /*遍历sheet*/
-        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+        for (int i = 1; i < workbook.getNumberOfSheets(); i++) {
             Sheet sheet = workbook.getSheetAt(i);
             /*获取表名和备注*/
             tableName = sheet.getRow(1).getCell(0).getRichStringCellValue().getString();
             tableComment = sheet.getRow(1).getCell(1).getRichStringCellValue().getString();
-            /*开始写数据库语句，如果数据库中已存在表，则删除表*/
-            sql = "DROP TABLE IF EXISTS `" + tableName + "`;";
-            list.add(sql);
+            isDropTable = sheet.getRow(1).getCell(2).getRichStringCellValue().getString();
+            /*开始写数据库语句，判断是否需要删除原表*/
+            if(isDropTable.equals("是")){
+                sql = "DROP TABLE IF EXISTS `" + tableName + "`;";
+                list.add(sql);
+            }
             /*清空sql语句*/
             sql = "";
-            sql += "CREATE TABLE `" + tableName + "` ( ";
+            sql += "CREATE TABLE IF NOT EXISTS `" + tableName + "` ( ";
             /*从第二行开始遍历*/
             for (int j = 1; j < sheet.getPhysicalNumberOfRows(); j++) {
                 Row row = sheet.getRow(j);
-                /*从第三列开始遍历*/
-                for (int k = 2; k < row.getLastCellNum(); k++) {
+                /*从第四列开始遍历*/
+                for (int k = 3; k < row.getLastCellNum(); k++) {
                     Cell cell = row.getCell(k);
                     /*处理单元格的值*/
                     if (cell == null) {
@@ -133,34 +140,34 @@ public class POIUtil {
                         }
                     }
 
-                    /*每一列处理*/
+                    /*每一列处理，第四列开始*/
                     switch (k) {
-                        case 2:
+                        case 3:
                             nameStr = tempStr;
                             break;
-                        case 3:
+                        case 4:
                             typeStr = tempStr;
                             break;
-                        case 4:
+                        case 5:
                             if (StringUtils.isNotBlank(tempStr)) {
                                 lengthStr = "(" + tempStr + ") ";
                             } else {
                                 lengthStr = tempStr;
                             }
                             break;
-                        case 5:
+                        case 6:
                             if (tempStr.equals("N")) {
                                 isNullStr = " NOT NULL ";
                             } else {
                                 isNullStr = " NULL ";
                             }
                             break;
-                        case 6:
+                        case 7:
                             if (StringUtils.isNotBlank(tempStr)) {
                                 defaultStr = " DEFAULT '" + tempStr + "' ";
                             }
                             break;
-                        case 7:
+                        case 8:
                             if (StringUtils.isNotBlank(tempStr)) {
                                 commentStr = " COMMENT '" + tempStr + "'";
                             }
