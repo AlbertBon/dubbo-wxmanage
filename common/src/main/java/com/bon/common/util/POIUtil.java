@@ -71,6 +71,9 @@ public class POIUtil {
             tableName = sheet.getRow(1).getCell(0).getRichStringCellValue().getString();
             /*是否删除原表*/
             isDropTable = sheet.getRow(1).getCell(2).getRichStringCellValue().getString();
+            if(StringUtils.isBlank(isDropTable)||isDropTable.equals("否")){
+                isDropTable = "否";
+            }
             list.add(tableName+","+isDropTable);
         }
         return list;
@@ -104,7 +107,7 @@ public class POIUtil {
             tableComment = sheet.getRow(1).getCell(1).getRichStringCellValue().getString();
             isDropTable = sheet.getRow(1).getCell(2).getRichStringCellValue().getString();
             /*开始写数据库语句，判断是否需要删除原表*/
-            if(isDropTable.equals("是")){
+            if(StringUtils.isNotBlank(isDropTable)&&isDropTable.equals("是")){
                 sql = "DROP TABLE IF EXISTS `" + tableName + "`;";
                 list.add(sql);
             }

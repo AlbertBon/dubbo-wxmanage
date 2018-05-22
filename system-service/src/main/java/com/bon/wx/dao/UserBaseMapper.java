@@ -12,7 +12,6 @@ import java.util.List;
  * @author: Bon
  * @create: 2018-05-11 17:45
  **/
-@Mapper
 public interface UserBaseMapper extends BaseMapper<User> {
 
     List<User> listAll();
