@@ -27,10 +27,10 @@ public class PropertyUtil {
             /*第一种，通过类加载器进行获取properties文件流*/
             in = PropertyUtil.class.getClassLoader().getResourceAsStream("constant.properties");
             /*第二种，通过类进行获取properties文件流*/
-            //in = PropertyUtil.class.getResourceAsStream("/jdbc.properties");
+            //in = PropertyUtil.class.getResourceAsStream("/constant.properties");
             props.load(in);
         } catch (FileNotFoundException e) {
-            logger.error("jdbc.properties文件未找到");
+            logger.error("constant.properties文件未找到");
         } catch (IOException e) {
             logger.error("出现IOException");
         } finally {
@@ -39,7 +39,7 @@ public class PropertyUtil {
                     in.close();
                 }
             } catch (IOException e) {
-                logger.error("jdbc.properties文件流关闭出现异常");
+                logger.error("constant.properties文件流关闭出现异常");
             }
         }
         logger.info("加载properties文件内容完成...........");

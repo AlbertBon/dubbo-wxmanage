@@ -171,6 +171,13 @@ public class POIUtil {
                             }
                             break;
                         case 8:
+                            if (tempStr.equals("Y")) {
+                                isNullStr = " unique ";
+                            } else {
+                                isNullStr = " ";
+                            }
+                            break;
+                        case 9:
                             if (StringUtils.isNotBlank(tempStr)) {
                                 commentStr = " COMMENT '" + tempStr + "'";
                             }

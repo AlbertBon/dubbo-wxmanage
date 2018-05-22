@@ -1,5 +1,6 @@
 import com.bon.common.util.MyLog;
 import com.bon.common.util.POIUtil;
+import com.bon.common.util.PropertyUtil;
 import com.bon.common.util.StringUtils;
 import com.bon.wx.SystemApplication;
 import com.bon.wx.dao.GenerateMapper;
@@ -24,12 +25,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @program: dubbo-wxmanage
@@ -64,4 +64,6 @@ public class AppTest {
     public void generateByPath() throws Exception {
         generateService.generateByFilePath("D:/test/generate.xls");
     }
+
+
 }

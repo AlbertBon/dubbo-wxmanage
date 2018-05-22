@@ -43,14 +43,17 @@ public class LoginServiceImpl implements LoginService{
         if(!vCode.equalsIgnoreCase(loginDTO.getCode())){
             throw new BusinessException(ExceptionType.VALIDATE_CODE_ERROR);
         }
+
         Example example = loginDTO.createExample(new User(),"username=",loginDTO.getUsername());
         example.and().andCondition("password=", MD5Util.encode(loginDTO.getPassword()));
         User user = userBaseMapper.selectOneByExample(example);
         if(user == null ){
             throw new BusinessException(ExceptionType.USERNAME_OR_PASSWORD_ERROR);
         }
+
         String key= MessageFormat.format(Constants.RedisKey.USER_LOGIN_USERNAME_TIMESTAMP_SESSION_ID,user.getUsername(),new Date().getTime(),sessionId);
         redisService.create(key,user.getUsername()+"_"+new Date().getTime()+"_"+sessionId);
+
         LoginVO loginVO = new LoginVO();
         BeanUtil.copyPropertys(user,loginVO);
         // TODO: 2018/5/21 给登录用户添加登录信息
