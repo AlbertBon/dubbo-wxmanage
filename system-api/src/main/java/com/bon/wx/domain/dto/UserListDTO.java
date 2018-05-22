@@ -1,6 +1,6 @@
 package com.bon.wx.domain.dto;
 
-import com.bon.common.domain.dto.BaseDTO;
+import com.bon.common.domain.dto.PageDTO;
 import com.bon.wx.domain.entity.User;
 
 /**
@@ -9,5 +9,5 @@ import com.bon.wx.domain.entity.User;
  * @author: Bon
  * @create: 2018-05-11 15:42
  **/
-public class UserListDTO extends BaseDTO<User> {
+public class UserListDTO extends PageDTO<User> {
 }
