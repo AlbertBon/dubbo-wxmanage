@@ -5,8 +5,10 @@ import com.bon.common.domain.vo.ResultBody;
 import com.bon.common.service.RedisService;
 import com.bon.common.util.ImageCodeUtil;
 import com.bon.wx.domain.dto.LoginDTO;
+import com.bon.wx.domain.dto.TokenDTO;
 import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.vo.LoginVO;
+import com.bon.wx.domain.vo.TokenVO;
 import com.bon.wx.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,20 +46,11 @@ public class LoginController {
     public ResultBody loginIn(@RequestBody LoginDTO loginDTO,HttpServletRequest request) {
         LoginVO loginVO=loginService.loginIn(loginDTO,request.getRequestedSessionId());
         return new ResultBody(loginVO);
-//        User user = userRepository.findByUsername(username);
-//        if (user == null ||  //未注册
-//                !user.getPassword().equals(password)) {  //密码错误
-//            //提示用户名或密码错误
-//            return new ResponseEntity<>(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.NOT_FOUND);
-//        }
-//        //生成一个token，保存用户登录状态
-//        TokenModel model = tokenManager.createToken(user.getId());
-//        return new ResponseEntity<>(ResultModel.ok(model), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "验证码")
+    @ApiOperation(value = "生成验证码")
     @GetMapping(value = "/getImageCode")
-    public ResultBody getImageCode(HttpServletRequest request,HttpServletResponse response) throws IOException {
+    public void getImageCode(HttpServletRequest request,HttpServletResponse response) throws IOException {
         // 设置响应的类型格式为图片格式
         response.setContentType("image/jpeg");
         //禁止图像缓存。
@@ -65,16 +58,19 @@ public class LoginController {
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
 
-
         ImageCodeUtil vCode = new ImageCodeUtil(120,40,4,100);
 
         String key= MessageFormat.format(Constants.RedisKey.USER_VALIDATE_CODE_SESSION_ID,request.getRequestedSessionId());
         redisService.create(key,vCode.getCode());
         vCode.write(response.getOutputStream());
-        return null;
     }
 
-
+    @ApiOperation(value = "获取token")
+    @GetMapping(value = "/getToken")
+    public ResultBody getToken(@RequestBody TokenDTO dto) throws IOException {
+        TokenVO vo = loginService.getToken(dto);
+        return new ResultBody(vo);
+    }
 
 
 }

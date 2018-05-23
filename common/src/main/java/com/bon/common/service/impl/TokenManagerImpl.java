@@ -10,6 +10,7 @@ import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -29,8 +30,8 @@ public class TokenManagerImpl implements TokenManager {
         // 使用 uuid 作为源 token
         String token = UUID.randomUUID().toString().replace("-", "");
         TokenModel model = new TokenModel(userId, token);
-        // 存储到 redis 并设置过期时间
-        redisService.set(String.valueOf(userId),token);
+        // 存储到 redis 并设置过期时间(默认2小时)
+        redisService.create(MessageFormat.format(Constants.RedisKey.TOKEN_USER_ID,userId),token);
         return model;
     }
 
@@ -52,17 +53,17 @@ public class TokenManagerImpl implements TokenManager {
         if (model == null) {
             return false;
         }
-        String token = redisService.get(String.valueOf(model.getUserId()));
+        String token = redisService.get(MessageFormat.format(Constants.RedisKey.TOKEN_USER_ID,model.getUserId()));
         if (token == null || !token.equals(model.getToken())) {
             return false;
         }
         // 如果验证成功，说明此用户进行了一次有效操作，延长 token 的过期时间
-        redisService.expire(String.valueOf(model.getUserId()),Constants.TOKEN_EXPIRES_SECONDS);
+        redisService.expire(MessageFormat.format(Constants.RedisKey.TOKEN_USER_ID,model.getUserId()),Constants.TOKEN_EXPIRES_SECONDS);
         return true;
     }
 
     public void deleteToken(long userId) {
-        redisService.del(String.valueOf(userId));
+        redisService.del(MessageFormat.format(Constants.RedisKey.TOKEN_USER_ID,userId));
     }
 
 }

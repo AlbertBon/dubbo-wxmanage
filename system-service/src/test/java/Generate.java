@@ -1,35 +1,14 @@
 import com.bon.common.util.MyLog;
-import com.bon.common.util.POIUtil;
-import com.bon.common.util.PropertyUtil;
-import com.bon.common.util.StringUtils;
 import com.bon.wx.SystemApplication;
 import com.bon.wx.dao.GenerateMapper;
 import com.bon.wx.service.GenerateService;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mybatis.generator.api.MyBatisGenerator;
-import org.mybatis.generator.config.Configuration;
-import org.mybatis.generator.config.xml.ConfigurationParser;
-import org.mybatis.generator.exception.InvalidConfigurationException;
-import org.mybatis.generator.exception.XMLParserException;
-import org.mybatis.generator.internal.DefaultShellCallback;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.io.*;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * @program: dubbo-wxmanage
@@ -39,9 +18,9 @@ import java.util.Scanner;
  **/
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {SystemApplication.class})
-public class AppTest {
+public class Generate {
 
-    private static final MyLog LOG = MyLog.getLog(AppTest.class);
+    private static final MyLog LOG = MyLog.getLog(Generate.class);
 
     @Autowired
     private GenerateService generateService;
@@ -52,12 +31,12 @@ public class AppTest {
 
     @Before
     public void before() throws Exception {
-        LOG.info(String.format("【测试开始】"));
+        LOG.info(String.format("【生成开始】"));
     }
 
     @After
     public void after() throws Exception {
-        LOG.info(String.format("【测试结束】"));
+        LOG.info(String.format("【生成结束】"));
     }
 
     @Test

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * @author: Bon
  * @create: 2018-05-21 17:48
  **/
-public class StringUtils {
+public class StringUtils extends org.apache.commons.lang3.StringUtils{
     /**
      * 下划线转驼峰法
      * @param line 源字符串

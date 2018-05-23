@@ -6,11 +6,14 @@ import com.bon.common.service.RedisService;
 import com.bon.common.util.BeanUtil;
 import com.bon.common.util.MD5Util;
 import com.bon.common.util.MyLog;
+import com.bon.common.util.StringUtils;
 import com.bon.wx.dao.UserBaseMapper;
 import com.bon.wx.dao.UserMapper;
 import com.bon.wx.domain.dto.LoginDTO;
+import com.bon.wx.domain.dto.TokenDTO;
 import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.vo.LoginVO;
+import com.bon.wx.domain.vo.TokenVO;
 import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.text.MessageFormat;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @program: dubbo-wxmanage
@@ -58,5 +62,20 @@ public class LoginServiceImpl implements LoginService{
         BeanUtil.copyPropertys(user,loginVO);
         // TODO: 2018/5/21 给登录用户添加登录信息
         return loginVO;
+    }
+
+    @Override
+    public TokenVO getToken(TokenDTO dto) {
+        // 使用 uuid 作为源 token
+        String token = UUID.randomUUID().toString().replace("-", "");
+        if(StringUtils.isNotBlank(dto.getWxOpenid())){
+            Example example = dto.createExample(new User(),"wxOpenid=",dto.getWxOpenid());
+            User user = userBaseMapper.selectOneByExample(example);
+            if(user!=null){
+                // 存储到 redis 并设置过期时间(默认2小时)
+                redisService.create(MessageFormat.format(Constants.RedisKey.TOKEN_USER_ID,user.getUserId()),token);
+            }
+        }
+        return null;
     }
 }

@@ -17,6 +17,9 @@ public class Constants {
     public static final String AUTHORIZATION = "authorization";
 
     public static final class RedisKey {
+
+        public static final String TOKEN_USER_ID = "token_user_id_{0}";
+
         public static final String USER_VALIDATE_CODE_SESSION_ID = "user_validate_code_session_id_{0}";
         public static final String USER_LOGIN_USERNAME_TIMESTAMP_SESSION_ID = "user_login_username_{0}_timestamp_{1}_session_id_{2}";
 

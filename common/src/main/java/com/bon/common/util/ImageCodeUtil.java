@@ -30,6 +30,8 @@ public class ImageCodeUtil {
     // 验证码图片Buffer
     private BufferedImage buffImg=null;
 
+    private static Random random = new Random();
+
     private char[] codeSequence = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
             'K', 'L', 'M', 'N',  'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
             'X', 'Y', 'Z',  '1', '2', '3', '4', '5', '6', '7', '8', '9' };
@@ -76,8 +78,9 @@ public class ImageCodeUtil {
         Graphics2D g = buffImg.createGraphics();
         // 生成随机数
         Random random = new Random();
-        // 将图像填充为白色
-        g.setColor(Color.WHITE);
+
+        Color c = getRandColor(200, 250);
+        g.setColor(c);// 设置背景色
         g.fillRect(0, 0, width, height);
         // 创建字体
         ImgFontByte imgFont=new ImgFontByte();
@@ -102,16 +105,24 @@ public class ImageCodeUtil {
         for (int i = 0; i < codeCount; i++) {
             String strRand = String.valueOf(codeSequence[random.nextInt(codeSequence.length)]);
             // 产生随机的颜色值，让输出的每个字符的颜色值都将不同。
-            red = random.nextInt(255);
-            green = random.nextInt(255);
-            blue = random.nextInt(255);
-            g.setColor(new Color(red, green, blue));
+            g.setColor(getRandColor(0, 200));// 设置线条的颜色
             g.drawString(strRand, (i + 1) * x, codeY);
             // 将产生的四个随机数组合在一起。
             randomCode.append(strRand);
         }
         // 将四位数字的验证码保存到Session中。
         code=randomCode.toString();
+    }
+
+    private static Color getRandColor(int fc, int bc) {
+        if (fc > 255)
+            fc = 255;
+        if (bc > 255)
+            bc = 255;
+        int r = fc + random.nextInt(bc - fc);
+        int g = fc + random.nextInt(bc - fc);
+        int b = fc + random.nextInt(bc - fc);
+        return new Color(r, g, b);
     }
 
     public void write(String path) throws IOException {
