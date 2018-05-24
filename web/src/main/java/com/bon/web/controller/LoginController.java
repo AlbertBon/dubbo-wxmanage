@@ -40,7 +40,7 @@ public class LoginController {
     @ApiOperation(value = "登录")
     @PostMapping(value = "/loginIn",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultBody loginIn(@RequestBody LoginDTO loginDTO,HttpServletRequest request) {
-        LoginVO loginVO=loginService.loginIn(loginDTO,request.getRequestedSessionId());
+        LoginVO loginVO=loginService.loginIn(loginDTO,request.getSession().getId());
         return new ResultBody(loginVO);
     }
 
@@ -56,17 +56,16 @@ public class LoginController {
 
         ImageCodeUtil vCode = new ImageCodeUtil(120,40,4,100);
 
-        String key= MessageFormat.format(Constants.RedisKey.USER_VALIDATE_CODE_SESSION_ID,request.getRequestedSessionId());
+        String key= MessageFormat.format(Constants.RedisKey.LOGIN_CAPTCHA_SESSION_ID,request.getSession().getId());
         redisService.create(key,vCode.getCode());
         vCode.write(response.getOutputStream());
     }
 
     @ApiOperation(value = "获取token")
-    @GetMapping(value = "/getToken")
+    @PostMapping(value = "/getToken",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultBody getToken(@RequestBody TokenDTO dto) throws IOException {
         TokenVO vo = loginService.getToken(dto);
         return new ResultBody(vo);
     }
-
 
 }

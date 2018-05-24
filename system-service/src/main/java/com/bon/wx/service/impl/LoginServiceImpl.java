@@ -42,7 +42,7 @@ public class LoginServiceImpl implements LoginService{
 
     @Override
     public LoginVO loginIn(LoginDTO loginDTO,String sessionId) {
-        String vCode=redisService.get(MessageFormat.format(Constants.RedisKey.USER_VALIDATE_CODE_SESSION_ID,sessionId));
+        String vCode=redisService.get(MessageFormat.format(Constants.RedisKey.LOGIN_CAPTCHA_SESSION_ID,sessionId));
         if(!vCode.equalsIgnoreCase(loginDTO.getCode())){
             throw new BusinessException(ExceptionType.VALIDATE_CODE_ERROR);
         }
@@ -54,7 +54,7 @@ public class LoginServiceImpl implements LoginService{
             throw new BusinessException(ExceptionType.USERNAME_OR_PASSWORD_ERROR);
         }
 
-        String key= MessageFormat.format(Constants.RedisKey.USER_LOGIN_USERNAME_SESSION_ID,user.getUsername(),sessionId);
+        String key= MessageFormat.format(Constants.RedisKey.LOGIN_USERNAME_SESSION_ID,user.getUsername(),sessionId);
         redisService.create(key,user.getUsername()+"_"+new Date().getTime()+"_"+sessionId);
 
         LoginVO loginVO = new LoginVO();
@@ -68,7 +68,7 @@ public class LoginServiceImpl implements LoginService{
         // 使用 uuid 作为源 token
         String token = UUID.randomUUID().toString().replace("-", "");
         if(StringUtils.isNotBlank(dto.getWxOpenid())){
-            Example example = dto.createExample(new User(),"wxOpenid=",dto.getWxOpenid());
+            Example example = dto.createExample(new User(),"wx_openid=",dto.getWxOpenid());
             User user = userBaseMapper.selectOneByExample(example);
             if(user!=null){
                 // 存储到 redis 并设置过期时间(默认2小时)

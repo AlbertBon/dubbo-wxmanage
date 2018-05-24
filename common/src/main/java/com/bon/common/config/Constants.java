@@ -18,10 +18,10 @@ public class Constants {
 
     public static final class RedisKey {
 
-        public static final String TOKEN_USERNAME_TOKEN = "token_username_{0}_token_{1}";
+        public static final String TOKEN_USERNAME_TOKEN = "TOKEN_USERNAME_TOKEN_{0}_{1}";//token session
 
-        public static final String USER_VALIDATE_CODE_SESSION_ID = "user_validate_code_session_id_{0}";
-        public static final String USER_LOGIN_USERNAME_SESSION_ID = "user_login_username_{0}_session_id_{1}";
+        public static final String LOGIN_CAPTCHA_SESSION_ID = "LOGIN_CAPTCHA_SESSION_ID_{0}";//验证码
+        public static final String LOGIN_USERNAME_SESSION_ID = "LOGIN_USERNAME_SESSION_ID_{0}_{1}";//用户登录session
 
     }
 

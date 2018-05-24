@@ -1,5 +1,6 @@
 package com.bon.web.interceptor;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.bon.common.config.Constants;
 import com.bon.common.domain.enums.ExceptionType;
 import com.bon.common.domain.vo.ResultBody;
@@ -7,12 +8,15 @@ import com.bon.common.service.RedisService;
 import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
+import java.text.MessageFormat;
 import java.util.Set;
 
 /**
@@ -30,34 +34,38 @@ public class MyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //请求错误拦截
-//        response.setCharacterEncoding("UTF-8");
-//        response.setContentType("application/json; charset=utf-8");
-//        if (request.getServletPath().equals("/error")) {
-//            OutputStream out = response.getOutputStream();
-//            out.write(new ResultBody(ExceptionType.REQUEST_ERROR).toErrString().getBytes("utf-8"));
-//            out.close();
-//            return false;
-//        }
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=utf-8");
+        if (request.getServletPath().equals("/error")) {
+            OutputStream out = response.getOutputStream();
+            out.write(new ResultBody(ExceptionType.REQUEST_ERROR).toErrString().getBytes("utf-8"));
+            out.close();
+            return false;
+        }
 
         //登录验证信息拦截
-//        response.sendRedirect("/login/check");
-//        if (request.getParameter("token") != null) {
-//            String token = request.getParameter("token");
-//            if (loginService.check(token)) {
-//                OutputStream out = response.getOutputStream();
-//                out.write(new ResultBody(ExceptionType.EXPIRED_ERROR).toErrString().getBytes("utf-8"));
-//                out.close();
-//                return false;
-//            }
-//        } else {
-//            String sessionId = request.getRequestedSessionId();
-//            if (loginService.check(sessionId)) {
-//                OutputStream out = response.getOutputStream();
-//                out.write(new ResultBody(ExceptionType.EXPIRED_ERROR).toErrString().getBytes("utf-8"));
-//                out.close();
-//                return false;
-//            }
-//        }
+        if(request.getServletPath().contains("/login/")){//不拦截/login部分
+            return true;
+        }
+        if (request.getParameter("token") != null) {
+            String token = request.getParameter("token");
+            String key = MessageFormat.format(Constants.RedisKey.TOKEN_USERNAME_TOKEN,"*",token);
+            if (!loginService.check(key)) {
+                OutputStream out = response.getOutputStream();
+                out.write(new ResultBody(ExceptionType.EXPIRED_ERROR).toErrString().getBytes("utf-8"));
+                out.close();
+                return false;
+            }
+        } else {
+            String sessionId = request.getSession().getId();
+            String key = MessageFormat.format(Constants.RedisKey.LOGIN_USERNAME_SESSION_ID,"*",sessionId);
+            if (!loginService.check(key)) {
+                OutputStream out = response.getOutputStream();
+                out.write(new ResultBody(ExceptionType.EXPIRED_ERROR).toErrString().getBytes("utf-8"));
+                out.close();
+                return false;
+            }
+        }
 
         return true;    //如果false，停止流程，api被拦截
     }
