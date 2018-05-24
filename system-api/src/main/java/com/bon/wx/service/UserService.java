@@ -4,6 +4,7 @@ import com.bon.common.domain.vo.PageVO;
 import com.bon.wx.domain.dto.UserDTO;
 import com.bon.wx.domain.dto.UserListDTO;
 import com.bon.wx.domain.entity.User;
+import com.bon.wx.domain.vo.UserVO;
 
 /**
  * @program: bon-dubbo
@@ -12,7 +13,7 @@ import com.bon.wx.domain.entity.User;
  * @create: 2018-04-27 17:47
  **/
 public interface UserService {
-    User getById(Long id);
+    UserVO getById(Long id);
     void save(UserDTO userDTO);
     void update(UserDTO userDTO);
     void delete(Long id);

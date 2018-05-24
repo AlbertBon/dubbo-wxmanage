@@ -7,7 +7,7 @@ import com.bon.common.util.ImageCodeUtil;
 import com.bon.wx.domain.dto.LoginDTO;
 import com.bon.wx.domain.dto.TokenDTO;
 import com.bon.wx.domain.vo.LoginVO;
-import com.bon.common.domain.vo.TokenVO;
+import com.bon.wx.domain.vo.TokenVO;
 import com.bon.wx.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

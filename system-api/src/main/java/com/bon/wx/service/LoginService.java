@@ -3,7 +3,7 @@ package com.bon.wx.service;
 import com.bon.wx.domain.dto.LoginDTO;
 import com.bon.wx.domain.dto.TokenDTO;
 import com.bon.wx.domain.vo.LoginVO;
-import com.bon.common.domain.vo.TokenVO;
+import com.bon.wx.domain.vo.TokenVO;
 
 /**
  * @program: dubbo-wxmanage

@@ -9,12 +9,14 @@ import com.bon.wx.dao.UserMapper;
 import com.bon.wx.domain.dto.UserDTO;
 import com.bon.wx.domain.dto.UserListDTO;
 import com.bon.wx.domain.entity.User;
+import com.bon.wx.domain.vo.UserVO;
 import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.UserService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,12 +38,14 @@ public class UserServiceImpl implements UserService {
     private UserBaseMapper userBaseMapper;
 
     @Override
-    public User getById(Long id) {
+    public UserVO getById(Long id) {
         if (id.equals(1L)) {
             throw new BusinessException(ExceptionType.SYSTEM_ERROR);
         }
         User user = userMapper.selectByPrimaryKey(id);
-        return user;
+        UserVO vo = new UserVO();
+        vo = BeanUtil.copyPropertys(user,vo);
+        return vo;
     }
 
     @Override
@@ -67,8 +71,13 @@ public class UserServiceImpl implements UserService {
     public PageVO list(UserListDTO userListDTO) {
         PageHelper.startPage(userListDTO);
         List<User> list = userBaseMapper.selectByExample(userListDTO.createExample(new User()));
-
-        PageVO pageVO = new PageVO(list);
+        List<UserVO> voList = new ArrayList<>();
+        for (User user : list){
+            UserVO vo = new UserVO();
+            BeanUtil.copyPropertys(user,vo);
+            voList.add(vo);
+        }
+        PageVO pageVO = new PageVO(voList);
         return pageVO;
     }
 

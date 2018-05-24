@@ -13,6 +13,7 @@ public enum ExceptionType {
     USERNAME_OR_PASSWORD_ERROR("100005","用户名或密码错误"),
     VALIDATE_CODE_ERROR("100006","验证码错误"),
     EXPIRED_ERROR("100007","登录信息过期"),
+    USERNAME_NULL_PASSWORD_ERROR("100008","用户获取失败"),
 
     //通用异常
     SYSTEM_ERROR("100001", "网络异常");

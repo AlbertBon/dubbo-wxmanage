@@ -12,7 +12,7 @@ import com.bon.wx.domain.dto.LoginDTO;
 import com.bon.wx.domain.dto.TokenDTO;
 import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.vo.LoginVO;
-import com.bon.common.domain.vo.TokenVO;
+import com.bon.wx.domain.vo.TokenVO;
 import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,10 +70,11 @@ public class LoginServiceImpl implements LoginService{
         if(StringUtils.isNotBlank(dto.getWxOpenid())){
             Example example = dto.createExample(new User(),"wx_openid=",dto.getWxOpenid());
             User user = userBaseMapper.selectOneByExample(example);
-            if(user!=null){
-                // 存储到 redis 并设置过期时间(默认2小时)
-                redisService.create(MessageFormat.format(Constants.RedisKey.TOKEN_USERNAME_TOKEN,user.getUsername(),token),token);
+            if(user==null){
+                throw new BusinessException(ExceptionType.USERNAME_NULL_PASSWORD_ERROR);
             }
+            // 存储到 redis 并设置过期时间(默认2小时)
+            redisService.create(MessageFormat.format(Constants.RedisKey.TOKEN_USERNAME_TOKEN,user.getUsername(),token),token);
         }
         TokenVO vo = new TokenVO();
         vo.setToken(token);

@@ -1,4 +1,4 @@
-package com.bon.common.domain.vo;
+package com.bon.wx.domain.vo;
 
 import java.io.Serializable;
 
