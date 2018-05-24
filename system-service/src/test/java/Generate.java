@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.File;
+
 /**
  * @program: dubbo-wxmanage
  * @description: 测试类
@@ -41,7 +43,7 @@ public class Generate {
 
     @Test
     public void generateByPath() throws Exception {
-        generateService.generateByFilePath("D:/test/generate.xls");
+        generateService.generateByFile(new File(GenerateService.class.getResource("/excel/generate.xls").getFile()));
     }
 
 

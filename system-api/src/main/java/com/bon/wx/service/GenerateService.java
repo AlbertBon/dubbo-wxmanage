@@ -1,5 +1,7 @@
 package com.bon.wx.service;
 
+import java.io.File;
+
 /**
  * @program: dubbo-wxmanage
  * @description: 生成sql
@@ -8,5 +10,5 @@ package com.bon.wx.service;
  **/
 public interface GenerateService {
     void generateByFilePath(String path) throws Exception;
-    void generateByFile();
+    void generateByFile(File file);
 }

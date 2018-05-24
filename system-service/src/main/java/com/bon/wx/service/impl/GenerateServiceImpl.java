@@ -127,7 +127,11 @@ public class GenerateServiceImpl implements GenerateService {
     }
 
     @Override
-    public void generateByFile() {
-
+    public void generateByFile(File file) {
+        try {
+            generateByFilePath(file.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
