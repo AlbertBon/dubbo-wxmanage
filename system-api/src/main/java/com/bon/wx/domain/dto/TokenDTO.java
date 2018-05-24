@@ -10,15 +10,15 @@ import com.bon.common.domain.dto.BaseDTO;
  **/
 public class TokenDTO extends BaseDTO{
     private String wxOpenid;
-    private String accessKey;
+    private String appId;
     private String secretKey;
 
-    public String getAccessKey() {
-        return accessKey;
+    public String getAppId() {
+        return appId;
     }
 
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getSecretKey() {

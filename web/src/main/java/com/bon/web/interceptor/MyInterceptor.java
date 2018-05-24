@@ -1,9 +1,11 @@
 package com.bon.web.interceptor;
 
+import com.bon.common.config.Constants;
 import com.bon.common.domain.enums.ExceptionType;
 import com.bon.common.domain.vo.ResultBody;
-import com.bon.common.service.impl.TokenManagerImpl;
+import com.bon.common.service.RedisService;
 import com.bon.wx.exception.BusinessException;
+import com.bon.wx.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
+import java.util.Set;
 
 /**
  * @program: dubbo-wxmanage
@@ -21,44 +24,40 @@ import java.io.OutputStream;
 public class MyInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private TokenManagerImpl manager;
+    private LoginService loginService;
 
     //在请求处理之前进行调用（Controller方法调用之前
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json; charset=utf-8");
-        if(request.getServletPath().equals("/error")){
-            OutputStream out = response.getOutputStream();
-            out.write(new ResultBody(ExceptionType.REQUEST_ERROR).toErrString().getBytes("utf-8"));
-            out.close();
-            return false;
-        }
-
-//        /*token权限*/
-//        // 如果不是映射到方法直接通过
-//        if (!(handler instanceof HandlerMethod)) {
-//            return true;
-//        }
-//        HandlerMethod handlerMethod = (HandlerMethod) handler;
-//        Method method = handlerMethod.getMethod ();
-//        // 从 header 中得到 token
-//        String authorization = request.getHeader (Constants.AUTHORIZATION);
-//        // 验证 token
-//        TokenModel model = manager.getToken (authorization);
-//        if (manager.checkToken (model)) {
-//            // 如果 token 验证成功，将 token 对应的用户 id 存在 request 中，便于之后注入
-//            request.setAttribute (Constants.CURRENT_USER_ID, model.getUserId ());
-//            return true;
-//        }
-//        // 如果验证 token 失败，并且方法注明了 Authorization，返回错误
-//        if (method.getAnnotation (Authorization.class) != null) {
+        //请求错误拦截
+//        response.setCharacterEncoding("UTF-8");
+//        response.setContentType("application/json; charset=utf-8");
+//        if (request.getServletPath().equals("/error")) {
 //            OutputStream out = response.getOutputStream();
-//            out.write(new ResultBody(ExceptionType.LOGIN_ERROR).toErrString().getBytes("utf-8"));
+//            out.write(new ResultBody(ExceptionType.REQUEST_ERROR).toErrString().getBytes("utf-8"));
 //            out.close();
 //            return false;
 //        }
 
+        //登录验证信息拦截
+//        response.sendRedirect("/login/check");
+//        if (request.getParameter("token") != null) {
+//            String token = request.getParameter("token");
+//            if (loginService.check(token)) {
+//                OutputStream out = response.getOutputStream();
+//                out.write(new ResultBody(ExceptionType.EXPIRED_ERROR).toErrString().getBytes("utf-8"));
+//                out.close();
+//                return false;
+//            }
+//        } else {
+//            String sessionId = request.getRequestedSessionId();
+//            if (loginService.check(sessionId)) {
+//                OutputStream out = response.getOutputStream();
+//                out.write(new ResultBody(ExceptionType.EXPIRED_ERROR).toErrString().getBytes("utf-8"));
+//                out.close();
+//                return false;
+//            }
+//        }
 
         return true;    //如果false，停止流程，api被拦截
     }
@@ -82,10 +81,10 @@ public class MyInterceptor implements HandlerInterceptor {
                 BusinessException businessException = (BusinessException) e;
                 out.write(new ResultBody(businessException.getCode(), businessException.getMessage()).toErrString().getBytes("utf-8"));
                 out.close();
-            } else if(e instanceof ClassCastException){
+            } else if (e instanceof ClassCastException) {
                 out.write(new ResultBody(ExceptionType.SYSTEM_ERROR).toErrString().getBytes("utf-8"));
                 out.close();
-            }else {
+            } else {
                 out.write(new ResultBody(ExceptionType.SYSTEM_ERROR).toErrString().getBytes("utf-8"));
                 out.close();
             }

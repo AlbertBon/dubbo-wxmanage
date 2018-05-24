@@ -20,6 +20,8 @@ public interface RedisService {
 
     public Set<String> keys(String pattern);
 
+    public String findKey(String pattern);
+
     public void removeByPattern(String pattern);
 
     public boolean expire(String key,long expire);
@@ -35,4 +37,6 @@ public interface RedisService {
     public String lpop(String key);
 
     public void del(String key);
+
+    boolean check(String pattern);
 }

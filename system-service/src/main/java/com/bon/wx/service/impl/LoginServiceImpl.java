@@ -8,12 +8,11 @@ import com.bon.common.util.MD5Util;
 import com.bon.common.util.MyLog;
 import com.bon.common.util.StringUtils;
 import com.bon.wx.dao.UserBaseMapper;
-import com.bon.wx.dao.UserMapper;
 import com.bon.wx.domain.dto.LoginDTO;
 import com.bon.wx.domain.dto.TokenDTO;
 import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.vo.LoginVO;
-import com.bon.wx.domain.vo.TokenVO;
+import com.bon.common.domain.vo.TokenVO;
 import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +54,7 @@ public class LoginServiceImpl implements LoginService{
             throw new BusinessException(ExceptionType.USERNAME_OR_PASSWORD_ERROR);
         }
 
-        String key= MessageFormat.format(Constants.RedisKey.USER_LOGIN_USERNAME_TIMESTAMP_SESSION_ID,user.getUsername(),new Date().getTime(),sessionId);
+        String key= MessageFormat.format(Constants.RedisKey.USER_LOGIN_USERNAME_SESSION_ID,user.getUsername(),sessionId);
         redisService.create(key,user.getUsername()+"_"+new Date().getTime()+"_"+sessionId);
 
         LoginVO loginVO = new LoginVO();
@@ -73,9 +72,21 @@ public class LoginServiceImpl implements LoginService{
             User user = userBaseMapper.selectOneByExample(example);
             if(user!=null){
                 // 存储到 redis 并设置过期时间(默认2小时)
-                redisService.create(MessageFormat.format(Constants.RedisKey.TOKEN_USER_ID,user.getUserId()),token);
+                redisService.create(MessageFormat.format(Constants.RedisKey.TOKEN_USERNAME_TOKEN,user.getUsername(),token),token);
             }
         }
-        return null;
+        TokenVO vo = new TokenVO();
+        vo.setToken(token);
+        return vo;
+    }
+
+    @Override
+    public boolean check(String pattern) {
+        String key = redisService.findKey(pattern);
+        if (key == null) {
+            return false;
+        }
+        redisService.expire(key,Constants.TOKEN_EXPIRES_SECONDS);
+        return true;
     }
 }

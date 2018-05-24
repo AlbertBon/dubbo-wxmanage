@@ -6,17 +6,13 @@ import com.bon.common.service.RedisService;
 import com.bon.common.util.ImageCodeUtil;
 import com.bon.wx.domain.dto.LoginDTO;
 import com.bon.wx.domain.dto.TokenDTO;
-import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.vo.LoginVO;
-import com.bon.wx.domain.vo.TokenVO;
+import com.bon.common.domain.vo.TokenVO;
 import com.bon.wx.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;

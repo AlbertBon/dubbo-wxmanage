@@ -3,8 +3,10 @@ package com.bon.wx.domain.dto;
 import com.bon.common.domain.dto.BaseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @program: dubbo-wxmanage
@@ -14,7 +16,7 @@ import java.io.Serializable;
  **/
 @ApiModel(value ="UserDTO")
 public class UserDTO implements Serializable {
-    @ApiModelProperty(value = "登陆名")
+    @ApiModelProperty(value = "姓名")
     private String name;
 
     @ApiModelProperty(value = "手机")
@@ -26,7 +28,7 @@ public class UserDTO implements Serializable {
     @ApiModelProperty(value = "地址")
     private String address;
 
-    @ApiModelProperty(value = "用户昵称")
+    @ApiModelProperty(value = "登录名")
     private String username;
 
     @ApiModelProperty(value = "密码")
@@ -34,6 +36,15 @@ public class UserDTO implements Serializable {
 
     @ApiModelProperty(value = "备注")
     private String remark;
+
+    @ApiModelProperty(value = "微信openid")
+    private String wxOpenid;
+
+    @ApiModelProperty(value = "应用id")
+    private String appId;
+
+    @ApiModelProperty(value = "密钥")
+    private String secretKey;
 
     public String getName() {
         return name;
@@ -89,5 +100,29 @@ public class UserDTO implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getWxOpenid() {
+        return wxOpenid;
+    }
+
+    public void setWxOpenid(String wxOpenid) {
+        this.wxOpenid = wxOpenid;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
     }
 }

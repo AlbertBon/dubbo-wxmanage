@@ -13,11 +13,14 @@
       <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="wx_openid" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="app_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="secret_key" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
     user_id, gmt_create, gmt_modified, name, phone, telephone, address, username, password, 
-    remark
+    remark, wx_openid, app_id, secret_key
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -33,11 +36,13 @@
     insert into user (user_id, gmt_create, gmt_modified, 
       name, phone, telephone, 
       address, username, password, 
-      remark)
+      remark, wx_openid, app_id, 
+      secret_key)
     values (#{userId,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
       #{name,jdbcType=VARCHAR}, #{phone,jdbcType=CHAR}, #{telephone,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR})
+      #{remark,jdbcType=VARCHAR}, #{wxOpenid,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, 
+      #{secretKey,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bon.wx.domain.entity.User">
     insert into user
@@ -72,6 +77,15 @@
       <if test="remark != null">
         remark,
       </if>
+      <if test="wxOpenid != null">
+        wx_openid,
+      </if>
+      <if test="appId != null">
+        app_id,
+      </if>
+      <if test="secretKey != null">
+        secret_key,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -103,6 +117,15 @@
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="wxOpenid != null">
+        #{wxOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null">
+        #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="secretKey != null">
+        #{secretKey,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -136,6 +159,15 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="wxOpenid != null">
+        wx_openid = #{wxOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null">
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="secretKey != null">
+        secret_key = #{secretKey,jdbcType=VARCHAR},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
@@ -149,7 +181,10 @@
       address = #{address,jdbcType=VARCHAR},
       username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      wx_openid = #{wxOpenid,jdbcType=VARCHAR},
+      app_id = #{appId,jdbcType=VARCHAR},
+      secret_key = #{secretKey,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
 </mapper>

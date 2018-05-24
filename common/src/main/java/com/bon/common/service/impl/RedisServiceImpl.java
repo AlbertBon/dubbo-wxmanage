@@ -73,6 +73,20 @@ public class RedisServiceImpl implements RedisService{
     }
 
     @Override
+    public String findKey(String pattern) {
+        Set<String> keys = redisTemplate.keys(pattern);
+        if(keys.size() == 1){
+            for (String key:keys){
+                return key;
+            }
+        }
+        if(keys.size()>1){
+            this.removeByPattern(pattern);
+        }
+        return null;
+    }
+
+    @Override
     public void removeByPattern(String pattern) {
         Set<String> keys = this.keys(pattern);
         for (String key:keys){
@@ -145,5 +159,15 @@ public class RedisServiceImpl implements RedisService{
     @Override
     public void del(String key) {
         redisTemplate.delete(key);
+    }
+
+    @Override
+    public boolean check(String pattern) {
+        String key = this.findKey(pattern);
+        if (key == null) {
+            return false;
+        }
+        this.expire(key,Constants.TOKEN_EXPIRES_SECONDS);
+        return true;
     }
 }
