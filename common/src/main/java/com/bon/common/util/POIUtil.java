@@ -71,7 +71,7 @@ public class POIUtil {
             tableName = sheet.getRow(1).getCell(0).getRichStringCellValue().getString();
             /*是否删除原表*/
             isDropTable = sheet.getRow(1).getCell(2).getRichStringCellValue().getString();
-            if(StringUtils.isBlank(isDropTable)||isDropTable.equals("否")){
+            if(StringUtils.isBlank(isDropTable)||isDropTable.equals("否")||isDropTable.equals("n")){
                 isDropTable = "否";
             }
             list.add(tableName+","+isDropTable);

@@ -117,8 +117,8 @@ public class UtilTest {
     @Test
     public void StringUtils(){
         String line="tb_user";
-        String camel=underline2Camel(line,true);
-        System.out.println(upperCase(camel));
+        String camel=underline2Camel(line,false);
+        System.out.println(camel);
         System.out.println(camel2Underline(camel));
     }
     /**

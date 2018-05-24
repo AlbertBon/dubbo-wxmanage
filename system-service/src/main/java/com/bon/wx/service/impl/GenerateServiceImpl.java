@@ -59,7 +59,7 @@ public class GenerateServiceImpl implements GenerateService {
         List<String> tableList = new ArrayList<>();
         //循环判断获取到的list是否删除原表，若是需要重新生成实体类
         for(String str : list){
-            if(str.split(",")[1].equals("是")){
+            if(!str.split(",")[1].equals("是")||str.split(",")[1].equals("y")){
                 tableList.add(str.split(",")[0]);
             }
         }
@@ -78,7 +78,7 @@ public class GenerateServiceImpl implements GenerateService {
         }
         //循环添加新的table标签
         for (String tableName : tableList) {
-            String domainName = StringUtils.upperCase(tableName);
+            String domainName = StringUtils.upperCase(StringUtils.underline2Camel(tableName,false));
             //1.得到属性值标签
             Element tableElem = doc.getRootElement().element("context").addElement("table");
             //2.通过增加同名属性的方法，修改属性值----key相同，覆盖；不存在key，则添加
