@@ -1,9 +1,8 @@
 package com.bon.web.config;
 
-import com.bon.web.interceptor.MyInterceptor;
+import com.bon.web.interceptor.Interceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -14,12 +13,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @create: 2018-05-10 15:38
  **/
 @Configuration
-public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
+public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     //关键，将拦截器作为bean写入配置中
     @Bean
-    public MyInterceptor myInterceptor(){
-        return new MyInterceptor();
+    public Interceptor myInterceptor(){
+        return new Interceptor();
     }
 
     @Override

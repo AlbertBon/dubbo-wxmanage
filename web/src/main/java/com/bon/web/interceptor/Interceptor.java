@@ -25,7 +25,7 @@ import java.util.Set;
  * @author: Bon
  * @create: 2018-05-10 15:35
  **/
-public class MyInterceptor implements HandlerInterceptor {
+public class Interceptor implements HandlerInterceptor {
 
     @Autowired
     private LoginService loginService;
