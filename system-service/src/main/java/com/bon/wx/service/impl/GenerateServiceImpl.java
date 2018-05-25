@@ -85,7 +85,9 @@ public class GenerateServiceImpl implements GenerateService {
             tableElem.addAttribute("tableName", tableName).addAttribute("domainObjectName", domainName)
                     .addAttribute("enableCountByExample", "false").addAttribute("enableUpdateByExample", "false")
                     .addAttribute("enableDeleteByExample", "false").addAttribute("enableSelectByExample", "false")
-                    .addAttribute("selectByExampleQueryId", "false");
+                    .addAttribute("selectByExampleQueryId", "false").addAttribute("enableSelectByPrimaryKey", "false")
+                    .addAttribute("enableUpdateByPrimaryKey", "false").addAttribute("enableInsert", "false")
+                    .addAttribute("enableDeleteByPrimaryKey", "false");
             tableElem.addElement("property").addAttribute("name", "useActualColumnNames").addAttribute("value", "false");
         }
         //指定文件输出的位置

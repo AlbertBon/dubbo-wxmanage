@@ -6,6 +6,7 @@ import com.bon.common.util.MD5Util;
 import com.bon.wx.domain.dto.UserDTO;
 import com.bon.wx.domain.dto.UserListDTO;
 import com.bon.wx.domain.entity.User;
+import com.bon.wx.domain.vo.UserVO;
 import com.bon.wx.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,8 +33,8 @@ public class UserController {
     @ApiResponse(code = 200, message = "success")
     @PostMapping(value = "/query",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultBody findByKey(@RequestParam Long key){
-        User user= userService.getById(key);
-        return new ResultBody(user);
+        UserVO vo= userService.getById(key);
+        return new ResultBody(vo);
     }
 
     @ApiOperation(value = "新增用户")

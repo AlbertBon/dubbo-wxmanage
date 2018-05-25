@@ -15,6 +15,7 @@ import com.bon.wx.service.UserService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,13 +30,10 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final MyLog _log = MyLog.getLog(UserServiceImpl.class);
+    private static final MyLog LOG = MyLog.getLog(UserServiceImpl.class);
 
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private UserBaseMapper userBaseMapper;
 
     @Override
     public UserVO getById(Long id) {
@@ -59,7 +57,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(UserDTO userDTO) {
-
+        Example example = userDTO.createExample(new User(),"username=",userDTO.getUsername());
+        User user = userMapper.selectOneByExample(example);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageVO list(UserListDTO userListDTO) {
         PageHelper.startPage(userListDTO);
-        List<User> list = userBaseMapper.selectByExample(userListDTO.createExample(new User()));
+        List<User> list = userMapper.selectByExample(userListDTO.createExample(new User()));
         List<UserVO> voList = new ArrayList<>();
         for (User user : list){
             UserVO vo = new UserVO();

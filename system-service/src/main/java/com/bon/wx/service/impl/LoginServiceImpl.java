@@ -8,6 +8,7 @@ import com.bon.common.util.MD5Util;
 import com.bon.common.util.MyLog;
 import com.bon.common.util.StringUtils;
 import com.bon.wx.dao.UserBaseMapper;
+import com.bon.wx.dao.UserMapper;
 import com.bon.wx.domain.dto.LoginDTO;
 import com.bon.wx.domain.dto.TokenDTO;
 import com.bon.wx.domain.entity.User;
@@ -35,7 +36,7 @@ public class LoginServiceImpl implements LoginService{
     private static final MyLog LOG = MyLog.getLog(LoginServiceImpl.class);
 
     @Autowired
-    private UserBaseMapper userBaseMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private RedisService redisService;
@@ -49,7 +50,7 @@ public class LoginServiceImpl implements LoginService{
 
         Example example = loginDTO.createExample(new User(),"username=",loginDTO.getUsername());
         example.and().andCondition("password=", MD5Util.encode(loginDTO.getPassword()));
-        User user = userBaseMapper.selectOneByExample(example);
+        User user = userMapper.selectOneByExample(example);
         if(user == null ){
             throw new BusinessException(ExceptionType.USERNAME_OR_PASSWORD_ERROR);
         }
@@ -69,7 +70,7 @@ public class LoginServiceImpl implements LoginService{
         String token = UUID.randomUUID().toString().replace("-", "");
         if(StringUtils.isNotBlank(dto.getWxOpenid())){
             Example example = dto.createExample(new User(),"wx_openid=",dto.getWxOpenid());
-            User user = userBaseMapper.selectOneByExample(example);
+            User user = userMapper.selectOneByExample(example);
             if(user==null){
                 throw new BusinessException(ExceptionType.USERNAME_NULL_PASSWORD_ERROR);
             }

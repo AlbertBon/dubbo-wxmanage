@@ -1,6 +1,7 @@
 package com.bon.wx.domain.dto;
 
 import com.bon.common.domain.dto.BaseDTO;
+import com.bon.wx.domain.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,7 +16,7 @@ import java.util.Date;
  * @create: 2018-05-03 18:36
  **/
 @ApiModel(value ="UserDTO")
-public class UserDTO implements Serializable {
+public class UserDTO extends BaseDTO {
     @ApiModelProperty(value = "姓名")
     private String name;
 
