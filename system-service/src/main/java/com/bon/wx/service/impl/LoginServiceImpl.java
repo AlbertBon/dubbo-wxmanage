@@ -47,9 +47,9 @@ public class LoginServiceImpl implements LoginService{
             throw new BusinessException(ExceptionType.VALIDATE_CODE_ERROR);
         }
 
-        Example example = loginDTO.createExample(new User(),"username=",loginDTO.getUsername());
-        example.and().andCondition("password=", MD5Util.encode(loginDTO.getPassword()));
-        User user = userMapper.selectOneByExample(example);
+        loginDTO.andFind(new User(),"username",loginDTO.getUsername());
+        loginDTO.andFind(new User(),"password",MD5Util.encode(loginDTO.getPassword()));
+        User user = userMapper.selectOneByExample(loginDTO.getExample());
         if(user == null ){
             throw new BusinessException(ExceptionType.USERNAME_OR_PASSWORD_ERROR);
         }
@@ -68,8 +68,8 @@ public class LoginServiceImpl implements LoginService{
         // 使用 uuid 作为源 token
         String token = UUID.randomUUID().toString().replace("-", "");
         if(StringUtils.isNotBlank(dto.getWxOpenid())){
-            Example example = dto.createExample(new User(),"wx_openid=",dto.getWxOpenid());
-            User user = userMapper.selectOneByExample(example);
+            dto.andFind(new User(),"wx_openid",dto.getWxOpenid());
+            User user = userMapper.selectOneByExample(dto.getWxOpenid());
             if(user==null){
                 throw new BusinessException(ExceptionType.USERNAME_NULL_PASSWORD_ERROR);
             }

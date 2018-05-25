@@ -13,83 +13,10 @@
   <sql id="Base_Column_List">
     role_id, gmt_create, gmt_modified, role_name, role_flag
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from role
     where role_id = #{roleId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from role
-    where role_id = #{roleId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.bon.wx.domain.entity.Role">
-    insert into role (role_id, gmt_create, gmt_modified, 
-      role_name, role_flag)
-    values (#{roleId,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{roleName,jdbcType=VARCHAR}, #{roleFlag,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.bon.wx.domain.entity.Role">
-    insert into role
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="roleId != null">
-        role_id,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified,
-      </if>
-      <if test="roleName != null">
-        role_name,
-      </if>
-      <if test="roleFlag != null">
-        role_flag,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="roleId != null">
-        #{roleId,jdbcType=BIGINT},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModified != null">
-        #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="roleName != null">
-        #{roleName,jdbcType=VARCHAR},
-      </if>
-      <if test="roleFlag != null">
-        #{roleFlag,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bon.wx.domain.entity.Role">
-    update role
-    <set>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="roleName != null">
-        role_name = #{roleName,jdbcType=VARCHAR},
-      </if>
-      <if test="roleFlag != null">
-        role_flag = #{roleFlag,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where role_id = #{roleId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.bon.wx.domain.entity.Role">
-    update role
-    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      role_name = #{roleName,jdbcType=VARCHAR},
-      role_flag = #{roleFlag,jdbcType=VARCHAR}
-    where role_id = #{roleId,jdbcType=BIGINT}
-  </update>
 </mapper>

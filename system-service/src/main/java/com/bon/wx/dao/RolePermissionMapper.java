@@ -1,17 +1,8 @@
 package com.bon.wx.dao;
 
 import com.bon.wx.domain.entity.RolePermission;
+import tk.mybatis.mapper.common.Mapper;
 
-public interface RolePermissionMapper {
-    int deleteByPrimaryKey(Long rolePermissionId);
-
-    int insert(RolePermission record);
-
-    int insertSelective(RolePermission record);
-
-    RolePermission selectByPrimaryKey(Long rolePermissionId);
-
-    int updateByPrimaryKeySelective(RolePermission record);
-
-    int updateByPrimaryKey(RolePermission record);
+public interface RolePermissionMapper extends Mapper<RolePermission> {
+    RolePermission getById(Long rolePermissionId);
 }

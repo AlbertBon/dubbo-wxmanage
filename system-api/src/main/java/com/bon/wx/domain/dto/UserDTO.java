@@ -16,7 +16,9 @@ import java.util.Date;
  * @create: 2018-05-03 18:36
  **/
 @ApiModel(value ="UserDTO")
-public class UserDTO extends BaseDTO {
+public class UserDTO extends BaseDTO<User> {
+    @ApiModelProperty(value = "ID")
+    private Long userId;
     @ApiModelProperty(value = "姓名")
     private String name;
 
@@ -46,6 +48,14 @@ public class UserDTO extends BaseDTO {
 
     @ApiModelProperty(value = "密钥")
     private String secretKey;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public String getName() {
         return name;

@@ -48,7 +48,7 @@
             <!-- 是否添加字段注释 true:是 false：否 -->
             <property name="addRemarkComments" value="true" />
             <!-- 自定义属性 作者名称 -->
-            <!--<property name="author" value="Bon" />-->
+            <property name="author" value="Bon" />
         </commentGenerator>
 
         <!-- 数据库连接 -->

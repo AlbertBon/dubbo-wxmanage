@@ -1,8 +1,10 @@
 package com.bon.wx.domain.vo;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @program: dubbo-wxmanage
@@ -12,6 +14,10 @@ import java.io.Serializable;
  **/
 public class UserVO implements Serializable{
     private Long userId;
+
+    private Date gmtCreate;
+
+    private Date gmtModified;
 
     private String name;
 
@@ -99,5 +105,21 @@ public class UserVO implements Serializable{
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 }

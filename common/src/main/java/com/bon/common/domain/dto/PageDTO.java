@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -32,7 +33,72 @@ public class PageDTO<T> implements Serializable {
 
     private Example example;
 
-    //根据条件创建查询模板
+    private Class<T> tClass;
+
+    private Example.Criteria criteria;
+
+    //获取T的class类型
+    public void getTClass(){
+        this.tClass  = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    //根据条件创建查询模板（根据定义泛型）
+    public Example createExample() {
+        this.getTClass();
+        if (null != this.getKeyMap()) {
+            example = new Example(tClass);
+            String flag = "";
+            for (Map.Entry<String, String> entry : keyMap.entrySet()) {
+                //获取标识值 or：,in: ,notIn:,isNull,isNotNull等等
+                flag = entry.getKey().split(":")[0];
+                switch (flag) {
+                    case "or":
+                        Map<String, String> map = JSONObject.parseObject(entry.getValue(),Map.class);
+                        Example example1 = new Example(tClass);
+                        Example.Criteria criteria = example1.createCriteria();
+                        for (Map.Entry<String,String> en: map.entrySet()) {
+
+                            //判断类型
+                            if(en.getKey().split(":")[0].equals("isNull")){
+                                criteria.andIsNull(en.getValue());
+                            }else if(en.getKey().split(":")[0].equals("isNotNull")){
+                                criteria.andIsNotNull(en.getValue());
+                            }else if(en.getKey().split(":")[0].equals("in")){
+                                criteria.andIn(en.getKey().split(":")[1],Arrays.asList(en.getValue().split(",")));
+                            }else if(en.getKey().split(":")[0].equals("notIn")){
+                                criteria.andNotIn(en.getKey().split(":")[1],Arrays.asList(en.getValue().split(",")));
+                            }else {
+                                criteria.andCondition(en.getKey(),en.getValue());
+                            }
+                        }
+                        example.or(criteria);
+                        break;
+                    case "in":
+                        String strIn[] = entry.getValue().split(",");
+                        example.and().andIn(entry.getKey().split(":")[1],Arrays.asList(strIn));
+                        break;
+                    case "notIn":
+                        String strNotIn[] = entry.getValue().split(",");
+                        example.and().andNotIn(entry.getKey().split(":")[1],Arrays.asList(strNotIn));
+                        break;
+                    case "isNull":
+                        example.and().andIsNull(entry.getValue());
+                        break;
+                    case "isNotNull":
+                        example.and().andIsNotNull(entry.getValue());
+                        break;
+                    default:
+                        example.and().andCondition(entry.getKey(), entry.getValue());
+                        break;
+                }
+            }
+            return example;
+        } else {
+            return null;
+        }
+    }
+
+    //根据条件创建查询模板(自定义泛型)
     public Example createExample(T t) {
         if (null != this.getKeyMap()) {
             example = new Example(t.getClass());
@@ -85,13 +151,6 @@ public class PageDTO<T> implements Serializable {
         } else {
             return null;
         }
-    }
-    //根据单个字段条件创建查询模板
-    public Example createExample(T t,String field,String value) {
-        example = new Example(t.getClass());
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andCondition(field,value);
-        return example;
     }
 
     public Map<String, String> getKeyMap() {
@@ -148,5 +207,29 @@ public class PageDTO<T> implements Serializable {
 
     public void setPageSizeZero(Boolean pageSizeZero) {
         this.pageSizeZero = pageSizeZero;
+    }
+
+    public Example getExample() {
+        return example;
+    }
+
+    public void setExample(Example example) {
+        this.example = example;
+    }
+
+    public Class<T> gettClass() {
+        return tClass;
+    }
+
+    public void settClass(Class<T> tClass) {
+        this.tClass = tClass;
+    }
+
+    public Example.Criteria getCriteria() {
+        return criteria;
+    }
+
+    public void setCriteria(Example.Criteria criteria) {
+        this.criteria = criteria;
     }
 }

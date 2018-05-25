@@ -85,7 +85,7 @@ public class GenerateServiceImpl implements GenerateService {
             tableElem.addAttribute("tableName", tableName).addAttribute("domainObjectName", domainName)
                     .addAttribute("enableCountByExample", "false").addAttribute("enableUpdateByExample", "false")
                     .addAttribute("enableDeleteByExample", "false").addAttribute("enableSelectByExample", "false")
-                    .addAttribute("selectByExampleQueryId", "false").addAttribute("enableSelectByPrimaryKey", "false")
+                    .addAttribute("selectByExampleQueryId", "false").addAttribute("enableSelectByPrimaryKey", "true")//只留根据id查询接口
                     .addAttribute("enableUpdateByPrimaryKey", "false").addAttribute("enableInsert", "false")
                     .addAttribute("enableDeleteByPrimaryKey", "false");
             tableElem.addElement("property").addAttribute("name", "useActualColumnNames").addAttribute("value", "false");

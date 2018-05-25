@@ -13,83 +13,10 @@
   <sql id="Base_Column_List">
     role_permission_id, gmt_create, gmt_modified, permission_id, role_id
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from role_permission
     where role_permission_id = #{rolePermissionId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from role_permission
-    where role_permission_id = #{rolePermissionId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.bon.wx.domain.entity.RolePermission">
-    insert into role_permission (role_permission_id, gmt_create, gmt_modified, 
-      permission_id, role_id)
-    values (#{rolePermissionId,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{permissionId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.bon.wx.domain.entity.RolePermission">
-    insert into role_permission
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="rolePermissionId != null">
-        role_permission_id,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified,
-      </if>
-      <if test="permissionId != null">
-        permission_id,
-      </if>
-      <if test="roleId != null">
-        role_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="rolePermissionId != null">
-        #{rolePermissionId,jdbcType=BIGINT},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModified != null">
-        #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="permissionId != null">
-        #{permissionId,jdbcType=BIGINT},
-      </if>
-      <if test="roleId != null">
-        #{roleId,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bon.wx.domain.entity.RolePermission">
-    update role_permission
-    <set>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModified != null">
-        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="permissionId != null">
-        permission_id = #{permissionId,jdbcType=BIGINT},
-      </if>
-      <if test="roleId != null">
-        role_id = #{roleId,jdbcType=BIGINT},
-      </if>
-    </set>
-    where role_permission_id = #{rolePermissionId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.bon.wx.domain.entity.RolePermission">
-    update role_permission
-    set gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      permission_id = #{permissionId,jdbcType=BIGINT},
-      role_id = #{roleId,jdbcType=BIGINT}
-    where role_permission_id = #{rolePermissionId,jdbcType=BIGINT}
-  </update>
 </mapper>

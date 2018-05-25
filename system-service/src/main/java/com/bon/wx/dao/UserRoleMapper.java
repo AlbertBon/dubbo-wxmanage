@@ -1,17 +1,8 @@
 package com.bon.wx.dao;
 
 import com.bon.wx.domain.entity.UserRole;
+import tk.mybatis.mapper.common.Mapper;
 
-public interface UserRoleMapper {
-    int deleteByPrimaryKey(Long userRoleId);
-
-    int insert(UserRole record);
-
-    int insertSelective(UserRole record);
-
-    UserRole selectByPrimaryKey(Long userRoleId);
-
-    int updateByPrimaryKeySelective(UserRole record);
-
-    int updateByPrimaryKey(UserRole record);
+public interface UserRoleMapper extends Mapper<UserRole> {
+    UserRole getById(Long userRoleId);
 }
