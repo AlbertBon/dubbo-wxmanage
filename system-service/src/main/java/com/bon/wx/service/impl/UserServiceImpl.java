@@ -3,8 +3,9 @@ package com.bon.wx.service.impl;
 import com.bon.common.domain.enums.ExceptionType;
 import com.bon.common.domain.vo.PageVO;
 import com.bon.common.util.BeanUtil;
+import com.bon.common.util.MD5Util;
 import com.bon.common.util.MyLog;
-import com.bon.wx.dao.UserBaseMapper;
+import com.bon.common.util.StringUtils;
 import com.bon.wx.dao.UserMapper;
 import com.bon.wx.domain.dto.UserDTO;
 import com.bon.wx.domain.dto.UserListDTO;
@@ -15,6 +16,7 @@ import com.bon.wx.service.UserService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
@@ -47,18 +49,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(UserDTO userDTO) {
+    public void save(UserDTO dto) {
+        if(StringUtils.isBlank(dto.getPassword())){
+            throw new BusinessException(ExceptionType.PASSWORD_NULL_ERROR);
+        }
+        dto.setPassword(MD5Util.encode(dto.getPassword()));
         User user = new User();
-        BeanUtil.copyPropertys(userDTO, user);
+        BeanUtil.copyPropertys(dto, user);
         user.setGmtCreate(new Date());
         user.setGmtModified(new Date());
         userMapper.insertSelective(user);
     }
 
     @Override
-    public void update(UserDTO userDTO) {
-        Example example = userDTO.createExample(new User(),"username=",userDTO.getUsername());
+    @Transactional
+    public void update(UserDTO dto) {
+        if(StringUtils.isNotBlank(dto.getPassword())){
+            dto.setPassword(MD5Util.encode(dto.getPassword()));
+        }else {
+            dto.setPassword(null);
+        }
+        Example example = dto.createExample(new User(),"username=",dto.getUsername());
         User user = userMapper.selectOneByExample(example);
+        if(user==null){
+            throw new BusinessException(ExceptionType.USERNAME_NULL_PASSWORD_ERROR);
+        }
+        user = BeanUtil.copyPropertys(dto,user);
+        user.setGmtModified(new Date());
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     @Override

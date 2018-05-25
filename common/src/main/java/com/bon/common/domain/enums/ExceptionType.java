@@ -14,9 +14,11 @@ public enum ExceptionType {
     VALIDATE_CODE_ERROR("100006","验证码错误"),
     EXPIRED_ERROR("100007","登录信息过期"),
     USERNAME_NULL_PASSWORD_ERROR("100008","用户获取失败"),
+    PASSWORD_NULL_ERROR("100009","用户密码不能为空"),
 
     //通用异常
-    SYSTEM_ERROR("100001", "网络异常");
+    SYSTEM_ERROR("100001", "网络异常"),
+    CUSTOMER_ERROR("200001","程序运行异常");
 
     private String code;
     private String message;

@@ -238,6 +238,7 @@ public class CommentGeneratorPlugin implements CommentGenerator {
 		topLevelClass.addJavaDocLine("import com.fasterxml.jackson.annotation.JsonFormat;");
 		topLevelClass.addJavaDocLine("import io.swagger.annotations.ApiModel;");
 		topLevelClass.addJavaDocLine("import io.swagger.annotations.ApiModelProperty;");
+        topLevelClass.addJavaDocLine("import javax.persistence.Id;");
         
         //添加类注释
         topLevelClass.addJavaDocLine("/**"); 
@@ -313,7 +314,14 @@ public class CommentGeneratorPlugin implements CommentGenerator {
         
         //字段备注信息
         String remarks = introspectedColumn.getRemarks();
+        //备注为ID时添加id注解
+        if(remarks.equals("ID")){
+            field.addJavaDocLine("@Id");
+        }
+
         field.addJavaDocLine("@ApiModelProperty(value = \"" + remarks + "\")");
+
+
         
         //当字段数据类型为date时添加日期注释
         StringBuffer sb = new StringBuffer();

@@ -7,7 +7,6 @@ import com.bon.common.util.BeanUtil;
 import com.bon.common.util.MD5Util;
 import com.bon.common.util.MyLog;
 import com.bon.common.util.StringUtils;
-import com.bon.wx.dao.UserBaseMapper;
 import com.bon.wx.dao.UserMapper;
 import com.bon.wx.domain.dto.LoginDTO;
 import com.bon.wx.domain.dto.TokenDTO;

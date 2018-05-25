@@ -5,7 +5,6 @@ import com.bon.common.domain.vo.PageVO;
 import com.bon.common.util.MD5Util;
 import com.bon.wx.domain.dto.UserDTO;
 import com.bon.wx.domain.dto.UserListDTO;
-import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.vo.UserVO;
 import com.bon.wx.service.UserService;
 import io.swagger.annotations.Api;
@@ -41,7 +40,6 @@ public class UserController {
     @ApiResponse(code = 200, message = "success")
     @PostMapping(value = "/addUser",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultBody addUser(@RequestBody UserDTO user){
-        user.setPassword(MD5Util.encode(user.getPassword()));
         userService.save(user);
         return new ResultBody();
     }
@@ -52,5 +50,13 @@ public class UserController {
     public ResultBody list(@RequestBody UserListDTO listDTO){
         PageVO pageVO = userService.list(listDTO);
         return new ResultBody(pageVO);
+    }
+
+    @ApiOperation(value = "修改用户")
+    @ApiResponse(code = 200, message = "success")
+    @PostMapping(value = "/updateUser",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResultBody updateUser(@RequestBody UserDTO dto){
+        userService.update(dto);
+        return new ResultBody();
     }
 }

@@ -1,5 +1,7 @@
 package com.bon.wx.domain.vo;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 /**
@@ -22,6 +24,26 @@ public class UserVO implements Serializable{
     private String username;
 
     private String remark;
+
+    private String wxOpenid;
+
+    private String appId;
+
+    public String getWxOpenid() {
+        return wxOpenid;
+    }
+
+    public void setWxOpenid(String wxOpenid) {
+        this.wxOpenid = wxOpenid;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
     public Long getUserId() {
         return userId;
