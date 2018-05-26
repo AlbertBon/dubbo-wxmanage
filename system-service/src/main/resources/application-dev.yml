@@ -27,6 +27,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/wxmanage?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false&&zeroDateTimeBehavior=convertToNull
+    name: wxmanage
     username: root
     password: root
     initialSize: 5    # 初始化大小

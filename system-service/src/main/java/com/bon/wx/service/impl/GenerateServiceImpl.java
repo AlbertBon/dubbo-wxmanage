@@ -18,6 +18,7 @@ import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,12 +43,37 @@ public class GenerateServiceImpl implements GenerateService {
     @Autowired
     private GenerateMapper generateMapper;
 
+    @Value("${spring.datasource.name}")
+    private String schema;
+
     @Override
     @Transactional
     public void generateByFilePath(String path) throws Exception {
 
-        LOG.info("开始执行创建表语句");
+        LOG.info("判断是否有需要修改的实体类");
         List<String> list = new ArrayList<>();
+        list = POIUtil.getTableNames(path);
+        List<String> tableList = new ArrayList<>();
+        //循环判断获取到的list是否删除原表，若是需要重新生成实体类
+        String tableNameTemp = "";
+        for(String str : list){
+            if(str.split(",")[1].equals("是")||str.split(",")[1].equals("y")){
+                tableNameTemp = str.split(",")[0];
+                tableList.add(tableNameTemp);
+            }else {
+                tableNameTemp = str.split(",")[0];
+                int countTable = generateMapper.findTable(tableNameTemp,schema);
+                if(countTable<=0){//如果数据库里没有这张表，即使选择不覆盖表也需要新增
+                    tableList.add(tableNameTemp);
+                }
+            }
+        }
+        if(tableList.size()<=0){
+            LOG.info("没有需要修改的实体类");
+            return ;
+        }
+
+        LOG.info("开始执行创建表语句");
         list = POIUtil.excelSqlImport(path);
         for (String sql : list) {
             generateMapper.createTable(sql);
@@ -55,18 +81,6 @@ public class GenerateServiceImpl implements GenerateService {
         LOG.info("创建表完成");
 
         LOG.info("开始修改generate.xml文件");
-        list = POIUtil.getTableNames(path);
-        List<String> tableList = new ArrayList<>();
-        //循环判断获取到的list是否删除原表，若是需要重新生成实体类
-        for(String str : list){
-            if(str.split(",")[1].equals("是")||str.split(",")[1].equals("y")){
-                tableList.add(str.split(",")[0]);
-            }
-        }
-        if(tableList.size()<=0){
-            LOG.info("没有需要修改的实体类");
-            return ;
-        }
         //创建Document对象，读取已存在的Xml文件generator.xml
         Document doc = new SAXReader().read(new File(GenerateService.class.getResource("/generator.xml").getFile()));
         //删除所有table标签

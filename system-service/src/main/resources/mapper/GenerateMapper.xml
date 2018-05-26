@@ -4,4 +4,7 @@
   <update id="createTable">
     ${sql}
   </update>
+  <select id="findTable" resultType="java.lang.Integer">
+    SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_NAME=#{tableName,jdbcType=VARCHAR} and TABLE_SCHEMA=#{schema,jdbcType=VARCHAR};
+  </select>
 </mapper>
