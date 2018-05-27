@@ -35,6 +35,7 @@ import java.util.List;
  * @create: 2018-04-27 18:00
  **/
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private static final MyLog LOG = MyLog.getLog(UserServiceImpl.class);
@@ -48,6 +49,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserVO getById(Long id) {
         User user = userMapper.selectByPrimaryKey(id);
+        if(user==null){
+            throw new BusinessException(ExceptionType.USERNAME_NULL_PASSWORD_ERROR);
+        }
         UserVO vo = new UserVO();
         vo = BeanUtil.copyPropertys(user,vo);
         return vo;
@@ -68,7 +72,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void update(UserDTO dto) {
         if(StringUtils.isNotBlank(dto.getPassword())){
             dto.setPassword(MD5Util.encode(dto.getPassword()));
@@ -88,9 +91,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+
     public void delete(Long id) {
         userMapper.deleteByPrimaryKey(id);
+        throw new BusinessException("test");
     }
 
     @Override

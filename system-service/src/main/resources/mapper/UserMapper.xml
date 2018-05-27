@@ -14,8 +14,8 @@
       <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="wx_openid" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="app_id" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="secret_key" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="app_id" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="secret_key" javaType="java.lang.String" jdbcType="CHAR" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">

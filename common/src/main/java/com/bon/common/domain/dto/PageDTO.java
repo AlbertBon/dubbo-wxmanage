@@ -31,10 +31,13 @@ public class PageDTO<T> implements Serializable {
     @ApiModelProperty(value = "查询关键字,举例{\"id=\":\"1\",\"or:\":\"{'id=':'2','name=':'2','in:name':'1,2,3','isNotNull':'name'}\"}", example = "{\"in:id\":\"1,2,3\",\"or:\":\"{'id=':'2','name=':'2','in:name':'1,2,3'}\"}")
     private Map<String, String> keyMap;
 
+    @ApiModelProperty(value = "查询模板", hidden = true)
     private Example example;
 
+    @ApiModelProperty(value = "泛型类型", hidden = true)
     private Class<T> tClass;
 
+    @ApiModelProperty(value = "模板条件", hidden = true)
     private Example.Criteria criteria;
 
     //获取T的class类型

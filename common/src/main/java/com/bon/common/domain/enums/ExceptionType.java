@@ -16,9 +16,10 @@ public enum ExceptionType {
     USERNAME_NULL_PASSWORD_ERROR("100008","用户获取失败"),
     PASSWORD_NULL_ERROR("100009","用户密码不能为空"),
 
-    //通用异常
+    //系统异常
     SYSTEM_ERROR("100001", "网络异常"),
-    CUSTOMER_ERROR("200001","程序运行异常");
+    CUSTOMER_ERROR("200001","程序运行异常"),
+    REDIS_ERROR("200002","redis连接异常"),;
 
     private String code;
     private String message;

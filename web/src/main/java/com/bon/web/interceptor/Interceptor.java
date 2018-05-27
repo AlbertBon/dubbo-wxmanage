@@ -8,6 +8,7 @@ import com.bon.common.service.RedisService;
 import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -44,7 +45,7 @@ public class Interceptor implements HandlerInterceptor {
         }
 
         //登录验证信息拦截
-        if(request.getServletPath().contains("/login/")){//不拦截/login部分
+        if(request.getServletPath().contains("/login/")||request.getServletPath().contains("/user/addUser")){//不拦截/login部分,暂时不拦截新增用户
             return true;
         }
         if (request.getParameter("token") != null) {
@@ -91,6 +92,9 @@ public class Interceptor implements HandlerInterceptor {
                 out.close();
             } else if (e instanceof ClassCastException) {
                 out.write(new ResultBody(ExceptionType.SYSTEM_ERROR).toErrString().getBytes("utf-8"));
+                out.close();
+            } else if(e instanceof RedisConnectionFailureException){
+                out.write(new ResultBody(ExceptionType.REDIS_ERROR).toErrString().getBytes("utf-8"));
                 out.close();
             } else {
                 out.write(new ResultBody(ExceptionType.SYSTEM_ERROR).toErrString().getBytes("utf-8"));

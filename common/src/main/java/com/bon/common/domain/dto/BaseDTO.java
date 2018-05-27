@@ -19,10 +19,13 @@ import java.util.*;
  **/
 public class BaseDTO<T> implements Serializable {
 
+    @ApiModelProperty(value = "查询模板", hidden = true)
     private Example example;
 
+    @ApiModelProperty(value = "泛型类型", hidden = true)
     private Class<T> tClass;
 
+    @ApiModelProperty(value = "模板条件", hidden = true)
     private Example.Criteria criteria;
 
     //获取T的class类型
