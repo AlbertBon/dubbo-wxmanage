@@ -68,4 +68,15 @@ public class LoginController {
         return new ResultBody(vo);
     }
 
+    @ApiOperation(value = "登出")
+    @PostMapping(value = "/loginOut",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResultBody loginOut(HttpServletRequest request) throws IOException {
+        if(request.getParameter("token")!=null){
+            loginService.loginOut(request.getParameter("token"));
+        }else {
+            loginService.loginOut(request.getRequestedSessionId());
+        }
+        return new ResultBody();
+    }
+
 }

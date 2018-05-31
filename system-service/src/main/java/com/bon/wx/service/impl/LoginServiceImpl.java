@@ -15,12 +15,15 @@ import com.bon.wx.domain.vo.LoginVO;
 import com.bon.wx.domain.vo.TokenVO;
 import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.LoginService;
+import org.hibernate.validator.internal.util.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -59,6 +62,7 @@ public class LoginServiceImpl implements LoginService{
 
         LoginVO loginVO = new LoginVO();
         BeanUtil.copyPropertys(user,loginVO);
+        LOG.info("用户{}-session登录",loginVO.getUsername());
         // TODO: 2018/5/21 给登录用户添加登录信息
         return loginVO;
     }
@@ -89,5 +93,27 @@ public class LoginServiceImpl implements LoginService{
         }
         redisService.expire(key,Constants.TOKEN_EXPIRES_SECONDS);
         return true;
+    }
+
+    @Override
+    public void loginOut(String sessionId) {
+        String username;
+        String tokenPattern = redisService.findKey(MessageFormat.format(Constants.RedisKey.TOKEN_USERNAME_TOKEN,'*',sessionId));
+        String sessionPattern = redisService.findKey(MessageFormat.format(Constants.RedisKey.LOGIN_USERNAME_SESSION_ID,'*',sessionId));
+        if(tokenPattern==null&&sessionPattern==null){
+            throw new BusinessException(ExceptionType.EXPIRED_ERROR);
+        }
+        if(tokenPattern!=null){
+            List list = Arrays.asList(tokenPattern.split("_"));
+            username = tokenPattern.split("_")[list.size()-2];
+            LOG.info("用户{}-token登出",username);
+        }
+        if(sessionPattern!=null){
+            List list = Arrays.asList(sessionPattern.split("_"));
+            username = sessionPattern.split("_")[list.size()-2];
+            LOG.info("用户{}-session登出",username);
+        }
+        redisService.removeByPattern(MessageFormat.format(Constants.RedisKey.TOKEN_USERNAME_TOKEN,'*',sessionId));
+        redisService.removeByPattern(MessageFormat.format(Constants.RedisKey.LOGIN_USERNAME_SESSION_ID,'*',sessionId));
     }
 }

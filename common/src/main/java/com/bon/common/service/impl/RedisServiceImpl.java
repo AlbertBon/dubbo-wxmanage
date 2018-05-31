@@ -75,13 +75,10 @@ public class RedisServiceImpl implements RedisService{
     @Override
     public String findKey(String pattern) {
         Set<String> keys = redisTemplate.keys(pattern);
-        if(keys.size() == 1){
+        if(keys.size() >= 1){//返回第一个匹配数据
             for (String key:keys){
                 return key;
             }
-        }
-        if(keys.size()>1){
-            this.removeByPattern(pattern);
         }
         return null;
     }

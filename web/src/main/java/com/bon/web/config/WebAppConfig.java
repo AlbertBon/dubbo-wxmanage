@@ -37,7 +37,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:8080")
                 .allowedMethods("GET", "POST")
-                .allowCredentials(false).maxAge(3600);
+                .allowCredentials(true).maxAge(3600);
     }
 
 }

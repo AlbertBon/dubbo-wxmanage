@@ -15,4 +15,5 @@ public interface LoginService {
     LoginVO loginIn(LoginDTO loginDTO,String sessionId);
     TokenVO getToken(TokenDTO dto);
     boolean check(String pattern);
+    void loginOut(String sessionId);
 }

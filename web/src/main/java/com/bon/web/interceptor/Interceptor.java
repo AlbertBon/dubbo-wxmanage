@@ -45,7 +45,8 @@ public class Interceptor implements HandlerInterceptor {
         }
 
         //登录验证信息拦截
-        if(request.getServletPath().contains("/login/")||request.getServletPath().contains("/user/addUser")){//不拦截/login部分,暂时不拦截新增用户
+        if((request.getServletPath().contains("/login/")||request.getServletPath().contains("/user/addUser"))
+                &&!request.getServletPath().contains("/login/loginOut")){//不拦截/login部分,暂时不拦截新增用户
             return true;
         }
         if (request.getParameter("token") != null) {
