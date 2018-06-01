@@ -5,6 +5,7 @@ import com.bon.common.config.Constants;
 import com.bon.common.domain.enums.ExceptionType;
 import com.bon.common.domain.vo.ResultBody;
 import com.bon.common.service.RedisService;
+import com.bon.common.util.PropertyUtil;
 import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,16 @@ public class Interceptor implements HandlerInterceptor {
     //在请求处理之前进行调用（Controller方法调用之前
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+//        if(request.getRequestedSessionId()==null){
+//            return true;
+//        }
         //请求错误拦截
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
+        response.setHeader("Access-Control-Allow-Origin",PropertyUtil.getProperty("corsHost"));
+        response.setHeader("Access-Control-Allow-Credentials","true");
+        response.setHeader("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept");
         if (request.getServletPath().equals("/error")) {
             OutputStream out = response.getOutputStream();
             out.write(new ResultBody(ExceptionType.REQUEST_ERROR).toErrString().getBytes("utf-8"));
@@ -85,6 +93,9 @@ public class Interceptor implements HandlerInterceptor {
         if (e != null) {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
+            response.setHeader("Access-Control-Allow-Origin",PropertyUtil.getProperty("corsHost"));
+            response.setHeader("Access-Control-Allow-Credentials","true");
+            response.setHeader("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept");
             OutputStream out = response.getOutputStream();
             /*异常拦截*/
             if (e instanceof BusinessException) {

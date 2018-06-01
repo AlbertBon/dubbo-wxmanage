@@ -1,5 +1,6 @@
 package com.bon.web.config;
 
+import com.bon.common.util.PropertyUtil;
 import com.bon.web.interceptor.Interceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +36,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8080")
+                .allowedOrigins(PropertyUtil.getProperty("corsHost"))
                 .allowedMethods("GET", "POST")
                 .allowCredentials(true).maxAge(3600);
     }
