@@ -64,10 +64,10 @@ public class UserServiceImpl implements UserService {
         }
         dto.setPassword(MD5Util.encode(dto.getPassword()));
         User user = new User();
+        BeanUtil.copyPropertys(dto, user);
         user.setUserId(null);
         user.setGmtCreate(new Date());
         user.setGmtModified(new Date());
-        BeanUtil.copyPropertys(dto, user);
         userMapper.insertSelective(user);
     }
 
@@ -94,7 +94,6 @@ public class UserServiceImpl implements UserService {
 
     public void delete(Long id) {
         userMapper.deleteByPrimaryKey(id);
-        throw new BusinessException("test");
     }
 
     @Override

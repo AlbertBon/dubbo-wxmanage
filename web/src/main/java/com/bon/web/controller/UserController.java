@@ -30,7 +30,7 @@ public class UserController {
 
     @ApiOperation(value = "用户列表")
     @ApiResponse(code = 200, message = "success")
-    @PostMapping(value = "/query",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/query")
     public ResultBody findByKey(@RequestParam Long key){
         UserVO vo= userService.getById(key);
         return new ResultBody(vo);
@@ -57,6 +57,13 @@ public class UserController {
     @PostMapping(value = "/updateUser",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultBody updateUser(@RequestBody UserDTO dto){
         userService.update(dto);
+        return new ResultBody();
+    }
+
+    @ApiOperation(value = "删除用户")
+    @GetMapping(value = "/deleteUser")
+    public ResultBody deleteUser(@RequestParam Long key){
+        userService.delete(key);
         return new ResultBody();
     }
 }
