@@ -101,13 +101,14 @@ public class UserServiceImpl implements UserService {
     public PageVO list(UserListDTO userListDTO) {
         PageHelper.startPage(userListDTO);
         List<User> list = userMapper.selectByExample(userListDTO.createExample());
+        PageVO pageVO = new PageVO(list);
         List<UserVO> voList = new ArrayList<>();
         for (User user : list){
             UserVO vo = new UserVO();
             BeanUtil.copyPropertys(user,vo);
             voList.add(vo);
         }
-        PageVO pageVO = new PageVO(voList);
+        pageVO.setList(voList);
         return pageVO;
     }
 
