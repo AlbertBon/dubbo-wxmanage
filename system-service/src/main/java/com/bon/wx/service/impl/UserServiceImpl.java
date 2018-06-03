@@ -1,5 +1,6 @@
 package com.bon.wx.service.impl;
 
+import com.bon.common.domain.dto.BaseDTO;
 import com.bon.common.domain.enums.ExceptionType;
 import com.bon.common.domain.vo.PageVO;
 import com.bon.common.util.BeanUtil;
@@ -15,6 +16,7 @@ import com.bon.wx.domain.dto.UserDTO;
 import com.bon.wx.domain.dto.UserListDTO;
 import com.bon.wx.domain.entity.Role;
 import com.bon.wx.domain.entity.User;
+import com.bon.wx.domain.entity.UserRole;
 import com.bon.wx.domain.vo.RoleVO;
 import com.bon.wx.domain.vo.UserVO;
 import com.bon.wx.exception.BusinessException;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +61,8 @@ public class UserServiceImpl implements UserService {
         }
         UserVO vo = new UserVO();
         vo = BeanUtil.copyPropertys(user,vo);
+        //放入用户角色id列表信息
+        vo.setRoleIds(getUserRoleIds(user.getUserId()));
         return vo;
     }
 
@@ -73,8 +78,8 @@ public class UserServiceImpl implements UserService {
         user.setGmtCreate(new Date());
         user.setGmtModified(new Date());
         userMapper.insertSelective(user);
-        //插入角色
-
+        //保存用户角色
+        saveUserRole(dto.getRoleIds(),user.getUserId());
     }
 
     @Override
@@ -85,8 +90,6 @@ public class UserServiceImpl implements UserService {
             dto.setPassword(null);
         }
 
-//        dto.andFind("username",dto.getUsername());
-//        User user=userMapper.selectOneByExample(dto.getExample());
         User user = userMapper.selectByPrimaryKey(dto.getUserId());
         if(user==null){
             throw new BusinessException(ExceptionType.USERNAME_NULL_PASSWORD_ERROR);
@@ -94,6 +97,8 @@ public class UserServiceImpl implements UserService {
         user = BeanUtil.copyPropertys(dto,user);
         user.setGmtModified(new Date());
         userMapper.updateByPrimaryKeySelective(user);
+        //保存用户角色
+        saveUserRole(dto.getRoleIds(),user.getUserId());
     }
 
     @Override
@@ -111,10 +116,26 @@ public class UserServiceImpl implements UserService {
         for (User user : list){
             UserVO vo = new UserVO();
             BeanUtil.copyPropertys(user,vo);
+            //放入用户角色id列表信息
+            vo.setRoleIds(getUserRoleIds(user.getUserId()));
             voList.add(vo);
         }
         pageVO.setList(voList);
         return pageVO;
+    }
+
+    @Override
+    public List<UserVO> getAllUser() {
+        List<User> list = userMapper.selectAll();
+        List<UserVO> voList = new ArrayList<>();
+        for (User user : list){
+            UserVO vo = new UserVO();
+            BeanUtil.copyPropertys(user,vo);
+            //放入用户角色id列表信息
+            vo.setRoleIds(getUserRoleIds(user.getUserId()));
+            voList.add(vo);
+        }
+        return voList;
     }
 
     @Override
@@ -164,6 +185,50 @@ public class UserServiceImpl implements UserService {
         }
         pageVO.setList(voList);
         return pageVO;
+    }
+
+    @Override
+    public List<RoleVO> getAllRole() {
+        List<Role> list = roleMapper.selectAll();
+        List<RoleVO> voList = new ArrayList<>();
+        for (Role role : list){
+            RoleVO vo = new RoleVO();
+            BeanUtil.copyPropertys(role,vo);
+            voList.add(vo);
+        }
+        return voList;
+    }
+
+    @Override
+    public void saveUserRole(List<Long> roleIds, Long userId) {
+        //删除用户角色
+        BaseDTO<UserRole> dto =new BaseDTO();
+        dto.createExample(new UserRole());
+        dto.andFind("userId",userId+"");
+        userRoleMapper.deleteByExample(dto.getExample());
+        //插入角色
+        for (Long roleId:roleIds){
+            UserRole userRole = new UserRole();
+            userRole.setUserId(userId);
+            userRole.setRoleId(roleId);
+            userRole.setGmtCreate(new Date());
+            userRole.setGmtModified(new Date());
+            userRoleMapper.insertSelective(userRole);
+        }
+    }
+
+    @Override
+    public List<Long> getUserRoleIds(Long userId) {
+        //查找用户所有角色
+        BaseDTO<UserRole> dto =new BaseDTO();
+        dto.createExample(new UserRole());
+        dto.andFind("userId",userId+"");
+        List<UserRole> userRoleList=userRoleMapper.selectByExample(dto.getExample());
+        List<Long> voList=new ArrayList<>();
+        for(UserRole userRole:userRoleList){
+            voList.add(userRole.getRoleId());
+        }
+        return voList;
     }
 
 }

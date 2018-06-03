@@ -10,6 +10,8 @@ import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.vo.RoleVO;
 import com.bon.wx.domain.vo.UserVO;
 
+import java.util.List;
+
 /**
  * @program: bon-dubbo
  * @description: 用户管理模块
@@ -22,12 +24,30 @@ public interface UserService {
     void updateUser(UserDTO userDTO);
     void deleteUser(Long id);
     PageVO listUser(UserListDTO userListDTO);
+    List<UserVO> getAllUser();
 
     RoleVO getRole(Long id);
     void saveRole(RoleDTO dto);
     void updateRole(RoleDTO dto);
     void deleteRole(Long id);
     PageVO listRole(RoleListDTO dto);
+    List<RoleVO> getAllRole();
 
-
+    /**
+     * @Author: Bon
+     * @Description: 保存用户角色
+     * @param roleIds
+     * @param userId
+     * @return: void
+     * @Date: 2018/6/3 0003 14:40
+     */
+    void saveUserRole(List<Long> roleIds,Long userId);
+    /**
+     * @Author: Bon
+     * @Description: 获取用户角色id列表
+     * @param
+     * @return: java.util.List<java.lang.Long>
+     * @Date: 2018/6/3 0003 15:10
+     */
+    List<Long> getUserRoleIds(Long userId);
 }

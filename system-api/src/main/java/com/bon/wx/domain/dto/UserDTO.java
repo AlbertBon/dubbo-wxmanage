@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @program: dubbo-wxmanage
@@ -52,15 +53,15 @@ public class UserDTO extends BaseDTO<User> {
     @ApiModelProperty(value = "邮箱")
     private String email;
 
-    @ApiModelProperty(value = "角色id")
-    private Long roleId;
+    @ApiModelProperty(value = "角色id组，','分隔")
+    private List<Long> roleIds;
 
-    public Long getRoleId() {
-        return roleId;
+    public List<Long> getRoleIds() {
+        return roleIds;
     }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setRoleIds(List<Long> roleIds) {
+        this.roleIds = roleIds;
     }
 
     public String getEmail() {

@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @program: bon-dubbo
  * @description: 用户管理模块
@@ -30,7 +32,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "用户列表")
+    @ApiOperation(value = "获取用户")
     @ApiResponse(code = 200, message = "success")
     @GetMapping(value = "/user/getUser")
     public ResultBody getUser(@RequestParam Long key){
@@ -69,7 +71,14 @@ public class UserController {
         return new ResultBody();
     }
 
-    @ApiOperation(value = "角色列表")
+    @ApiOperation(value = "获取所有用户")
+    @GetMapping(value = "/role/getAllUser")
+    public ResultBody getAllUser(){
+        List<UserVO> list = userService.getAllUser();
+        return new ResultBody(list);
+    }
+
+    @ApiOperation(value = "获取角色")
     @GetMapping(value = "/role/getRole")
     public ResultBody getRole(@RequestParam Long key){
         RoleVO vo= userService.getRole(key);
@@ -103,5 +112,12 @@ public class UserController {
     public ResultBody deleteRole(@RequestParam Long key){
         userService.deleteRole(key);
         return new ResultBody();
+    }
+
+    @ApiOperation(value = "获取所有角色")
+    @GetMapping(value = "/role/getAllRole")
+    public ResultBody getAllRole(){
+        List<RoleVO> list = userService.getAllRole();
+        return new ResultBody(list);
     }
 }

@@ -2,6 +2,7 @@ package com.bon.common.domain.dto;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.bon.common.util.StringUtils;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.poi.ss.formula.functions.T;
 import tk.mybatis.mapper.entity.Example;
@@ -53,6 +54,8 @@ public class BaseDTO<T> implements Serializable {
         if(this.example==null){
             this.createExample();
         }
+        //驼峰转下划线
+        field = StringUtils.camel2Underline(field);
         criteria.andCondition(field+"=",value);
         return example;
     }
@@ -62,6 +65,8 @@ public class BaseDTO<T> implements Serializable {
         if(this.example==null){
             this.createExample(t);
         }
+        //驼峰转下划线
+        field = StringUtils.camel2Underline(field);
         criteria.andCondition(field+"=",value);
         return example;
     }
@@ -71,6 +76,8 @@ public class BaseDTO<T> implements Serializable {
         if(this.example==null){
             this.createExample();
         }
+        //驼峰转下划线
+        field = StringUtils.camel2Underline(field);
         criteria.andCondition(field+" like",value);
         return criteria;
     }
@@ -80,6 +87,8 @@ public class BaseDTO<T> implements Serializable {
         if(this.example==null){
             this.createExample(t);
         }
+        //驼峰转下划线
+        field = StringUtils.camel2Underline(field);
         criteria.andCondition(field+" like",value);
         return example;
     }

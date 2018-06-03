@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @program: dubbo-wxmanage
@@ -34,6 +35,16 @@ public class UserVO implements Serializable{
     private String wxOpenid;
 
     private String appId;
+
+    private List<Long> roleIds;
+
+    public List<Long> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(List<Long> roleIds) {
+        this.roleIds = roleIds;
+    }
 
     public String getWxOpenid() {
         return wxOpenid;
