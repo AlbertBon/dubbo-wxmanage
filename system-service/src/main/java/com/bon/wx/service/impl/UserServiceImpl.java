@@ -8,6 +8,7 @@ import com.bon.common.util.MyLog;
 import com.bon.common.util.StringUtils;
 import com.bon.wx.dao.RoleMapper;
 import com.bon.wx.dao.UserMapper;
+import com.bon.wx.dao.UserRoleMapper;
 import com.bon.wx.domain.dto.RoleDTO;
 import com.bon.wx.domain.dto.RoleListDTO;
 import com.bon.wx.domain.dto.UserDTO;
@@ -46,6 +47,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleMapper roleMapper;
 
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+
     @Override
     public UserVO getUser(Long id) {
         User user = userMapper.selectByPrimaryKey(id);
@@ -69,6 +73,8 @@ public class UserServiceImpl implements UserService {
         user.setGmtCreate(new Date());
         user.setGmtModified(new Date());
         userMapper.insertSelective(user);
+        //插入角色
+
     }
 
     @Override

@@ -57,7 +57,8 @@ public class GenerateServiceImpl implements GenerateService {
         //循环判断获取到的list是否删除原表，若是需要重新生成实体类
         String tableNameTemp = "";
         for(String str : list){
-            if(str.split(",")[1].equals("是")||str.split(",")[1].equals("y")){
+            if(str.split(",")[1].equals("是")||str.split(",")[1].equals("y")
+                    ||str.split(",")[1].equals("修改")||str.split(",")[1].equals("u")){
                 tableNameTemp = str.split(",")[0];
                 tableList.add(tableNameTemp);
             }else {

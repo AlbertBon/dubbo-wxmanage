@@ -49,6 +49,28 @@ public class UserDTO extends BaseDTO<User> {
     @ApiModelProperty(value = "密钥")
     private String secretKey;
 
+    @ApiModelProperty(value = "邮箱")
+    private String email;
+
+    @ApiModelProperty(value = "角色id")
+    private Long roleId;
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Long getUserId() {
         return userId;
     }

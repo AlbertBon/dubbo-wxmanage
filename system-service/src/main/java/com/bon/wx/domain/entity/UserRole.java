@@ -1,13 +1,15 @@
 package com.bon.wx.domain.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * 
  * 实体类对应的数据表为：  user_role
@@ -17,6 +19,7 @@ import javax.persistence.Id;
 @ApiModel(value ="UserRole")
 public class UserRole implements Serializable {
     @Id
+    @GeneratedValue(generator = "JDBC")
     @ApiModelProperty(value = "ID")
     private Long userRoleId;
 

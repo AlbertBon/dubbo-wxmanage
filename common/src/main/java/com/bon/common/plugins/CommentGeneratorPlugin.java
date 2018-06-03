@@ -239,7 +239,8 @@ public class CommentGeneratorPlugin implements CommentGenerator {
 		topLevelClass.addJavaDocLine("import io.swagger.annotations.ApiModel;");
 		topLevelClass.addJavaDocLine("import io.swagger.annotations.ApiModelProperty;");
         topLevelClass.addJavaDocLine("import javax.persistence.Id;");
-        
+        topLevelClass.addJavaDocLine("import javax.persistence.GeneratedValue;");
+
         //添加类注释
         topLevelClass.addJavaDocLine("/**"); 
         sb.append(" * "+ remarks); 
@@ -317,6 +318,7 @@ public class CommentGeneratorPlugin implements CommentGenerator {
         //备注为ID时添加id注解
         if(remarks.equals("ID")){
             field.addJavaDocLine("@Id");
+            field.addJavaDocLine("@GeneratedValue(generator = \"JDBC\")");
         }
 
         field.addJavaDocLine("@ApiModelProperty(value = \"" + remarks + "\")");

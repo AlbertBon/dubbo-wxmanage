@@ -8,6 +8,7 @@
       <arg column="gmt_modified" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="email" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="telephone" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="address" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -19,8 +20,8 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    user_id, gmt_create, gmt_modified, name, phone, telephone, address, username, password, 
-    remark, wx_openid, app_id, secret_key
+    user_id, gmt_create, gmt_modified, name, phone, email, telephone, address, username, 
+    password, remark, wx_openid, app_id, secret_key
   </sql>
   <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 

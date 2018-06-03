@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +19,7 @@ import java.util.Date;
 @ApiModel(value ="RolePermission")
 public class RolePermission implements Serializable {
     @Id
+    @GeneratedValue(generator = "JDBC")
     @ApiModelProperty(value = "ID")
     private Long rolePermissionId;
 
