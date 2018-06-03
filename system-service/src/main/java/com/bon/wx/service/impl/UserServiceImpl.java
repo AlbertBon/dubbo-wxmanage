@@ -7,15 +7,10 @@ import com.bon.common.util.BeanUtil;
 import com.bon.common.util.MD5Util;
 import com.bon.common.util.MyLog;
 import com.bon.common.util.StringUtils;
-import com.bon.wx.dao.MenuMapper;
-import com.bon.wx.dao.RoleMapper;
-import com.bon.wx.dao.UserMapper;
-import com.bon.wx.dao.UserRoleMapper;
+import com.bon.wx.dao.*;
 import com.bon.wx.domain.dto.*;
-import com.bon.wx.domain.entity.Menu;
-import com.bon.wx.domain.entity.Role;
-import com.bon.wx.domain.entity.User;
-import com.bon.wx.domain.entity.UserRole;
+import com.bon.wx.domain.entity.*;
+import com.bon.wx.domain.enums.PermissionType;
 import com.bon.wx.domain.vo.MenuVO;
 import com.bon.wx.domain.vo.RoleVO;
 import com.bon.wx.domain.vo.UserVO;
@@ -55,6 +50,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MenuMapper menuMapper;
+
+    @Autowired
+    private PermissionMapper permissionMapper;
 
     @Override
     public UserVO getUser(Long id) {
@@ -218,6 +216,14 @@ public class UserServiceImpl implements UserService {
         menu.setGmtModified(new Date());
         BeanUtil.copyPropertys(dto,menu);
         menuMapper.insertSelective(menu);
+        //权限表中新增菜单权限记录
+        Permission permission =new Permission();
+        permission.setGmtCreate(new Date());
+        permission.setGmtModified(new Date());
+        permission.setPermissionName("【"+PermissionType.MENU.getValue()+"】"+menu.getName());
+        permission.setType(PermissionType.MENU.getKey());
+        permission.setObjectId(menu.getMenuId());
+        permissionMapper.insertSelective(permission);
     }
 
     @Override
@@ -232,8 +238,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteMenu(Long id) {
-        menuMapper.deleteByPrimaryKey(id);
+    public void deleteMenu(Long menuId) {
+        menuMapper.deleteByPrimaryKey(menuId);
+        //删除权限表对应记录
+        BaseDTO dto = new BaseDTO();
+        dto.createExample(new Permission());
+        dto.andFind("type",PermissionType.MENU.getKey());
+        dto.andFind("objectId", String.valueOf(menuId));
+        permissionMapper.deleteByExample(dto);
     }
 
     @Override

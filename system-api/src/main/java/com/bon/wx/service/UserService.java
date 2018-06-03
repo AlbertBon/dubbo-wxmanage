@@ -39,21 +39,10 @@ public interface UserService {
     PageVO listMenu(MenuListDTO dto);
     List<MenuVO> getAllMenu();
 
-    /**
-     * @Author: Bon
-     * @Description: 保存用户角色
-     * @param roleIds
-     * @param userId
-     * @return: void
-     * @Date: 2018/6/3 0003 14:40
-     */
+
+     /*保存用户角色*/
     void saveUserRole(List<Long> roleIds,Long userId);
-    /**
-     * @Author: Bon
-     * @Description: 获取用户角色id列表
-     * @param
-     * @return: java.util.List<java.lang.Long>
-     * @Date: 2018/6/3 0003 15:10
-     */
+    /*获取用户角色id列表*/
     List<Long> getUserRoleIds(Long userId);
+
 }
