@@ -53,7 +53,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
             sb.append(word.toUpperCase());
             sb.append(matcher.end()==line.length()?"":"_");
         }
-        return sb.toString();
+        return sb.toString().toLowerCase();
     }
 
     public static String upperCase(String str) {

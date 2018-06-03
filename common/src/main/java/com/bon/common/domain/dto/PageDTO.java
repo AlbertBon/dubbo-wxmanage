@@ -1,6 +1,7 @@
 package com.bon.common.domain.dto;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bon.common.util.StringUtils;
 import io.swagger.annotations.ApiModelProperty;
 import tk.mybatis.mapper.entity.Example;
 
@@ -28,8 +29,8 @@ public class PageDTO<T> implements Serializable {
     private Boolean reasonable;
     @ApiModelProperty(value = "当设置为true的时候，如果pagesize设置为0（或RowBounds的limit=0），就不执行分页，返回全部结果", example = "false", hidden = true)
     private Boolean pageSizeZero;
-    @ApiModelProperty(value = "查询关键字,举例{\"id=\":\"1\",\"or:\":\"{'id=':'2','name=':'2','in:name':'1,2,3','isNotNull':'name'}\"}", example = "{\"in:id\":\"1,2,3\",\"or:\":\"{'id=':'2','name=':'2','in:name':'1,2,3'}\"}")
-    private Map<String, String> keyMap;
+    @ApiModelProperty(value = "查询关键字,举例{\"equal_id\":\"1\",\"orMap\":\"{'equal_userId':'2','like_name':'2','in_name':'1,2,3','isNotNull':'name'}\"}", example = "{\"in:id\":\"1,2,3\",\"or:\":\"{'id=':'2','name=':'2','in:name':'1,2,3'}\"}")
+    private Map<String, Object> keyMap;
 
     @ApiModelProperty(value = "查询模板", hidden = true)
     private Example example;
@@ -51,44 +52,76 @@ public class PageDTO<T> implements Serializable {
         if (null != this.getKeyMap()) {
             example = new Example(tClass);
             String flag = "";
-            for (Map.Entry<String, String> entry : keyMap.entrySet()) {
+            for (Map.Entry<String, Object> entry : keyMap.entrySet()) {
+                if(entry.getValue()==null||StringUtils.isBlank(entry.getValue().toString())){
+                    break;
+                }
                 //获取标识值 or：,in: ,notIn:,isNull,isNotNull等等
-                flag = entry.getKey().split(":")[0];
+                flag = entry.getKey().split("_")[0];
+                String key= "";
                 switch (flag) {
-                    case "or":
-                        Map<String, String> map = JSONObject.parseObject(entry.getValue(),Map.class);
+                    case "orMap":
+                        Map<String, Object> map = JSONObject.parseObject(entry.getValue().toString(),Map.class);
                         Example example1 = new Example(tClass);
                         Example.Criteria criteria = example1.createCriteria();
-                        for (Map.Entry<String,String> en: map.entrySet()) {
+                        for (Map.Entry<String,Object> en: map.entrySet()) {
 
                             //判断类型
-                            if(en.getKey().split(":")[0].equals("isNull")){
-                                criteria.andIsNull(en.getValue());
-                            }else if(en.getKey().split(":")[0].equals("isNotNull")){
-                                criteria.andIsNotNull(en.getValue());
-                            }else if(en.getKey().split(":")[0].equals("in")){
-                                criteria.andIn(en.getKey().split(":")[1],Arrays.asList(en.getValue().split(",")));
-                            }else if(en.getKey().split(":")[0].equals("notIn")){
-                                criteria.andNotIn(en.getKey().split(":")[1],Arrays.asList(en.getValue().split(",")));
-                            }else {
-                                criteria.andCondition(en.getKey(),en.getValue());
+                            if(en.getKey().split("_")[0].equals("isNull")){
+                                criteria.andIsNull(en.getValue().toString());
+                            }else if(en.getKey().split("_")[0].equals("isNotNull")){
+                                criteria.andIsNotNull(en.getValue().toString());
+                            }else if(en.getKey().split("_")[0].equals("in")){
+                                criteria.andIn(StringUtils.camel2Underline(en.getKey().split("_")[1]),Arrays.asList(en.getValue().toString().split(",")));
+                            }else if(en.getKey().split("_")[0].equals("notIn")){
+                                criteria.andNotIn(StringUtils.camel2Underline(en.getKey().split("_")[1]),Arrays.asList(en.getValue().toString().split(",")));
+                            }else if(en.getKey().split("_")[0].equals("equal")){
+                                criteria.andCondition(StringUtils.camel2Underline(en.getKey().split("_")[1])+" =",en.getValue());
+                            }else if(en.getKey().split("_")[0].equals("like")){
+                                criteria.andCondition(StringUtils.camel2Underline(en.getKey().split("_")[1])+" like",en.getValue());
                             }
                         }
                         example.or(criteria);
                         break;
+                    case "orEqual":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.or().andCondition(key+" =", entry.getValue());
+                        break;
+                    case "orLike":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.or().andCondition(key+" like", "%"+entry.getValue()+"%");
+                        break;
                     case "in":
-                        String strIn[] = entry.getValue().split(",");
-                        example.and().andIn(entry.getKey().split(":")[1],Arrays.asList(strIn));
+                        String strIn[] = entry.getValue().toString().split(",");
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andIn(key,Arrays.asList(strIn));
                         break;
                     case "notIn":
-                        String strNotIn[] = entry.getValue().split(",");
-                        example.and().andNotIn(entry.getKey().split(":")[1],Arrays.asList(strNotIn));
+                        String strNotIn[] = entry.getValue().toString().split(",");
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andNotIn(key,Arrays.asList(strNotIn));
                         break;
                     case "isNull":
-                        example.and().andIsNull(entry.getValue());
+                        example.and().andIsNull(StringUtils.camel2Underline(entry.getValue().toString()));
                         break;
                     case "isNotNull":
-                        example.and().andIsNotNull(entry.getValue());
+                        example.and().andIsNotNull(StringUtils.camel2Underline(entry.getValue().toString()));
+                        break;
+                    case "equal":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andCondition(key+" =", entry.getValue());
+                        break;
+                    case "like":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andCondition(key+" like", "%"+entry.getValue()+"%");
+                        break;
+                    case "greater":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andCondition(key+ " >=", entry.getValue());
+                        break;
+                    case "less":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andCondition(key+ " <=", entry.getValue());
                         break;
                     default:
                         example.and().andCondition(entry.getKey(), entry.getValue());
@@ -106,44 +139,76 @@ public class PageDTO<T> implements Serializable {
         if (null != this.getKeyMap()) {
             example = new Example(t.getClass());
             String flag = "";
-            for (Map.Entry<String, String> entry : keyMap.entrySet()) {
+            for (Map.Entry<String, Object> entry : keyMap.entrySet()) {
+                if(entry.getValue()==null||StringUtils.isBlank(entry.getValue().toString())){
+                    break;
+                }
                 //获取标识值 or：,in: ,notIn:,isNull,isNotNull等等
-                flag = entry.getKey().split(":")[0];
+                flag = entry.getKey().split("_")[0];
+                String key= "";
                 switch (flag) {
-                    case "or":
-                        Map<String, String> map = JSONObject.parseObject(entry.getValue(),Map.class);
-                        Example example1 = new Example(t.getClass());
+                    case "orMap":
+                        Map<String, Object> map = JSONObject.parseObject(entry.getValue().toString(),Map.class);
+                        Example example1 = new Example(tClass);
                         Example.Criteria criteria = example1.createCriteria();
-                        for (Map.Entry<String,String> en: map.entrySet()) {
+                        for (Map.Entry<String,Object> en: map.entrySet()) {
 
                             //判断类型
-                            if(en.getKey().split(":")[0].equals("isNull")){
-                                criteria.andIsNull(en.getValue());
-                            }else if(en.getKey().split(":")[0].equals("isNotNull")){
-                                criteria.andIsNotNull(en.getValue());
-                            }else if(en.getKey().split(":")[0].equals("in")){
-                                criteria.andIn(en.getKey().split(":")[1],Arrays.asList(en.getValue().split(",")));
-                            }else if(en.getKey().split(":")[0].equals("notIn")){
-                                criteria.andNotIn(en.getKey().split(":")[1],Arrays.asList(en.getValue().split(",")));
-                            }else {
-                                criteria.andCondition(en.getKey(),en.getValue());
+                            if(en.getKey().split("_")[0].equals("isNull")){
+                                criteria.andIsNull(en.getValue().toString());
+                            }else if(en.getKey().split("_")[0].equals("isNotNull")){
+                                criteria.andIsNotNull(en.getValue().toString());
+                            }else if(en.getKey().split("_")[0].equals("in")){
+                                criteria.andIn(StringUtils.camel2Underline(en.getKey().split("_")[1]),Arrays.asList(en.getValue().toString().split(",")));
+                            }else if(en.getKey().split("_")[0].equals("notIn")){
+                                criteria.andNotIn(StringUtils.camel2Underline(en.getKey().split("_")[1]),Arrays.asList(en.getValue().toString().split(",")));
+                            }else if(en.getKey().split("_")[0].equals("equal")){
+                                criteria.andCondition(StringUtils.camel2Underline(en.getKey().split("_")[1])+" =",en.getValue());
+                            }else if(en.getKey().split("_")[0].equals("like")){
+                                criteria.andCondition(StringUtils.camel2Underline(en.getKey().split("_")[1])+" like",en.getValue());
                             }
                         }
                         example.or(criteria);
                         break;
+                    case "orEqual":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.or().andCondition(key+" =", entry.getValue());
+                        break;
+                    case "orLike":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.or().andCondition(key+" like", "%"+entry.getValue()+"%");
+                        break;
                     case "in":
-                        String strIn[] = entry.getValue().split(",");
-                        example.and().andIn(entry.getKey().split(":")[1],Arrays.asList(strIn));
+                        String strIn[] = entry.getValue().toString().split(",");
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andIn(key,Arrays.asList(strIn));
                         break;
                     case "notIn":
-                        String strNotIn[] = entry.getValue().split(",");
-                        example.and().andNotIn(entry.getKey().split(":")[1],Arrays.asList(strNotIn));
+                        String strNotIn[] = entry.getValue().toString().split(",");
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andNotIn(key,Arrays.asList(strNotIn));
                         break;
                     case "isNull":
-                        example.and().andIsNull(entry.getValue());
+                        example.and().andIsNull(StringUtils.camel2Underline(entry.getValue().toString()));
                         break;
                     case "isNotNull":
-                        example.and().andIsNotNull(entry.getValue());
+                        example.and().andIsNotNull(StringUtils.camel2Underline(entry.getValue().toString()));
+                        break;
+                    case "equal":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andCondition(key+" =", entry.getValue());
+                        break;
+                    case "like":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andCondition(key+" like", "%"+entry.getValue()+"%");
+                        break;
+                    case "greater":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andCondition(key+ " >=", entry.getValue());
+                        break;
+                    case "less":
+                        key= StringUtils.camel2Underline(entry.getKey().split("_")[1]);
+                        example.and().andCondition(key+ " <=", entry.getValue());
                         break;
                     default:
                         example.and().andCondition(entry.getKey(), entry.getValue());
@@ -156,11 +221,11 @@ public class PageDTO<T> implements Serializable {
         }
     }
 
-    public Map<String, String> getKeyMap() {
+    public Map<String, Object> getKeyMap() {
         return keyMap;
     }
 
-    public void setKeyMap(Map<String, String> keyMap) {
+    public void setKeyMap(Map<String, Object> keyMap) {
         this.keyMap = keyMap;
     }
 

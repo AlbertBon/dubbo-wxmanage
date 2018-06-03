@@ -116,10 +116,16 @@ public class UtilTest {
 
     @Test
     public void StringUtils(){
-        String line="tb_user";
-        String camel=underline2Camel(line,false);
-        System.out.println(camel);
-        System.out.println(camel2Underline(camel));
+        String line="equal_tbUser";
+        String str = line.split("_")[1];
+        log.info(str);
+        str = camel2Underline(str);
+        log.info(str);
+
+//        String camel=underline2Camel(line,false);
+//        System.out.println(camel);
+//        camel2Underline(line);
+//        System.out.println(camel2Underline(camel));
     }
     /**
      * 修改：属性值、文本

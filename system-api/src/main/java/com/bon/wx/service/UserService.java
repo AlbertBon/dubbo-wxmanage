@@ -17,13 +17,13 @@ import com.bon.wx.domain.vo.UserVO;
  * @create: 2018-04-27 17:47
  **/
 public interface UserService {
-    UserVO getById(Long id);
-    void save(UserDTO userDTO);
-    void update(UserDTO userDTO);
-    void delete(Long id);
-    PageVO list(UserListDTO userListDTO);
+    UserVO getUser(Long id);
+    void saveUser(UserDTO userDTO);
+    void updateUser(UserDTO userDTO);
+    void deleteUser(Long id);
+    PageVO listUser(UserListDTO userListDTO);
 
-    RoleVO getRoleById(Long id);
+    RoleVO getRole(Long id);
     void saveRole(RoleDTO dto);
     void updateRole(RoleDTO dto);
     void deleteRole(Long id);

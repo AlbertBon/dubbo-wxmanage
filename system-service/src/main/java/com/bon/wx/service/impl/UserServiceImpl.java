@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     private RoleMapper roleMapper;
 
     @Override
-    public UserVO getById(Long id) {
+    public UserVO getUser(Long id) {
         User user = userMapper.selectByPrimaryKey(id);
         if(user==null){
             throw new BusinessException(ExceptionType.USERNAME_NULL_PASSWORD_ERROR);
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(UserDTO dto) {
+    public void saveUser(UserDTO dto) {
         if(StringUtils.isBlank(dto.getPassword())){
             throw new BusinessException(ExceptionType.PASSWORD_NULL_ERROR);
         }
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(UserDTO dto) {
+    public void updateUser(UserDTO dto) {
         if(StringUtils.isNotBlank(dto.getPassword())){
             dto.setPassword(MD5Util.encode(dto.getPassword()));
         }else {
@@ -92,12 +92,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
 
-    public void delete(Long id) {
+    public void deleteUser(Long id) {
         userMapper.deleteByPrimaryKey(id);
     }
 
     @Override
-    public PageVO list(UserListDTO userListDTO) {
+    public PageVO listUser(UserListDTO userListDTO) {
         PageHelper.startPage(userListDTO);
         List<User> list = userMapper.selectByExample(userListDTO.createExample());
         PageVO pageVO = new PageVO(list);
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public RoleVO getRoleById(Long id) {
+    public RoleVO getRole(Long id) {
         Role role = roleMapper.getById(id);
         RoleVO vo = new RoleVO();
         BeanUtil.copyPropertys(role,vo);
@@ -149,13 +149,14 @@ public class UserServiceImpl implements UserService {
     public PageVO listRole(RoleListDTO listDTO) {
         PageHelper.startPage(listDTO);
         List<Role> list = roleMapper.selectByExample(listDTO.createExample());
+        PageVO pageVO = new PageVO(list);
         List<RoleVO> voList = new ArrayList<>();
         for (Role role : list){
             RoleVO vo = new RoleVO();
             BeanUtil.copyPropertys(role,vo);
             voList.add(vo);
         }
-        PageVO pageVO = new PageVO(voList);
+        pageVO.setList(voList);
         return pageVO;
     }
 

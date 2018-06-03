@@ -64,6 +64,7 @@ public class LoginServiceImpl implements LoginService{
         BeanUtil.copyPropertys(user,loginVO);
         LOG.info("用户{}-session登录",loginVO.getUsername());
         // TODO: 2018/5/21 给登录用户添加登录信息
+        loginVO.setToken(key);
         return loginVO;
     }
 
@@ -100,9 +101,6 @@ public class LoginServiceImpl implements LoginService{
         String username;
         String tokenPattern = redisService.findKey(MessageFormat.format(Constants.RedisKey.TOKEN_USERNAME_TOKEN,'*',sessionId));
         String sessionPattern = redisService.findKey(MessageFormat.format(Constants.RedisKey.LOGIN_USERNAME_SESSION_ID,'*',sessionId));
-        if(tokenPattern==null&&sessionPattern==null){
-            throw new BusinessException(ExceptionType.EXPIRED_ERROR);
-        }
         if(tokenPattern!=null){
             List list = Arrays.asList(tokenPattern.split("_"));
             username = tokenPattern.split("_")[list.size()-2];
