@@ -7,16 +7,16 @@ import com.bon.common.util.BeanUtil;
 import com.bon.common.util.MD5Util;
 import com.bon.common.util.MyLog;
 import com.bon.common.util.StringUtils;
+import com.bon.wx.dao.MenuMapper;
 import com.bon.wx.dao.RoleMapper;
 import com.bon.wx.dao.UserMapper;
 import com.bon.wx.dao.UserRoleMapper;
-import com.bon.wx.domain.dto.RoleDTO;
-import com.bon.wx.domain.dto.RoleListDTO;
-import com.bon.wx.domain.dto.UserDTO;
-import com.bon.wx.domain.dto.UserListDTO;
+import com.bon.wx.domain.dto.*;
+import com.bon.wx.domain.entity.Menu;
 import com.bon.wx.domain.entity.Role;
 import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.entity.UserRole;
+import com.bon.wx.domain.vo.MenuVO;
 import com.bon.wx.domain.vo.RoleVO;
 import com.bon.wx.domain.vo.UserVO;
 import com.bon.wx.exception.BusinessException;
@@ -52,6 +52,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRoleMapper userRoleMapper;
+
+    @Autowired
+    private MenuMapper menuMapper;
 
     @Override
     public UserVO getUser(Long id) {
@@ -194,6 +197,67 @@ public class UserServiceImpl implements UserService {
         for (Role role : list){
             RoleVO vo = new RoleVO();
             BeanUtil.copyPropertys(role,vo);
+            voList.add(vo);
+        }
+        return voList;
+    }
+
+    @Override
+    public MenuVO getMenu(Long id) {
+        Menu menu = menuMapper.getById(id);
+        MenuVO vo = new MenuVO();
+        BeanUtil.copyPropertys(menu,vo);
+        return vo;
+    }
+
+    @Override
+    public void saveMenu(MenuDTO dto) {
+        Menu menu = new Menu();
+        menu.setMenuId(null);
+        menu.setGmtCreate(new Date());
+        menu.setGmtModified(new Date());
+        BeanUtil.copyPropertys(dto,menu);
+        menuMapper.insertSelective(menu);
+    }
+
+    @Override
+    public void updateMenu(MenuDTO dto) {
+        Menu menu = menuMapper.getById(dto.getMenuId());
+        if(menu == null){
+            throw new BusinessException("获取菜单失败");
+        }
+        menu.setGmtModified(new Date());
+        BeanUtil.copyPropertys(dto,menu);
+        menuMapper.updateByPrimaryKeySelective(menu);
+    }
+
+    @Override
+    public void deleteMenu(Long id) {
+        menuMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public PageVO listMenu(MenuListDTO dto) {
+        PageHelper.startPage(dto);
+        List<Menu> list = menuMapper.selectByExample(dto.createExample());
+        PageVO pageVO = new PageVO(list);
+        List<MenuVO> voList = new ArrayList<>();
+        for (Menu menu : list){
+            MenuVO vo = new MenuVO();
+            BeanUtil.copyPropertys(menu,vo);
+            voList.add(vo);
+        }
+        pageVO.setList(voList);
+        return pageVO;
+    }
+
+    @Override
+    public List<MenuVO> getAllMenu() {
+        List<Menu> list = menuMapper.selectAll();
+        List<MenuVO> voList = new ArrayList<>();
+        for (Menu menu : list){
+            MenuVO vo = new MenuVO();
+            BeanUtil.copyPropertys(menu,vo);
             voList.add(vo);
         }
         return voList;

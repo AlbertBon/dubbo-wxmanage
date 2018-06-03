@@ -1,12 +1,11 @@
 package com.bon.wx.service;
 
 import com.bon.common.domain.vo.PageVO;
-import com.bon.wx.domain.dto.RoleDTO;
-import com.bon.wx.domain.dto.RoleListDTO;
-import com.bon.wx.domain.dto.UserDTO;
-import com.bon.wx.domain.dto.UserListDTO;
+import com.bon.wx.domain.dto.*;
+import com.bon.wx.domain.entity.Menu;
 import com.bon.wx.domain.entity.Role;
 import com.bon.wx.domain.entity.User;
+import com.bon.wx.domain.vo.MenuVO;
 import com.bon.wx.domain.vo.RoleVO;
 import com.bon.wx.domain.vo.UserVO;
 
@@ -32,6 +31,13 @@ public interface UserService {
     void deleteRole(Long id);
     PageVO listRole(RoleListDTO dto);
     List<RoleVO> getAllRole();
+
+    MenuVO getMenu(Long id);
+    void saveMenu(MenuDTO dto);
+    void updateMenu(MenuDTO dto);
+    void deleteMenu(Long id);
+    PageVO listMenu(MenuListDTO dto);
+    List<MenuVO> getAllMenu();
 
     /**
      * @Author: Bon
