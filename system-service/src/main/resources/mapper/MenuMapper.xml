@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bon.wx.dao.MenuMapper">
+  <resultMap id="BaseResultMap" type="com.bon.wx.domain.entity.Menu">
+    <constructor>
+      <idArg column="menu_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="gmt_create" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="gmt_modified" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="path" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="redirect" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="icon" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="hidden" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="always_show" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="children" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="parent" javaType="java.lang.Long" jdbcType="BIGINT" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    menu_id, gmt_create, gmt_modified, name, path, redirect, title, icon, hidden, always_show, 
+    children, parent
+  </sql>
+  <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from menu
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </select>
+</mapper>
