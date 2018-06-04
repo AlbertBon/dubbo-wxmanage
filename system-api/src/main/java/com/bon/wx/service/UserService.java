@@ -5,6 +5,7 @@ import com.bon.wx.domain.dto.*;
 import com.bon.wx.domain.entity.Menu;
 import com.bon.wx.domain.entity.Role;
 import com.bon.wx.domain.entity.User;
+import com.bon.wx.domain.vo.MenuRouterVO;
 import com.bon.wx.domain.vo.MenuVO;
 import com.bon.wx.domain.vo.RoleVO;
 import com.bon.wx.domain.vo.UserVO;
@@ -44,5 +45,8 @@ public interface UserService {
     void saveUserRole(List<Long> roleIds,Long userId);
     /*获取用户角色id列表*/
     List<Long> getUserRoleIds(Long userId);
+
+    /*根据用户id获取菜单变路由格式json*/
+    List<MenuRouterVO> getMenuRouter(Long userId);
 
 }

@@ -4,6 +4,7 @@ import com.bon.common.domain.vo.ResultBody;
 import com.bon.common.domain.vo.PageVO;
 import com.bon.common.util.MD5Util;
 import com.bon.wx.domain.dto.*;
+import com.bon.wx.domain.vo.MenuRouterVO;
 import com.bon.wx.domain.vo.MenuVO;
 import com.bon.wx.domain.vo.RoleVO;
 import com.bon.wx.domain.vo.UserVO;
@@ -159,6 +160,13 @@ public class UserController {
     @GetMapping(value = "/menu/getAllMenu")
     public ResultBody getAllMenu(){
         List<MenuVO> list = userService.getAllMenu();
+        return new ResultBody(list);
+    }
+
+    @ApiOperation(value = "根据用户id获取菜单变路由格式json")
+    @GetMapping(value = "/menu/getMenuRouter")
+    public ResultBody getMenuRouter(@RequestParam Long userId){
+        List<MenuRouterVO> list = userService.getMenuRouter(userId);
         return new ResultBody(list);
     }
 }

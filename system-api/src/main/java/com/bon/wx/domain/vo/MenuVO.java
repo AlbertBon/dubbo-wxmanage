@@ -1,10 +1,4 @@
-package com.bon.wx.domain.vo;/**
- * 类描述信息
- * com.bon.wx.domain.vo
- *
- * @author pengwen
- * @create 2018/6/3 0003
- **/
+package com.bon.wx.domain.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
