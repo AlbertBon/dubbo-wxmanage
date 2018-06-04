@@ -7,8 +7,10 @@ package com.bon.wx.domain.vo;/**
  **/
 
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @program: 后台
@@ -21,6 +23,7 @@ import java.io.Serializable;
  **/
 public class MenuVO implements Serializable{
 
+    @ApiModelProperty(value = "ID")
     private Long menuId;
 
     @ApiModelProperty(value = "菜单名称")
@@ -28,6 +31,9 @@ public class MenuVO implements Serializable{
 
     @ApiModelProperty(value = "菜单地址")
     private String path;
+
+    @ApiModelProperty(value = "视图文件路径")
+    private String component;
 
     @ApiModelProperty(value = "跳转地址（如果设置为noredirect会在面包屑导航中无连接）")
     private String redirect;
@@ -44,8 +50,8 @@ public class MenuVO implements Serializable{
     @ApiModelProperty(value = "00:true,01:false没有子菜单也会显示在导航中")
     private String alwaysShow;
 
-    @ApiModelProperty(value = "子菜单字符组")
-    private String children;
+    @ApiModelProperty(value = "数据库id地址")
+    private String dataPath;
 
     @ApiModelProperty(value = "父菜单id")
     private Long parent;
@@ -114,19 +120,27 @@ public class MenuVO implements Serializable{
         this.alwaysShow = alwaysShow;
     }
 
-    public String getChildren() {
-        return children;
-    }
-
-    public void setChildren(String children) {
-        this.children = children;
-    }
-
     public Long getParent() {
         return parent;
     }
 
     public void setParent(Long parent) {
         this.parent = parent;
+    }
+
+    public String getComponent() {
+        return component;
+    }
+
+    public void setComponent(String component) {
+        this.component = component;
+    }
+
+    public String getDataPath() {
+        return dataPath;
+    }
+
+    public void setDataPath(String dataPath) {
+        this.dataPath = dataPath;
     }
 }

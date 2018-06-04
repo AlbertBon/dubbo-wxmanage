@@ -72,6 +72,13 @@ public class UserServiceImpl implements UserService {
         if(StringUtils.isBlank(dto.getPassword())){
             throw new BusinessException(ExceptionType.PASSWORD_NULL_ERROR);
         }
+
+        dto.andFind("username",dto.getUsername());
+        List<User> userList = userMapper.selectByExample(dto.getExample());
+        if(userList.size()>0){
+            throw new BusinessException("用户名重复");
+        }
+
         dto.setPassword(MD5Util.encode(dto.getPassword()));
         User user = new User();
         BeanUtil.copyPropertys(dto, user);
@@ -211,11 +218,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveMenu(MenuDTO dto) {
         Menu menu = new Menu();
+        BeanUtil.copyPropertys(dto,menu);
         menu.setMenuId(null);
         menu.setGmtCreate(new Date());
         menu.setGmtModified(new Date());
-        BeanUtil.copyPropertys(dto,menu);
         menuMapper.insertSelective(menu);
+        //添加数据库id路径,如果不为空则有父节点
+        if(dto.getMenuId()!=null){
+            Menu m = menuMapper.getById(dto.getMenuId());
+            menu.setDataPath(m.getDataPath()+menu.getMenuId()+"/");
+            menu.setParent(m.getMenuId());
+        }else {
+            menu.setDataPath(menu.getMenuId()+"/");
+            menu.setParent(0L);
+        }
+        menuMapper.updateByPrimaryKey(menu);
         //权限表中新增菜单权限记录
         Permission permission =new Permission();
         permission.setGmtCreate(new Date());
@@ -245,7 +262,7 @@ public class UserServiceImpl implements UserService {
         dto.createExample(new Permission());
         dto.andFind("type",PermissionType.MENU.getKey());
         dto.andFind("objectId", String.valueOf(menuId));
-        permissionMapper.deleteByExample(dto);
+        permissionMapper.deleteByExample(dto.getExample());
     }
 
     @Override
@@ -279,8 +296,7 @@ public class UserServiceImpl implements UserService {
     public void saveUserRole(List<Long> roleIds, Long userId) {
         //删除用户角色
         BaseDTO<UserRole> dto =new BaseDTO();
-        dto.createExample(new UserRole());
-        dto.andFind("userId",userId+"");
+        dto.andFind(new UserRole(),"userId",userId+"");
         userRoleMapper.deleteByExample(dto.getExample());
         //插入角色
         for (Long roleId:roleIds){
@@ -296,9 +312,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Long> getUserRoleIds(Long userId) {
         //查找用户所有角色
-        BaseDTO<UserRole> dto =new BaseDTO();
-        dto.createExample(new UserRole());
-        dto.andFind("userId",userId+"");
+        BaseDTO dto =new BaseDTO();
+        dto.andFind(new UserRole(),"userId",userId+"");
         List<UserRole> userRoleList=userRoleMapper.selectByExample(dto.getExample());
         List<Long> voList=new ArrayList<>();
         for(UserRole userRole:userRoleList){
