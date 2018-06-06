@@ -28,13 +28,4 @@
     from menu
     where menu_id = #{menuId,jdbcType=BIGINT}
   </select>
-  <select id="getByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    SELECT DISTINCT(m.menu_id), m.*
-    FROM menu m
-    LEFT JOIN permission p ON m.menu_id = p.object_id AND p.`type`='00' AND m.parent=0
-    INNER JOIN role_permission rp ON p.permission_id = rp.permission_id
-    INNER JOIN role r ON r.role_id = rp.role_id
-    INNER JOIN user_role ur ON ur.role_id = r.role_id
-    INNER JOIN USER u ON u.user_id = ur.user_id AND u.user_id = #{user_id,jdbcType=BIGINT}
-  </select>
 </mapper>

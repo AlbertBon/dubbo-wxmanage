@@ -151,4 +151,100 @@ public class GenerateServiceImpl implements GenerateService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void generateTableByFile(File file){
+        try {
+            LOG.info("开始执行创建表语句");
+            List<String> list = POIUtil.excelSqlImport(file.getAbsolutePath());
+            for (String sql : list) {
+                generateMapper.createTable(sql);
+            }
+            LOG.info("创建表完成");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void generateClassByFile(File file) {
+        try {
+            LOG.info("判断是否有需要修改的实体类");
+            List<String> list = new ArrayList<>();
+            list = POIUtil.getTableNames(file.getAbsolutePath());
+            List<String> tableList = new ArrayList<>();
+            //循环判断获取到的list是否删除原表，若是需要重新生成实体类
+            String tableNameTemp = "";
+            for(String str : list){
+                if(str.split(",")[1].equals("是")||str.split(",")[1].equals("y")
+                        ||str.split(",")[1].equals("修改")||str.split(",")[1].equals("u")){
+                    tableNameTemp = str.split(",")[0];
+                    tableList.add(tableNameTemp);
+                }else {
+                    tableNameTemp = str.split(",")[0];
+                    int countTable = generateMapper.findTable(tableNameTemp,schema);
+                    if(countTable<=0){//如果数据库里没有这张表，即使选择不覆盖表也需要新增
+                        tableList.add(tableNameTemp);
+                    }
+                }
+            }
+            if(tableList.size()<=0){
+                LOG.info("没有需要修改的实体类");
+                return ;
+            }
+
+            LOG.info("开始修改generate.xml文件");
+            //创建Document对象，读取已存在的Xml文件generator.xml
+            Document doc = new SAXReader().read(new File(GenerateService.class.getResource("/generator.xml").getFile()));
+            //删除所有table标签
+            List<Element> elements = doc.getRootElement().element("context").elements();
+            for(Element element :elements){
+                if(element.getName().equals("table")){
+                    element.detach();
+                }
+            }
+            //循环添加新的table标签
+            for (String tableName : tableList) {
+                String domainName = StringUtils.upperCase(StringUtils.underline2Camel(tableName,false));
+                LOG.info("实体类--{}--生成",domainName);
+                //1.得到属性值标签
+                Element tableElem = doc.getRootElement().element("context").addElement("table");
+                //2.通过增加同名属性的方法，修改属性值----key相同，覆盖；不存在key，则添加
+                tableElem.addAttribute("tableName", tableName).addAttribute("domainObjectName", domainName)
+                        .addAttribute("enableCountByExample", "false").addAttribute("enableUpdateByExample", "false")
+                        .addAttribute("enableDeleteByExample", "false").addAttribute("enableSelectByExample", "false")
+                        .addAttribute("selectByExampleQueryId", "false").addAttribute("enableSelectByPrimaryKey", "true")//只留根据id查询接口
+                        .addAttribute("enableUpdateByPrimaryKey", "false").addAttribute("enableInsert", "false")
+                        .addAttribute("enableDeleteByPrimaryKey", "false");
+                tableElem.addElement("property").addAttribute("name", "useActualColumnNames").addAttribute("value", "false");
+            }
+            //指定文件输出的位置
+            FileOutputStream out =new FileOutputStream(GenerateService.class.getResource("/generator.xml").getFile());
+            // 指定文本的写出的格式：
+            OutputFormat format=OutputFormat.createPrettyPrint();   //漂亮格式：有空格换行
+            format.setEncoding("UTF-8");
+            //1.创建写出对象
+            XMLWriter writer=new XMLWriter(out,format);
+            //2.写出Document对象
+            writer.write(doc);
+            //3.关闭流
+            writer.close();
+            LOG.info("修改generate.xml文件完成");
+
+
+            LOG.info("开始生成实体类 ...");
+            List<String> warnings = new ArrayList<String>();
+            boolean overwrite = true;
+            File configFile = new File(GenerateService.class.getResource("/generator.xml").getFile());
+            ConfigurationParser cp = new ConfigurationParser(warnings);
+            Configuration config = cp.parseConfiguration(configFile);
+            DefaultShellCallback callback = new DefaultShellCallback(overwrite);
+            MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
+            myBatisGenerator.generate(null);
+            LOG.info("实体类生成完毕");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

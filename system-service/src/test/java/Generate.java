@@ -46,5 +46,15 @@ public class Generate {
         generateService.generateByFile(new File(GenerateService.class.getResource("/excel/generate.xls").getFile()));
     }
 
+    @Test
+    public void generateTableByFile() throws Exception {
+        generateService.generateTableByFile(new File(GenerateService.class.getResource("/excel/generate.xls").getFile()));
+    }
+
+    @Test
+    public void generateClassByFile() throws Exception {
+        generateService.generateClassByFile(new File(GenerateService.class.getResource("/excel/generate.xls").getFile()));
+    }
+
 
 }

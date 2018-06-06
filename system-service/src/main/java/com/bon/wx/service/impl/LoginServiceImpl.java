@@ -12,9 +12,11 @@ import com.bon.wx.domain.dto.LoginDTO;
 import com.bon.wx.domain.dto.TokenDTO;
 import com.bon.wx.domain.entity.User;
 import com.bon.wx.domain.vo.LoginVO;
+import com.bon.wx.domain.vo.MenuRouterVO;
 import com.bon.wx.domain.vo.TokenVO;
 import com.bon.wx.exception.BusinessException;
 import com.bon.wx.service.LoginService;
+import com.bon.wx.service.UserService;
 import org.hibernate.validator.internal.util.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,9 @@ public class LoginServiceImpl implements LoginService{
     @Autowired
     private RedisService redisService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public LoginVO loginIn(LoginDTO loginDTO,String sessionId) {
         String vCode=redisService.get(MessageFormat.format(Constants.RedisKey.LOGIN_CAPTCHA_SESSION_ID,sessionId));
@@ -65,6 +70,9 @@ public class LoginServiceImpl implements LoginService{
         LOG.info("用户{}-session登录",loginVO.getUsername());
         // TODO: 2018/5/21 给登录用户添加登录信息
         loginVO.setToken(key);
+        //获取菜单路由
+        List<MenuRouterVO> routers=userService.getMenuRouter(user.getUserId());
+        loginVO.setRouters(routers);
         return loginVO;
     }
 

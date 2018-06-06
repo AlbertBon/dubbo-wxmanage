@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bon.wx.dao.MenuExtendMapper">
+  <resultMap id="MenuVOMap" type="com.bon.wx.domain.vo.MenuVO">
+    <constructor>
+      <idArg column="menu_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="gmt_create" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="gmt_modified" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="path" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="component" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="redirect" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="icon" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="hidden" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="always_show" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="data_path" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="parent" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="parent_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <resultMap id="BaseResultMap" type="com.bon.wx.domain.entity.Menu">
+    <constructor>
+      <idArg column="menu_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="gmt_create" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="gmt_modified" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="path" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="component" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="redirect" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="icon" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="hidden" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="always_show" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="data_path" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="parent" javaType="java.lang.Long" jdbcType="BIGINT" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    menu_id, gmt_create, gmt_modified, name, path, component, redirect, title, icon, 
+    hidden, always_show, data_path, parent
+  </sql>
+  <select id="getById" parameterType="java.lang.Long" resultMap="MenuVOMap">
+  select
+    m.*,m1.name as parent_name
+    from menu m
+    LEFT JOIN menu m1 ON m.parent = m1.menu_id and m.menu_id = #{menuId,jdbcType=BIGINT}
+  </select>
+  <select id="getByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT
+    DISTINCT(m.menu_id), m.*
+    FROM menu m
+    LEFT JOIN permission p ON m.menu_id = p.object_id AND p.`type`='00' AND m.parent=0
+    INNER JOIN role_permission rp ON p.permission_id = rp.permission_id
+    INNER JOIN role r ON r.role_id = rp.role_id
+    INNER JOIN user_role ur ON ur.role_id = r.role_id
+    INNER JOIN USER u ON u.user_id = ur.user_id AND u.user_id = #{user_id,jdbcType=BIGINT}
+  </select>
+</mapper>

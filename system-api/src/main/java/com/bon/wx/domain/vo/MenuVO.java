@@ -50,6 +50,17 @@ public class MenuVO implements Serializable{
     @ApiModelProperty(value = "父菜单id")
     private Long parent;
 
+    @ApiModelProperty(value = "父菜单name")
+    private String parentName;
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
     public Long getMenuId() {
         return menuId;
     }

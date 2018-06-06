@@ -53,6 +53,9 @@ public class UserServiceImpl implements UserService {
     private MenuMapper menuMapper;
 
     @Autowired
+    private MenuExtendMapper menuExtendMapper;
+
+    @Autowired
     private PermissionMapper permissionMapper;
 
     @Override
@@ -210,9 +213,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public MenuVO getMenu(Long id) {
-        Menu menu = menuMapper.getById(id);
-        MenuVO vo = new MenuVO();
-        BeanUtil.copyPropertys(menu, vo);
+        MenuVO vo = menuExtendMapper.getById(id);
         return vo;
     }
 
@@ -226,7 +227,7 @@ public class UserServiceImpl implements UserService {
         menuMapper.insertSelective(menu);
         //添加数据库id路径,如果不为空则有父节点
         if (dto.getMenuId() != null) {
-            Menu m = menuMapper.getById(dto.getMenuId());
+            Menu m = menuMapper.selectByPrimaryKey(dto.getMenuId());
             menu.setDataPath(m.getDataPath() + "/" + menu.getMenuId());
             menu.setParent(m.getMenuId());
         } else {
@@ -246,7 +247,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateMenu(MenuDTO dto) {
-        Menu menu = menuMapper.getById(dto.getMenuId());
+        Menu menu = menuMapper.selectByPrimaryKey(dto.getMenuId());
         if (menu == null) {
             throw new BusinessException("获取菜单失败");
         }
@@ -275,6 +276,9 @@ public class UserServiceImpl implements UserService {
         for (Menu menu : list) {
             MenuVO vo = new MenuVO();
             BeanUtil.copyPropertys(menu, vo);
+            if(menu.getParent()!=0){
+                vo.setParentName(menuMapper.getById(menu.getParent()).getName());
+            }
             voList.add(vo);
         }
         pageVO.setList(voList);
@@ -325,11 +329,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<MenuRouterVO> getMenuRouter(Long userId) {
-        List<Menu> menuList = menuMapper.getByUserId(userId);
+        List<Menu> menuList = menuExtendMapper.getByUserId(userId);
         List<MenuRouterVO> voList = funMenuChild(menuList);
         return voList;
     }
 
+    /**
+     * @Author: Bon
+     * @Description: 递归获取子菜单
+     * @param menuList
+     * @return: java.util.List<com.bon.wx.domain.vo.MenuRouterVO>
+     * @Date: 2018/6/6 15:04
+     */
     public List<MenuRouterVO> funMenuChild(List<Menu> menuList) {
         List<MenuRouterVO> voList = new ArrayList<>();
         for (Menu menu : menuList) {

@@ -11,4 +11,7 @@ import java.io.File;
 public interface GenerateService {
     void generateByFilePath(String path) throws Exception;
     void generateByFile(File file);
+
+    void generateTableByFile(File file);
+    void generateClassByFile(File file);
 }

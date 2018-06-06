@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @program: dubbo-wxmanage
@@ -26,8 +27,18 @@ public class LoginVO implements Serializable{
     private String username;
 
     private String remark;
-
+    //token(uuid)
     private String token;
+    //前端菜单路由
+    private List<MenuRouterVO> routers;
+
+    public List<MenuRouterVO> getRouters() {
+        return routers;
+    }
+
+    public void setRouters(List<MenuRouterVO> routers) {
+        this.routers = routers;
+    }
 
     public String getToken() {
         return token;
