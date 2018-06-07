@@ -292,7 +292,10 @@ public class UserServiceImpl implements UserService {
         for (Menu menu : list) {
             MenuVO vo = new MenuVO();
             BeanUtil.copyPropertys(menu, vo);
-            voList.add(vo);
+            //只获取子菜单
+            if(vo.getParent()!=0){
+                voList.add(vo);
+            }
         }
         return voList;
     }
