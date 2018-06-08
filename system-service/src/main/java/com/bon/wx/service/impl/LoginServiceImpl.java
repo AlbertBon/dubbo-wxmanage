@@ -63,7 +63,7 @@ public class LoginServiceImpl implements LoginService{
         }
 
         String key= MessageFormat.format(Constants.RedisKey.LOGIN_USERNAME_SESSION_ID,user.getUsername(),sessionId);
-        redisService.create(key,user.getUsername()+"_"+new Date().getTime()+"_"+sessionId);
+        redisService.create(key,user.getUsername()+"_"+ System.currentTimeMillis()+"_"+sessionId);
 
         LoginVO loginVO = new LoginVO();
         BeanUtil.copyPropertys(user,loginVO);
