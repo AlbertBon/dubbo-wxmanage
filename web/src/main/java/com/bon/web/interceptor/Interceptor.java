@@ -43,10 +43,6 @@ public class Interceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-//        if(request.getRequestedSessionId()==null){
-//            return true;
-//        }
         //请求错误拦截
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");

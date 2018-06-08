@@ -41,12 +41,31 @@ public interface UserService {
     List<MenuVO> getAllMenu();
 
 
-     /*保存用户角色*/
+    /**
+     * 保存用户角色
+     * @param roleIds
+     * @param userId
+     */
     void saveUserRole(List<Long> roleIds,Long userId);
-    /*获取用户角色id列表*/
+    /**
+     * 获取用户角色id列表
+     * @param userId
+     * @return
+     */
     List<Long> getUserRoleIds(Long userId);
 
-    /*根据用户id获取菜单变路由格式json*/
+    /**
+     * 获取角色菜单id列表
+     * @param roleId
+     * @return
+     */
+    List<Long> getRoleMenuIds(Long roleId);
+
+    /**
+     * 根据用户id获取菜单变路由格式json
+     * @param userId
+     * @return
+     */
     List<MenuRouterVO> getMenuRouter(Long userId);
 
 }

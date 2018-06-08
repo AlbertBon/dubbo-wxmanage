@@ -58,6 +58,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PermissionMapper permissionMapper;
 
+    /**
+     * 用户
+     * @param id
+     * @return
+     */
     @Override
     public UserVO getUser(Long id) {
         User user = userMapper.selectByPrimaryKey(id);
@@ -114,9 +119,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-
     public void deleteUser(Long id) {
         userMapper.deleteByPrimaryKey(id);
+        BaseDTO dto = new BaseDTO();
+        dto.andFind(new UserRole(),"userId",id+"");
+        userRoleMapper.deleteByExample(dto.getExample());
     }
 
     @Override
@@ -149,6 +156,12 @@ public class UserServiceImpl implements UserService {
         }
         return voList;
     }
+
+    /**
+     * 角色
+     * @param id
+     * @return
+     */
 
     @Override
     public RoleVO getRole(Long id) {
@@ -210,6 +223,12 @@ public class UserServiceImpl implements UserService {
         }
         return voList;
     }
+
+    /**
+     * 菜单
+     * @param id
+     * @return
+     */
 
     @Override
     public MenuVO getMenu(Long id) {
@@ -328,6 +347,11 @@ public class UserServiceImpl implements UserService {
             voList.add(userRole.getRoleId());
         }
         return voList;
+    }
+
+    @Override
+    public List<Long> getRoleMenuIds(Long roleId) {
+        return null;
     }
 
     @Override
