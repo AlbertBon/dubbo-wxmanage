@@ -71,7 +71,7 @@ public class LoginServiceImpl implements LoginService{
         // TODO: 2018/5/21 给登录用户添加登录信息
         loginVO.setToken(key);
         //获取菜单路由
-        List<MenuRouterVO> routers=userService.getMenuRouter(user.getUserId());
+        List<MenuRouterVO> routers=userService.getMenuRouterByUser(user.getUserId());
         loginVO.setRouters(routers);
         return loginVO;
     }

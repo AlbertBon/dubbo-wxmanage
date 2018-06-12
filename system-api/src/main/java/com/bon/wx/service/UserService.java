@@ -41,6 +41,7 @@ public interface UserService {
     List<MenuVO> getAllMenu();
 
 
+
     /**
      * 保存用户角色
      * @param roleIds
@@ -55,6 +56,12 @@ public interface UserService {
     List<Long> getUserRoleIds(Long userId);
 
     /**
+     * 保存角色菜单
+     * @param menuIds
+     * @param roleId
+     */
+    void saveRoleMenu(List<Long> menuIds,Long roleId);
+    /**
      * 获取角色菜单id列表
      * @param roleId
      * @return
@@ -66,6 +73,20 @@ public interface UserService {
      * @param userId
      * @return
      */
-    List<MenuRouterVO> getMenuRouter(Long userId);
+    List<MenuRouterVO> getMenuRouterByUser(Long userId);
+
+    /**
+     * 根据角色id获取菜单变路由格式json
+     * @param roleId
+     * @return
+     */
+    List<MenuRouterVO> getMenuRouterByRole(Long roleId);
+
+    /**
+     * 获取所有菜单路由
+     * @param roleId
+     * @return
+     */
+    List<MenuRouterVO> getAllMenuRouter();
 
 }

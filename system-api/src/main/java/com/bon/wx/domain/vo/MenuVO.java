@@ -53,6 +53,22 @@ public class MenuVO implements Serializable{
     @ApiModelProperty(value = "父菜单name")
     private String parentName;
 
+    public MenuVO(){}
+    public MenuVO(Long menuId, String name, String path, String component, String redirect, String title, String icon, String hidden, String alwaysShow, String dataPath, Long parent, String parentName) {
+        this.menuId = menuId;
+        this.name = name;
+        this.path = path;
+        this.component = component;
+        this.redirect = redirect;
+        this.title = title;
+        this.icon = icon;
+        this.hidden = hidden;
+        this.alwaysShow = alwaysShow;
+        this.dataPath = dataPath;
+        this.parent = parent;
+        this.parentName = parentName;
+    }
+
     public String getParentName() {
         return parentName;
     }

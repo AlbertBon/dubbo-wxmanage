@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -27,6 +28,17 @@ public class RoleDTO extends BaseDTO<Role> {
 
     @ApiModelProperty(value = "角色标识")
     private String roleFlag;
+
+    @ApiModelProperty(value = "角色菜单id")
+    private List<Long> menuIds;
+
+    public List<Long> getMenuIds() {
+        return menuIds;
+    }
+
+    public void setMenuIds(List<Long> menuIds) {
+        this.menuIds = menuIds;
+    }
 
     public Long getRoleId() {
         return roleId;

@@ -37,14 +37,14 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    menu_id, gmt_create, gmt_modified, name, path, component, redirect, title, icon, 
+    menu_id, gmt_create, gmt_modified, name, path, component, redirect, title, icon,
     hidden, always_show, data_path, parent
   </sql>
   <select id="getById" parameterType="java.lang.Long" resultMap="MenuVOMap">
   select
     m.*,m1.name as parent_name
     from menu m
-    LEFT JOIN menu m1 ON m.parent = m1.menu_id and m.menu_id = #{menuId,jdbcType=BIGINT}
+    INNER JOIN menu m1 ON m.parent = m1.menu_id and m.menu_id = #{menuId,jdbcType=BIGINT}
   </select>
   <select id="getByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     SELECT
@@ -54,6 +54,41 @@
     INNER JOIN role_permission rp ON p.permission_id = rp.permission_id
     INNER JOIN role r ON r.role_id = rp.role_id
     INNER JOIN user_role ur ON ur.role_id = r.role_id
-    INNER JOIN USER u ON u.user_id = ur.user_id AND u.user_id = #{user_id,jdbcType=BIGINT}
+    INNER JOIN USER u ON u.user_id = ur.user_id AND u.user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <select id="getByPathAndUserId"  resultMap="BaseResultMap">
+    SELECT
+    DISTINCT(m.menu_id), m.*
+    FROM menu m
+    LEFT JOIN permission p ON m.menu_id = p.object_id AND p.`type`='00' AND m.data_path LIKE concat(#{path},'/%')
+    INNER JOIN role_permission rp ON p.permission_id = rp.permission_id
+    INNER JOIN role r ON r.role_id = rp.role_id
+    INNER JOIN user_role ur ON ur.role_id = r.role_id
+    INNER JOIN USER u ON u.user_id = ur.user_id AND u.user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <select id="getByRoleId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT
+    DISTINCT(m.menu_id), m.*
+    FROM menu m
+    LEFT JOIN permission p ON m.menu_id = p.object_id AND p.`type`='00' AND m.parent=0
+    INNER JOIN role_permission rp ON p.permission_id = rp.permission_id
+    INNER JOIN role r ON r.role_id = rp.role_id AND r.role_id = #{roleId,jdbcType=BIGINT}
+  </select>
+  <select id="getByPathAndRoleId"  resultMap="BaseResultMap">
+    SELECT
+    DISTINCT(m.menu_id), m.*
+    FROM menu m
+    LEFT JOIN permission p ON m.menu_id = p.object_id AND p.`type`='00' AND m.data_path LIKE concat(#{path},'/%')
+    INNER JOIN role_permission rp ON p.permission_id = rp.permission_id
+    INNER JOIN role r ON r.role_id = rp.role_id and r.role_id = #{roleId,jdbcType=BIGINT}
+  </select>
+  <select id="getIdsByRoleId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    SELECT
+    DISTINCT(m.menu_id)
+    FROM menu m
+    LEFT JOIN permission p ON m.menu_id = p.object_id AND p.`type`='00' AND <![CDATA[ m.parent<>0 ]]>
+    INNER JOIN role_permission rp ON p.permission_id = rp.permission_id
+    INNER JOIN role r ON r.role_id = rp.role_id AND r.role_id = #{roleId,jdbcType=BIGINT}
   </select>
 </mapper>

@@ -166,7 +166,7 @@ public class UserController {
     @ApiOperation(value = "根据用户id获取菜单变路由格式json")
     @GetMapping(value = "/menu/getMenuRouter")
     public ResultBody getMenuRouter(@RequestParam Long userId){
-        List<MenuRouterVO> list = userService.getMenuRouter(userId);
+        List<MenuRouterVO> list = userService.getMenuRouterByUser(userId);
         return new ResultBody(list);
     }
 }

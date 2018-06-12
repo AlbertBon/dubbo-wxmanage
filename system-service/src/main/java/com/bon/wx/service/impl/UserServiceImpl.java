@@ -58,6 +58,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PermissionMapper permissionMapper;
 
+    @Autowired
+    private RolePermissionMapper rolePermissionMapper;
+
     /**
      * 用户
      * @param id
@@ -168,6 +171,8 @@ public class UserServiceImpl implements UserService {
         Role role = roleMapper.getById(id);
         RoleVO vo = new RoleVO();
         BeanUtil.copyPropertys(role, vo);
+        //放入角色菜单id列表信息
+        vo.setMenuIds(getRoleMenuIds(id));
         return vo;
     }
 
@@ -179,6 +184,8 @@ public class UserServiceImpl implements UserService {
         role.setGmtModified(new Date());
         BeanUtil.copyPropertys(dto, role);
         roleMapper.insertSelective(role);
+        //保存角色菜单权限
+        saveRoleMenu(dto.getMenuIds(),dto.getRoleId());
     }
 
     @Override
@@ -190,6 +197,8 @@ public class UserServiceImpl implements UserService {
         role.setGmtModified(new Date());
         BeanUtil.copyPropertys(dto, role);
         roleMapper.updateByPrimaryKeySelective(role);
+        //保存角色菜单权限
+        saveRoleMenu(dto.getMenuIds(),dto.getRoleId());
     }
 
     @Override
@@ -206,6 +215,8 @@ public class UserServiceImpl implements UserService {
         for (Role role : list) {
             RoleVO vo = new RoleVO();
             BeanUtil.copyPropertys(role, vo);
+            //放入角色菜单id列表信息
+            vo.setMenuIds(getRoleMenuIds(role.getRoleId()));
             voList.add(vo);
         }
         pageVO.setList(voList);
@@ -219,6 +230,8 @@ public class UserServiceImpl implements UserService {
         for (Role role : list) {
             RoleVO vo = new RoleVO();
             BeanUtil.copyPropertys(role, vo);
+            //放入角色菜单id列表信息
+            vo.setMenuIds(getRoleMenuIds(role.getRoleId()));
             voList.add(vo);
         }
         return voList;
@@ -232,7 +245,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public MenuVO getMenu(Long id) {
-        MenuVO vo = menuExtendMapper.getById(id);
+        Menu menu = menuMapper.getById(id);
+        MenuVO vo = new MenuVO();
+        BeanUtil.copyPropertys(menu, vo);
+        if(menu.getParent()!=0){
+            vo.setParentName(menuMapper.getById(menu.getParent()).getName());
+        }
         return vo;
     }
 
@@ -250,7 +268,7 @@ public class UserServiceImpl implements UserService {
             menu.setDataPath(m.getDataPath() + "/" + menu.getMenuId());
             menu.setParent(m.getMenuId());
         } else {
-            menu.setDataPath(menu.getMenuId()+"");
+            menu.setDataPath(menu.getDataPath()+"");
             menu.setParent(0L);
         }
         menuMapper.updateByPrimaryKey(menu);
@@ -337,6 +355,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void saveRoleMenu(List<Long> menuIds, Long roleId) {
+        //删除角色菜单权限
+        BaseDTO dto = new BaseDTO();
+        dto.andFind(new RolePermission(), "roleId", roleId + "");
+        rolePermissionMapper.deleteByExample(dto.getExample());
+        List<Long> rootIds=new ArrayList<>();
+        //插入菜单权限id
+        for (Long menuId : menuIds) {
+            BaseDTO dto1 = new BaseDTO();
+            dto1.andFind(new Permission(),"objectId",menuId+"");
+            dto1.andFind("type",PermissionType.MENU.getKey());
+            Permission permission = permissionMapper.selectOneByExample(dto1.getExample());
+            RolePermission rolePermission = new RolePermission();
+            rolePermission.setPermissionId(permission.getPermissionId());
+            rolePermission.setRoleId(roleId);
+            rolePermission.setGmtCreate(new Date());
+            rolePermission.setGmtModified(new Date());
+            rolePermissionMapper.insertSelective(rolePermission);
+            //如果没有根节点则插入根节点id
+            Menu menu = menuMapper.getById(menuId);
+            Long rootId = Long.valueOf(menu.getDataPath().split("/")[0]);
+            if(!rootIds.contains(rootId)){
+                rootIds.add(rootId);
+                rolePermission = new RolePermission();
+                rolePermission.setPermissionId(rootId);
+                rolePermission.setRoleId(roleId);
+                rolePermission.setGmtCreate(new Date());
+                rolePermission.setGmtModified(new Date());
+                rolePermissionMapper.insertSelective(rolePermission);
+            }
+        }
+    }
+
+    @Override
     public List<Long> getUserRoleIds(Long userId) {
         //查找用户所有角色
         BaseDTO dto = new BaseDTO();
@@ -351,24 +403,43 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Long> getRoleMenuIds(Long roleId) {
-        return null;
+        //查找角色所有菜单
+        List<Long> voList = menuExtendMapper.getIdsByRoleId(roleId);
+        return voList;
     }
 
     @Override
-    public List<MenuRouterVO> getMenuRouter(Long userId) {
+    public List<MenuRouterVO> getMenuRouterByRole(Long roleId) {
+        List<Menu> menuList = menuExtendMapper.getByRoleId(roleId);
+        List<MenuRouterVO> voList = funMenuChildByRole(menuList,roleId);
+        return voList;
+    }
+
+    @Override
+    public List<MenuRouterVO> getMenuRouterByUser(Long userId) {
         List<Menu> menuList = menuExtendMapper.getByUserId(userId);
-        List<MenuRouterVO> voList = funMenuChild(menuList);
+        List<MenuRouterVO> voList = funMenuChildByUserId(menuList,userId);
+        return voList;
+    }
+
+
+    @Override
+    public List<MenuRouterVO> getAllMenuRouter() {
+        BaseDTO dto = new BaseDTO();
+        dto.andFind(new Menu(), "parent", 0+"");
+        List<Menu> menuList = menuMapper.selectByExample(dto.getExample());
+        List<MenuRouterVO> voList = funMenuChildAll(menuList);
         return voList;
     }
 
     /**
      * @Author: Bon
-     * @Description: 递归获取子菜单
+     * @Description: 递归获取子菜单(根据userId)
      * @param menuList
      * @return: java.util.List<com.bon.wx.domain.vo.MenuRouterVO>
      * @Date: 2018/6/6 15:04
      */
-    public List<MenuRouterVO> funMenuChild(List<Menu> menuList) {
+    public List<MenuRouterVO> funMenuChildAll(List<Menu> menuList) {
         List<MenuRouterVO> voList = new ArrayList<>();
         for (Menu menu : menuList) {
             //转化为路由菜单
@@ -385,10 +456,73 @@ public class UserServiceImpl implements UserService {
 
             //判断如果还有子菜单就递归调用继续查找子菜单
             BaseDTO dto = new BaseDTO();
-            dto.likeFind(new Menu(), "dataPath", menu.getDataPath() + "/%");
+            dto.likeFind(new Menu(),"dataPath",menu.getDataPath()+"/%");
             List<Menu> menuList1 = menuMapper.selectByExample(dto.getExample());
             if (menuList1.size() > 0) {
-                vo.setChildren(funMenuChild(menuList1));
+                vo.setChildren(funMenuChildAll(menuList1));
+            }
+            voList.add(vo);
+        }
+        return voList;
+    }
+
+    /**
+     * @Author: Bon
+     * @Description: 递归获取子菜单(根据userId)
+     * @param menuList
+     * @return: java.util.List<com.bon.wx.domain.vo.MenuRouterVO>
+     * @Date: 2018/6/6 15:04
+     */
+    public List<MenuRouterVO> funMenuChildByUserId(List<Menu> menuList,Long userId) {
+        List<MenuRouterVO> voList = new ArrayList<>();
+        for (Menu menu : menuList) {
+            //转化为路由菜单
+            MenuRouterVO vo = new MenuRouterVO();
+            MenuRouterVO.Meta meta = vo.new Meta();
+            vo.setAlwaysShow(menu.getAlwaysShow());
+            vo.setComponent(menu.getComponent());
+            vo.setHidden(menu.getHidden());
+            vo.setName(menu.getName());
+            vo.setPath(menu.getPath());
+            meta.setIcon(menu.getIcon());
+            meta.setTitle(menu.getTitle());
+            vo.setMeta(meta);
+
+            //判断如果还有子菜单就递归调用继续查找子菜单
+            List<Menu> menuList1 = menuExtendMapper.getByPathAndUserId(menu.getDataPath(),userId);
+            if (menuList1.size() > 0) {
+                vo.setChildren(funMenuChildByUserId(menuList1,userId));
+            }
+            voList.add(vo);
+        }
+        return voList;
+    }
+    /**
+     * @Author: Bon
+     * @Description: 递归获取子菜单(根据roleId获取)
+     * @param menuList
+     * @return: java.util.List<com.bon.wx.domain.vo.MenuRouterVO>
+     * @Date: 2018/6/6 15:04
+     */
+    public List<MenuRouterVO> funMenuChildByRole(List<Menu> menuList,Long roleId) {
+        List<MenuRouterVO> voList = new ArrayList<>();
+        for (Menu menu : menuList) {
+            //转化为路由菜单
+            MenuRouterVO vo = new MenuRouterVO();
+            MenuRouterVO.Meta meta = vo.new Meta();
+            vo.setAlwaysShow(menu.getAlwaysShow());
+            vo.setComponent(menu.getComponent());
+            vo.setHidden(menu.getHidden());
+            vo.setName(menu.getName());
+            vo.setPath(menu.getPath());
+            meta.setIcon(menu.getIcon());
+            meta.setTitle(menu.getTitle());
+            vo.setMeta(meta);
+
+            //判断如果还有子菜单就递归调用继续查找子菜单
+            List<Menu> menuList1 = menuExtendMapper.getByPathAndRoleId(menu.getDataPath(),roleId);
+            if (menuList1.size() > 0) {
+                vo.setChildren(funMenuChildByRole(menuList1,roleId));
             }
             voList.add(vo);
         }

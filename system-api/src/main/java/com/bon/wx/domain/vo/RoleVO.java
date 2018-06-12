@@ -2,6 +2,7 @@ package com.bon.wx.domain.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -20,6 +21,16 @@ public class RoleVO implements Serializable {
     private String roleName;
 
     private String roleFlag;
+
+    private List<Long> menuIds;
+
+    public List<Long> getMenuIds() {
+        return menuIds;
+    }
+
+    public void setMenuIds(List<Long> menuIds) {
+        this.menuIds = menuIds;
+    }
 
     public Long getRoleId() {
         return roleId;
